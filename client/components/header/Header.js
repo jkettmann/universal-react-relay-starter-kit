@@ -3,14 +3,18 @@ import PropTypes from 'prop-types'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Link from 'found/lib/Link'
 import AppBar from 'material-ui/AppBar'
+import styled from 'styled-components'
 
 import UserMenu from './HeaderUserMenu'
 
-import styles from './Header.css'
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`
 
 const Header = ({ viewer, toggleNavigation }) => (
   <AppBar
-    title={<Link className={styles.title} to="/">Relay Authentication</Link>}
+    title={<StyledLink to="/">Relay Authentication</StyledLink>}
     onLeftIconButtonTouchTap={toggleNavigation}
     iconElementRight={<UserMenu viewer={viewer} />}
   />

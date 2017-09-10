@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 
-import styles from './Profile.css'
+const Wrapper = styled.div`
+  padding: 10px;
+`
 
 const Profile = ({ viewer, router }) => {
   const user = viewer.user
@@ -13,11 +16,11 @@ const Profile = ({ viewer, router }) => {
     return <div />
   }
   return (
-    <div className={styles.container}>
+    <Wrapper>
       <h2>Your Account</h2>
       <div>{user.firstName} {user.lastName}</div>
       <div>{user.email}</div>
-    </div>
+    </Wrapper>
   )
 }
 

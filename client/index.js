@@ -4,6 +4,7 @@ import 'whatwg-fetch'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { injectGlobal } from 'styled-components'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import BrowserProtocol from 'farce/lib/BrowserProtocol'
 import queryMiddleware from 'farce/lib/queryMiddleware'
@@ -15,9 +16,21 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import fetchQuery from './fetchQuery'
 import routes from './components/Routes'
 
-import './base.css'
-
 injectTapEventPlugin()
+
+// eslint-disable-next-line no-unused-expressions
+injectGlobal`
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: Roboto, sans-serif;;
+    font-weight: 300;
+    color: #555;
+  }
+`
 
 const environment = new Environment({
   network: Network.create(fetchQuery),

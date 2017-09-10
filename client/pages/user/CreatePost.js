@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
@@ -9,7 +10,17 @@ import RaisedButton from 'material-ui/RaisedButton'
 import ImageInput from '../../components/imageInput/ImageInput'
 import CreatePostMutation from '../../mutation/CreatePostMutation'
 
-import styles from './CreatePost.css'
+const Wrapper = styled.div`
+  margin-top: 50px;
+  text-align: center;
+`
+
+const Form = styled(Formsy.Form)`
+  max-width: 600px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+`
 
 class CreatePostPage extends React.Component {
   static propTypes = {
@@ -61,14 +72,13 @@ class CreatePostPage extends React.Component {
     }
 
     return (
-      <div className={styles.content}>
+      <Wrapper>
         <h2>Create Post</h2>
 
-        <Formsy.Form
+        <Form
           onValid={this.enableButton}
           onInvalid={this.disableButton}
           onSubmit={this.createPost}
-          className={styles.form}
         >
 
           <FormsyText
@@ -107,9 +117,9 @@ class CreatePostPage extends React.Component {
             disabled={!this.state.canSubmit}
           />
 
-        </Formsy.Form>
+        </Form>
 
-      </div>
+      </Wrapper>
     )
   }
 }

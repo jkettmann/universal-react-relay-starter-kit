@@ -1,25 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { createFragmentContainer, graphql } from 'react-relay'
 
-import styles from './PostDetail.css'
+const Image = styled.img`
+  width: 100%;
+`
+
+const ContentWrapper = styled.div`
+  padding: 10px;
+`
+
+const Title = styled.h1`
+  margin: 0;
+`
+
+const UserInfo = styled.div`
+  margin-bottom: 20px;
+`
 
 const PostDetail = ({ viewer }) => (
   <div>
-    <img
-      className={styles.image}
+    <Image
       src={viewer.post.image}
       alt={viewer.post.title}
     />
 
-    <div className={styles.container}>
-      <h1 className={styles.title}>{viewer.post.title}</h1>
-      <div className={styles.user}>
+    <ContentWrapper>
+      <Title>{viewer.post.title}</Title>
+      <UserInfo>
         by {viewer.post.creator.firstName} {viewer.post.creator.lastName}
-      </div>
+      </UserInfo>
 
       <div>{viewer.post.description}</div>
-    </div>
+    </ContentWrapper>
   </div>
 )
 

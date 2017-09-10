@@ -1,17 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { createFragmentContainer, graphql } from 'react-relay'
 
-import styles from './Home.css'
+const Wrapper = styled.div`
+  margin-top: 20px;
+  text-align: center;
+`
 
 const HomePage = ({ viewer }) => (
-  <div className={styles.content}>
+  <Wrapper>
     <h1>User Authentication with Relay</h1>
 
     <div>
       You are currently {!viewer.isLoggedIn && 'not'} logged in.
     </div>
-  </div>
+  </Wrapper>
 )
 
 HomePage.propTypes = {

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
@@ -9,7 +10,27 @@ import RaisedButton from 'material-ui/RaisedButton'
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
 
-import styles from './Login.css'
+const Wrapper = styled.div`
+  margin-top: 50px;
+  text-align: center;
+`
+
+const Hint = styled.div`
+  max-width: 400px;
+  margin: auto;
+  font-size: 14px;
+  line-height: 20px;
+`
+
+const Bold = styled.b`
+  font-weight: 400;
+`
+
+const Form = styled(Formsy.Form)`
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+`
 
 class LoginPage extends React.Component {
   static propTypes = {
@@ -58,18 +79,17 @@ class LoginPage extends React.Component {
     const submitMargin = { marginTop: 20 }
 
     return (
-      <div className={styles.content}>
+      <Wrapper>
         <h2>Login</h2>
 
-        <div className={styles.hint}>
-          You can use <b>reader@test.com</b>, <b>publisher@test.com</b>,
-          <b> publisher2@test.com</b> with password <b>qwerty</b>.
-        </div>
+        <Hint>
+          You can use <Bold>reader@test.com</Bold>, <Bold>publisher@test.com</Bold>,
+          <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
+        </Hint>
 
-        <Formsy.Form
+        <Form
           ref={this.setFormElement}
           onSubmit={this.login}
-          className={styles.form}
         >
 
           <FormsyText
@@ -103,9 +123,9 @@ class LoginPage extends React.Component {
             onClick={() => this.props.router.push('/register')}
           />
 
-        </Formsy.Form>
+        </Form>
 
-      </div>
+      </Wrapper>
     )
   }
 }
