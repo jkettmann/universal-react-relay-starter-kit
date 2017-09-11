@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { injectGlobal } from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 
@@ -9,6 +10,20 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import Header from './header/Header'
 import Navigation from './navigation/Navigation'
 import Loading from './Loading'
+
+// eslint-disable-next-line no-unused-expressions
+injectGlobal`
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;;
+  font-weight: 300;
+  color: #555;
+}
+`
 
 class App extends React.Component {
   static childContextTypes = {

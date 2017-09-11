@@ -4,6 +4,8 @@ node_modules
 # Build
 build/app.js
 build/style.css
+buildClient
+buildServer
 
 # Logs
 logs

@@ -7,18 +7,20 @@
   "plugins": [
     "transform-runtime",
     ["relay", { "schema": "graphql/schema.graphql" }],
-    ["react-transform", {
-      "transforms": [
-        {
-          "transform": "react-transform-hmr",
-          "imports": ["react"],
-          "locals": ["module"]
-        },
-        {
-          "transform": "react-transform-catch-errors",
-          "imports": ["react", "redbox-react"]
-        }
-      ]
-    }]
+    "babel-plugin-styled-components",
+    "universal-import"
+    // ["react-transform", {
+    //   "transforms": [
+    //     {
+    //       "transform": "react-transform-hmr",
+    //       "imports": ["react"],
+    //       "locals": ["module"]
+    //     },
+    //     {
+    //       "transform": "react-transform-catch-errors",
+    //       "imports": ["react", "redbox-react"]
+    //     }
+    //   ]
+    // }]
   ]
 }

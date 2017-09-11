@@ -1,5 +1,14 @@
-import path from 'path'
 import express from 'express'
+import webpack from 'webpack' // aliased to webpack-universal
+import webpackDevMiddleware from 'webpack-dev-middleware'
+import webpackHotMiddleware from 'webpack-hot-middleware'
+import webpackHotServerMiddleware from 'webpack-hot-server-middleware'
+import clientConfig from '../webpack/client.dev'
+import serverConfig from '../webpack/server.dev'
+import clientConfigProd from '../webpack/client.prod'
+import serverConfigProd from '../webpack/server.prod'
+
+import path from 'path'
 import request from 'request'
 import historyApiFallback from 'connect-history-api-fallback'
 
@@ -11,6 +20,12 @@ require('./logger.js')
 const IMAGE_PORT = 9000
 const GRAPHQL_PORT = 8080
 const RELAY_PORT = 3000
+
+const publicPath = clientConfig.output.publicPath
+const outputPath = clientConfig.output.path
+const DEV = process.env.NODE_ENV === 'development'
+
+let isBuilt = false
 
 createGraphQlServer(GRAPHQL_PORT, new Database())
 
@@ -24,8 +39,8 @@ imageServer.listen(IMAGE_PORT)
 
 const app = express()
 
-app.use(historyApiFallback())
-app.use('/', express.static(`${pathBase}/build`))
+// app.use(historyApiFallback())
+// app.use('/', express.static(`${pathBase}/build`))
 
 app.use('/graphql', (req, res) => {
   req.pipe(request(`http://localhost:${GRAPHQL_PORT}/graphql`)).pipe(res)
@@ -37,6 +52,11 @@ app.get(/images\/.{1,}/i, (req, res) => {
     .pipe(res)
 })
 
+const done = () => !isBuilt && app.listen(RELAY_PORT, () => {
+  isBuilt = true
+  console.log('BUILD COMPLETE -- Listening @ http://localhost:3000')
+})
+
 if (!process.env.PRODUCTION) {
   /** ***********************************************************
    *
@@ -44,27 +64,15 @@ if (!process.env.PRODUCTION) {
    *
    *************************************************************/
 
-  /* eslint-disable global-require, import/no-extraneous-dependencies */
-  const webpack = require('webpack')
-  const config = require('../webpack.config.js')
-  const webpackDevMiddleware = require('webpack-dev-middleware')
-  const webpackHotMiddleware = require('webpack-hot-middleware')
-  /* eslint-enable */
+  const compiler = webpack([clientConfig, serverConfig])
+  const clientCompiler = compiler.compilers[0]
+  const options = { publicPath, stats: { colors: true } }
 
-  const compiler = webpack(config)
-  app.use(webpackDevMiddleware(compiler, config.devServer))
-  app.use(webpackHotMiddleware(compiler))
-  app.use(express.static(config.output.publicPath))
+  app.use(webpackDevMiddleware(compiler, options))
+  app.use(webpackHotMiddleware(clientCompiler))
+  app.use(webpackHotServerMiddleware(compiler))
 
-  app.listen(RELAY_PORT, (err) => {
-    if (err) {
-      // eslint-disable-next-line no-undef
-      log(err)
-    } else {
-      // eslint-disable-next-line no-undef
-      log(`App is now running on http://localhost:${RELAY_PORT}`)
-    }
-  })
+  compiler.plugin('done', done)
 } else {
   /** ****************
    *
