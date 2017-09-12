@@ -6,8 +6,12 @@
   ],
   "plugins": [
     "transform-runtime",
-    ["relay", { "schema": "graphql/schema.graphql" }],
-    "babel-plugin-styled-components",
+    ["relay", {
+      "schema": "graphql/schema.graphql"
+    }],
+    ["babel-plugin-styled-components", {
+      "ssr": true
+    }],
     "universal-import"
     // ["react-transform", {
     //   "transforms": [
