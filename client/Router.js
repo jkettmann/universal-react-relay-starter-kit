@@ -6,7 +6,7 @@ import { Resolver } from 'found-relay'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 
 import { ClientFetcher } from './fetcher'
-import routes from './components/Routes'
+import routes from './pages/Routes'
 
 export const historyMiddlewares = [queryMiddleware]
 

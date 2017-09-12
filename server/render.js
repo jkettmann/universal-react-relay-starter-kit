@@ -7,7 +7,7 @@ import { ServerStyleSheet } from 'styled-components'
 
 import { ServerFetcher } from '../client/fetcher'
 import { createResolver, historyMiddlewares, render } from '../client/Router'
-import Routes from '../client/components/Routes'
+import Routes from '../client/pages/Routes'
 
 export default ({ clientStats }) => async (req, res) => {
   // for material ui

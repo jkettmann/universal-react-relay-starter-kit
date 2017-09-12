@@ -4,7 +4,7 @@ import Route from 'found/lib/Route'
 import makeRouteConfig from 'found/lib/makeRouteConfig'
 import universal from 'react-universal-component'
 
-import App from './App'
+import App from '../components/App'
 
 const POST_COUNT = 6
 
@@ -18,9 +18,11 @@ const userProfileQuery = graphql`query Routes_Profile_Query { viewer { ...Profil
 const userPostsQuery = graphql`query Routes_UserPosts_Query ($afterCursor: String, $count: Int!) { viewer { ...UserPosts_viewer } }`
 const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { ...CreatePost_viewer } }`
 
-const getPage = props => import(`../pages/${props.page}`)
+const getPage = props => import(`./${props.page}`)
 
-const UniversalComponent = universal(getPage)
+const UniversalComponent = universal(getPage, {
+  loading: <div>Hi! I'm not ready yet</div>,
+})
 
 const createRender = page => renderParams => (
   <UniversalComponent page={page} {...renderParams.props} isLoading={false} />
@@ -36,13 +38,13 @@ export default makeRouteConfig(
       <App {...match} {...ownProps} {...props} isLoading={!props} />}
   >
     <Route
-      render={createRender('home/Home')}
+      render={createRender('Home')}
       query={homeQuery}
     />
 
     <Route
       path="posts"
-      render={createRender('post/Posts')}
+      render={createRender('Posts')}
       query={postsQuery}
       prepareVariables={params => ({
         ...params,
@@ -53,31 +55,31 @@ export default makeRouteConfig(
 
     <Route
       path="post/:postId"
-      render={createRender('post/PostDetail')}
+      render={createRender('PostDetail')}
       query={postDetailQuery}
     />
 
     <Route
       path="login"
-      render={createRender('user/Login')}
+      render={createRender('UserLogin')}
       query={loginQuery}
     />
 
     <Route
       path="register"
-      render={createRender('user/Register')}
+      render={createRender('UserRegister')}
       query={registerQuery}
     />
 
     <Route
       path="user"
-      render={createRender('user/Profile')}
+      render={createRender('UserProfile')}
       query={userProfileQuery}
     />
 
     <Route
       path="user/posts"
-      render={createRender('user/UserPosts')}
+      render={createRender('UserPosts')}
       query={userPostsQuery}
       prepareVariables={params => ({
         ...params,
@@ -88,7 +90,7 @@ export default makeRouteConfig(
 
     <Route
       path="user/post/create"
-      render={createRender('user/CreatePost')}
+      render={createRender('UserCreatePost')}
       query={createPostQuery}
     />
   </Route>,
