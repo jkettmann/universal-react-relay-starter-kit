@@ -5,6 +5,7 @@ import makeRouteConfig from 'found/lib/makeRouteConfig'
 import universal from 'react-universal-component'
 
 import App from '../components/App'
+import Loading from '../components/Loading'
 
 const POST_COUNT = 6
 
@@ -21,21 +22,19 @@ const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { ...Crea
 const getPage = props => import(`./${props.page}`)
 
 const UniversalComponent = universal(getPage, {
-  loading: <div>Hi! I'm not ready yet</div>,
+  loading: Loading,
 })
 
-const createRender = page => renderParams => (
-  <UniversalComponent page={page} {...renderParams.props} isLoading={false} />
+// eslint-disable-next-line react/prop-types
+const createRender = page => ({ props }) => (
+  <UniversalComponent page={page} {...props} isLoading={!props} />
 )
 
 export default makeRouteConfig(
   <Route
     path="/"
+    Component={App}
     query={appQuery}
-    // we use the render method instead of Component here to always display Header
-    // and Navigation even if the data has not been fetched yet
-    render={({ match, ownProps, props }) =>
-      <App {...match} {...ownProps} {...props} isLoading={!props} />}
   >
     <Route
       render={createRender('Home')}

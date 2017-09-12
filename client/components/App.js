@@ -9,7 +9,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import Header from './header/Header'
 import Navigation from './navigation/Navigation'
-import Loading from './Loading'
 
 // eslint-disable-next-line no-unused-expressions
 injectGlobal`
@@ -37,7 +36,6 @@ class App extends React.Component {
     }),
     children: PropTypes.node.isRequired,
     router: routerShape.isRequired,
-    isLoading: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -74,27 +72,23 @@ class App extends React.Component {
   }
 
   render() {
-    const { viewer, children, isLoading } = this.props
+    const { viewer, children } = this.props
 
     return (
-      <div>
-        <div id="container">
-          <Header
-            viewer={viewer}
-            toggleNavigation={this.toggleNavigation}
-          />
+      <div id="container">
+        <Header
+          viewer={viewer}
+          toggleNavigation={this.toggleNavigation}
+        />
 
-          <Navigation
-            viewer={viewer}
-            open={this.state.navigationOpen}
-            close={this.closeNavigation}
-            navigateTo={this.navigateTo}
-          />
+        <Navigation
+          viewer={viewer}
+          open={this.state.navigationOpen}
+          close={this.closeNavigation}
+          navigateTo={this.navigateTo}
+        />
 
-          {children}
-        </div>
-
-        {isLoading && <Loading />}
+        {children}
       </div>
     )
   }
