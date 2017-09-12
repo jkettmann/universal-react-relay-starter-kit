@@ -4,29 +4,29 @@ import 'whatwg-fetch'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import AppContainer from 'react-hot-loader/lib/AppContainer'
+import AppContainer from 'react-hot-loader/lib/AppContainer'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import { createClientRouter, createClientResolver } from './Router'
 
 injectTapEventPlugin()
 
-async function render() {
+async function render(createRouter) {
   const resolver = createClientResolver()
-  const Router = await createClientRouter(resolver)
+  const Router = await createRouter(resolver)
   ReactDOM.render(
-    <Router resolver={resolver} />,
+    <AppContainer>
+      <Router resolver={resolver} />
+    </AppContainer>,
     // eslint-disable-next-line no-undef
     document.getElementById('root'),
   )
 }
 
-render()
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./Router.js', () => {
+    render(require('./Router').createClientRouter)
+  })
+}
 
-// if (process.env.NODE_ENV === 'development' && module.hot) {
-//   module.hot.accept('./components/Router.js', () => {
-//     render(require('./components/Router').default)
-//   })
-// }
-
-// render(Router)
+render(createClientRouter)
