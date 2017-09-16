@@ -6,6 +6,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware'
 import path from 'path'
 import request from 'request'
+import debug from 'debug'
 
 import clientConfig from '../webpack/client.dev'
 import serverConfig from '../webpack/server.dev'
@@ -16,7 +17,7 @@ import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
 import createGraphQlServer from './graphql/server'
 
-require('./logger.js')
+const log = debug('server')
 
 const IMAGE_PORT = 9000
 const GRAPHQL_PORT = 8080
@@ -55,7 +56,7 @@ app.get(/images\/.{1,}/i, (req, res) => {
 
 const done = () => !isBuilt && app.listen(RELAY_PORT, () => {
   isBuilt = true
-  console.log('BUILD COMPLETE -- Listening @ http://localhost:3000')
+  log('BUILD COMPLETE -- Listening @ http://localhost:3000')
 })
 
 if (!process.env.PRODUCTION) {

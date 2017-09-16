@@ -5,11 +5,14 @@ import { getFarceResult } from 'found/lib/server'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Helmet } from 'react-helmet'
+import debug from 'debug'
 
 import { ServerFetcher } from '../client/fetcher'
 import { createResolver, historyMiddlewares, render } from '../client/Router'
 import Routes from '../client/pages/Routes'
 import withIntl from '../client/intl/ismorphicIntlProvider'
+
+const log = debug('server:render')
 
 export default ({ clientStats }) => async (req, res) => {
   // for material ui
@@ -45,9 +48,9 @@ export default ({ clientStats }) => async (req, res) => {
     scripts,
   } = flushChunks(clientStats, { chunkNames })
 
-  console.log('PATH', req.path)
-  console.log('DYNAMIC CHUNK NAMES RENDERED', chunkNames)
-  console.log('SCRIPTS SERVED', scripts)
+  log('PATH', req.path)
+  log('DYNAMIC CHUNK NAMES RENDERED', chunkNames)
+  log('SCRIPTS SERVED', scripts)
 
   res.send(
     `<!doctype html>

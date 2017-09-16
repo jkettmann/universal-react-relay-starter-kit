@@ -1,9 +1,12 @@
 import express from 'express'
 import graphQLHTTP from 'express-graphql'
+import debug from 'debug'
 
 import uploadMiddleWare from './uploadMiddleware'
 import sessionMiddleware from './sessionMiddleware'
 import Schema from './schema'
+
+const log = debug('graphql-server')
 
 export default function createGraphQlServer(port, database) {
   const graphQLServer = express()

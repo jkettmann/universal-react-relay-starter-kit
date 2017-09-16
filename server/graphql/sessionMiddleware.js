@@ -1,6 +1,9 @@
 import cookieSession from 'cookie-session'
+import debug from 'debug'
 
 import { decodeToken } from '../authentication'
+
+const log = debug('server:sessionMiddleware')
 
 function loadSessionData(req) {
   if (req.session && req.session.token) {

@@ -41,7 +41,6 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin('[name].css'),
   ],
   module: {
     loaders: [
@@ -49,24 +48,6 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         loaders: ['babel-loader'],
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-            {
-              loader: 'postcss-loader',
-              options: {
-                plugins: () => [
-                  require('autoprefixer'), // Automatically include vendor prefixes
-                  require('postcss-nested'), // Enable nested rules, like in Sass
-                ],
-              },
-            },
-          ],
-        }),
       },
       {
         test: /\.js$/,

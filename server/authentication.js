@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken'
+import debug from 'debug'
 
 import { SECRET, ROLES } from './config'
+
+const log = debug('server:authentication')
 
 export function createToken({ id, role } = {}) {
   // eslint-disable-next-line no-undef

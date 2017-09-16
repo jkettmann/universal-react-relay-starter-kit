@@ -3,6 +3,9 @@ import _ from 'lodash'
 import fs from 'fs'
 import path from 'path'
 import sanitize from 'sanitize-filename'
+import debug from 'debug'
+
+const log = debug('server:uploadMiddleware')
 
 const UPLOAD_PATH = path.resolve(__dirname, '../../static/images/upload')
 

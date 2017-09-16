@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
 
 module.exports = {
   name: 'client',
@@ -20,36 +19,17 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader'
       },
-      {
-        test: /\.styl$/,
-        use: ExtractCssChunks.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                localIdentName: '[name]__[local]--[hash:base64:5]'
-              }
-            },
-            {
-              loader: 'stylus-loader'
-            }
-          ]
-        })
-      }
     ]
   },
   resolve: {
-    extensions: ['.js', '.css', '.styl']
+    extensions: ['.js']
   },
   plugins: [
-    new ExtractCssChunks(),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['bootstrap'], // needed to put webpack bootstrap code before chunks
       filename: '[name].[chunkhash].js',
       minChunks: Infinity
     }),
-
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
