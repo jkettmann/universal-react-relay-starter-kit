@@ -12,6 +12,9 @@
     ["babel-plugin-styled-components", {
       "ssr": true
     }],
+    ["react-intl", {
+      "messagesDir": "./build/intl/messages/"
+    }],
     "universal-import"
     // ["react-transform", {
     //   "transforms": [

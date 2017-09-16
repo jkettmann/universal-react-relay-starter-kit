@@ -4,6 +4,7 @@ import { injectGlobal } from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { Helmet } from 'react-helmet'
+import { defineMessages, injectIntl, intlShape } from 'react-intl'
 
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -25,6 +26,11 @@ body {
 }
 `
 
+const messages = defineMessages({
+  pageTitle: { id: 'App.pageTitle', defaultMessage: 'Universal Relay Starter Kit' },
+  metaDescription: { id: 'App.metaDescription', defaultMessage: 'The description to be displayed in google search results' },
+})
+
 class App extends React.Component {
   static childContextTypes = {
     muiTheme: PropTypes.object.isRequired,
@@ -37,6 +43,7 @@ class App extends React.Component {
     }),
     children: PropTypes.node.isRequired,
     router: routerShape.isRequired,
+    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -73,13 +80,18 @@ class App extends React.Component {
   }
 
   render() {
-    const { viewer, children } = this.props
+    const { viewer, children, intl } = this.props
 
     return (
       <div id="container">
         <Helmet>
-          <title>Universal Relay Starter Kit</title>
-          <meta name="description" content="The description to be displayed in google search results" />
+          <title>
+            {intl.formatMessage(messages.pageTitle)}
+          </title>
+          <meta
+            name="description"
+            content={intl.formatMessage(messages.metaDescription)}
+          />
         </Helmet>
 
         <Header
@@ -101,7 +113,7 @@ class App extends React.Component {
 }
 
 export default createFragmentContainer(
-  App,
+  injectIntl(App),
   graphql`
     fragment App_viewer on Viewer {
       ...Header_viewer

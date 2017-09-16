@@ -2,8 +2,7 @@
 node_modules
 
 # Build
-build/app.js
-build/style.css
+build
 buildClient
 buildServer
 

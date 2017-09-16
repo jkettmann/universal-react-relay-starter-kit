@@ -1,0 +1,10 @@
+{
+  "en": {
+    "App.pageTitle": "Universal Relay Starter Kit",
+    "App.metaDescription": "A starter kit for development a universal React app with Relay and GraphQL"
+  },
+  "de": {
+    "App.pageTitle": "Universal Relay Starter Kit",
+    "App.metaDescription": "Ein Starter Kit zur Entwicklung einer React App mit Relay und GraphQL"
+  }
+}

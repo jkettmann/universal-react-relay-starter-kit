@@ -1,17 +1,18 @@
 import express from 'express'
 import webpack from 'webpack' // aliased to webpack-universal
+import cookieParser from 'cookie-parser'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware'
+import path from 'path'
+import request from 'request'
+
 import clientConfig from '../webpack/client.dev'
 import serverConfig from '../webpack/server.dev'
 import clientConfigProd from '../webpack/client.prod'
 import serverConfigProd from '../webpack/server.prod'
 
-import path from 'path'
-import request from 'request'
-import historyApiFallback from 'connect-history-api-fallback'
-
+import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
 import createGraphQlServer from './graphql/server'
 
@@ -39,8 +40,8 @@ imageServer.listen(IMAGE_PORT)
 
 const app = express()
 
-// app.use(historyApiFallback())
-// app.use('/', express.static(`${pathBase}/build`))
+app.use(cookieParser())
+app.use(intlMiddleware)
 
 app.use('/graphql', (req, res) => {
   req.pipe(request(`http://localhost:${GRAPHQL_PORT}/graphql`)).pipe(res)

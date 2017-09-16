@@ -9,6 +9,7 @@ import { Helmet } from 'react-helmet'
 import { ServerFetcher } from '../client/fetcher'
 import { createResolver, historyMiddlewares, render } from '../client/Router'
 import Routes from '../client/pages/Routes'
+import withIntl from '../client/intl/ismorphicIntlProvider'
 
 export default ({ clientStats }) => async (req, res) => {
   // for material ui
@@ -30,8 +31,10 @@ export default ({ clientStats }) => async (req, res) => {
     return
   }
 
+  const locale = req.cookies && req.cookies.locale
+  const elementwithIntl = withIntl(element, locale)
   const sheet = new ServerStyleSheet()
-  const app = ReactDOM.renderToString(sheet.collectStyles(element))
+  const app = ReactDOM.renderToString(sheet.collectStyles(elementwithIntl))
   const chunkNames = flushChunkNames()
   const relayPayload = serialize(fetcher, { isJSON: true })
   const styleTags = sheet.getStyleTags()
@@ -55,11 +58,13 @@ export default ({ clientStats }) => async (req, res) => {
           ${helmet.meta ? helmet.meta.toString() : ''}
           ${styleTags}
           <script>window.__RELAY_PAYLOADS__ = ${relayPayload};</script>
+
+          <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
         </head>
         <body>
           <div id="root">${app}</div>
           ${js}
         </body>
-      </html>`
+      </html>`,
   )
 }
