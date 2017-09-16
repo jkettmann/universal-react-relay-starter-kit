@@ -4,6 +4,7 @@ import flushChunks from 'webpack-flush-chunks'
 import { getFarceResult } from 'found/lib/server'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
+import { Helmet } from 'react-helmet'
 
 import { ServerFetcher } from '../client/fetcher'
 import { createResolver, historyMiddlewares, render } from '../client/Router'
@@ -34,6 +35,7 @@ export default ({ clientStats }) => async (req, res) => {
   const chunkNames = flushChunkNames()
   const relayPayload = serialize(fetcher, { isJSON: true })
   const styleTags = sheet.getStyleTags()
+  const helmet = Helmet.renderStatic()
 
   const {
     js,
@@ -49,7 +51,8 @@ export default ({ clientStats }) => async (req, res) => {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>react-universal-component-boilerplate</title>
+          ${helmet.title ? helmet.title.toString() : ''}
+          ${helmet.meta ? helmet.meta.toString() : ''}
           ${styleTags}
           <script>window.__RELAY_PAYLOADS__ = ${relayPayload};</script>
         </head>

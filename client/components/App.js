@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { injectGlobal } from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { Helmet } from 'react-helmet'
 
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -76,6 +77,11 @@ class App extends React.Component {
 
     return (
       <div id="container">
+        <Helmet>
+          <title>Universal Relay Starter Kit</title>
+          <meta name="description" content="The description to be displayed in google search results" />
+        </Helmet>
+
         <Header
           viewer={viewer}
           toggleNavigation={this.toggleNavigation}

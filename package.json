@@ -95,6 +95,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-helmet": "^5.2.0",
     "react-hot-loader": "next",
     "react-relay": "^1.0.0",
     "react-tap-event-plugin": "^2.0.1",

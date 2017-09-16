@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { routerShape } from 'found/lib/PropTypes'
+import { Helmet } from 'react-helmet'
 import { createPaginationContainer, graphql } from 'react-relay'
 
 import PostList from '../../components/post/PostList'
@@ -9,6 +10,11 @@ export const POST_COUNT = 6
 
 const Posts = ({ viewer, router, relay }) => (
   <div>
+    <Helmet>
+      <title>Universal Relay Starter Kit - A list of posts</title>
+      <meta name="description" content="The description to be displayed in google search results" />
+    </Helmet>
+
     <PostList
       posts={viewer.posts.edges}
       hasMore={relay.hasMore()}
