@@ -7,6 +7,7 @@ import webpackHotServerMiddleware from 'webpack-hot-server-middleware'
 import path from 'path'
 import request from 'request'
 import debug from 'debug'
+import dotenv from 'dotenv'
 
 import clientConfig from '../webpack/client.dev'
 import serverConfig from '../webpack/server.dev'
@@ -17,11 +18,12 @@ import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
 import createGraphQlServer from './graphql/server'
 
+dotenv.config()
 const log = debug('server')
 
 const IMAGE_PORT = 9000
-const GRAPHQL_PORT = 8080
-const RELAY_PORT = 3000
+const PORT_GRAPHQL = process.env.PORT_GRAPHQL
+const PORT_APP = process.env.PORT_APP
 
 const publicPath = clientConfig.output.publicPath
 const outputPath = clientConfig.output.path
@@ -29,7 +31,7 @@ const DEV = process.env.NODE_ENV === 'development'
 
 let isBuilt = false
 
-createGraphQlServer(GRAPHQL_PORT, new Database())
+createGraphQlServer(PORT_GRAPHQL, new Database())
 
 // __dirname is {projectRoot}/server, so we have to step one directory up
 const pathBase = path.resolve(__dirname, '../')
@@ -45,7 +47,7 @@ app.use(cookieParser())
 app.use(intlMiddleware)
 
 app.use('/graphql', (req, res) => {
-  req.pipe(request(`http://localhost:${GRAPHQL_PORT}/graphql`)).pipe(res)
+  req.pipe(request(`http://localhost:${PORT_GRAPHQL}/graphql`)).pipe(res)
 })
 
 app.get(/images\/.{1,}/i, (req, res) => {
@@ -54,9 +56,9 @@ app.get(/images\/.{1,}/i, (req, res) => {
     .pipe(res)
 })
 
-const done = () => !isBuilt && app.listen(RELAY_PORT, () => {
+const done = () => !isBuilt && app.listen(PORT_APP, () => {
   isBuilt = true
-  log('BUILD COMPLETE -- Listening @ http://localhost:3000')
+  log(`BUILD COMPLETE -- Listening @ http://localhost:${PORT_APP}`)
 })
 
 if (!process.env.PRODUCTION) {
