@@ -1,7 +1,7 @@
 {
-  "name": "relay-authentication",
+  "name": "universal-react-relay-starter-kit",
   "version": "0.1.0",
-  "description": "An example showing role based authentication with relay",
+  "description": "Create a React Relay app with server side rendering and code splitting",
   "main": "client/main.js",
   "scripts": {
     "clean": "rimraf buildClient buildServer",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jkettmann/relay-authentication.git"
+    "url": "https://github.com/jkettmann/universal-react-relay-starter-kit.git"
   },
   "keywords": [
     "skeleton",
@@ -25,9 +25,9 @@
   "author": "Johannes Kettmann",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jkettmann/relay-authentication/issues"
+    "url": "https://github.com/jkettmann/universal-react-relay-starter-kit/issues"
   },
-  "homepage": "https://github.com/jkettmann/relay-authentication",
+  "homepage": "https://github.com/jkettmann/universal-react-relay-starter-kit",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^7.2.3",
