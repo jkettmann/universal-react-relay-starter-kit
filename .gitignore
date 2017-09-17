@@ -1,6 +1,9 @@
 # Dependency directory
 node_modules
 
+#Environment
+.env
+
 # Build
 build
 buildClient
