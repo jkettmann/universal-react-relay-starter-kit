@@ -37,7 +37,6 @@ module.exports = {
       filename: '[name].js',
       minChunks: Infinity
     }),
-
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
