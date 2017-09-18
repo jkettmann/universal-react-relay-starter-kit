@@ -14,13 +14,12 @@ import withIntl from '../client/intl/ismorphicIntlProvider'
 
 const log = debug('server:render')
 
-export default ({ clientStats }) => async (req, res) => {
+async function renderAsync(req) {
   // for material ui
   global.navigator = global.navigator || {}
   global.navigator.userAgent = req.headers['user-agent'] || 'all'
 
   const fetcher = new ServerFetcher('http://localhost:8080/graphql')
-
   const { redirect, status, element } = await getFarceResult({
     url: req.url,
     historyMiddlewares,
@@ -29,19 +28,43 @@ export default ({ clientStats }) => async (req, res) => {
     render,
   })
 
-  if (redirect) {
-    res.redirect(302, redirect.url)
-    return
-  }
-
   const locale = req.cookies && req.cookies.locale
   const elementwithIntl = withIntl(element, locale)
   const sheet = new ServerStyleSheet()
   const app = ReactDOM.renderToString(sheet.collectStyles(elementwithIntl))
-  const chunkNames = flushChunkNames()
   const relayPayload = serialize(fetcher, { isJSON: true })
   const styleTags = sheet.getStyleTags()
   const helmet = Helmet.renderStatic()
+
+  return {
+    app,
+    helmet,
+    relayPayload,
+    styleTags,
+    redirect,
+  }
+}
+
+export default ({ clientStats }) => async (req, res) => {
+  let title = ''
+  let meta = ''
+  let styleTags = ''
+  let relayPayload = null
+  let app = ''
+
+  try {
+    const renderResult = await renderAsync(req)
+    const helmet = renderResult.helmet
+    title = helmet && helmet.title && helmet.title.toString()
+    meta = helmet && helmet.meta && helmet.meta.toString()
+    styleTags = renderResult.styleTags
+    relayPayload = renderResult.relayPayload
+    app = renderResult.app
+  } catch (err) {
+    console.error('render', err)
+  }
+
+  const chunkNames = flushChunkNames()
 
   const {
     js,
@@ -57,8 +80,8 @@ export default ({ clientStats }) => async (req, res) => {
       <html>
         <head>
           <meta charset="utf-8">
-          ${helmet.title ? helmet.title.toString() : ''}
-          ${helmet.meta ? helmet.meta.toString() : ''}
+          ${title}
+          ${meta}
           ${styleTags}
           <script>window.__RELAY_PAYLOADS__ = ${relayPayload};</script>
 
