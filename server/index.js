@@ -6,6 +6,8 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware'
 import path from 'path'
 import request from 'request'
+import Aws from 'aws-sdk'
+import S3Router from 'react-s3-uploader/s3router'
 import debug from 'debug'
 import dotenv from 'dotenv'
 
@@ -33,27 +35,27 @@ let isBuilt = false
 
 createGraphQlServer(PORT_GRAPHQL, new Database())
 
-// __dirname is {projectRoot}/server, so we have to step one directory up
-const pathBase = path.resolve(__dirname, '../')
-
-const imageServer = express()
-imageServer.use('/images', express.static(`${pathBase}/static/images`))
-
-imageServer.listen(IMAGE_PORT)
+Aws.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+})
 
 const app = express()
+
+app.use('/upload/image', S3Router({
+  bucket: process.env.S3_IMAGE_BUCKET,
+  region: 'eu-central-1',
+  signatureVersion: 'v4',
+  headers: { 'Access-Control-Allow-Origin': '*' },
+  ACL: 'public-read',
+  uniquePrefix: true,
+}))
 
 app.use(cookieParser())
 app.use(intlMiddleware)
 
 app.use('/graphql', (req, res) => {
   req.pipe(request(`http://localhost:${PORT_GRAPHQL}/graphql`)).pipe(res)
-})
-
-app.get(/images\/.{1,}/i, (req, res) => {
-  req
-    .pipe(request(`http://localhost:${IMAGE_PORT}${req.originalUrl}`))
-    .pipe(res)
 })
 
 const done = () => !isBuilt && app.listen(PORT_APP, () => {

@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "accept-language": "^3.0.17",
+    "aws-sdk": "^2.117.0",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.2",
     "debug": "^3.0.1",
@@ -85,6 +86,7 @@
     "react-hot-loader": "next",
     "react-intl": "^2.4.0",
     "react-relay": "^1.0.0",
+    "react-s3-uploader": "^4.5.0",
     "react-tap-event-plugin": "^2.0.1",
     "react-universal-component": "^2.5.4",
     "relay-compiler": "^1.0.0",

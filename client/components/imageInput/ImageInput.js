@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { HOC } from 'formsy-react'
 import RaisedButton from 'material-ui/RaisedButton'
+import S3Uploader from 'react-s3-uploader'
 
 class FileInput extends React.Component {
   static propTypes = {
@@ -21,17 +22,28 @@ class FileInput extends React.Component {
   constructor() {
     super()
     this.state = {
-      file: null,
+      fileKey: null,
       imageSrc: null,
     }
   }
 
-  setInputElement = (element) => {
-    this.inputElement = element || {}
+  onUploadStart = (file, next) => {
+    console.log('upload start')
+    next(file)
   }
 
-  openDialog = () => {
-    this.inputElement.click()
+  onUploadProgress = (percent, message) => {
+    console.log('upload progress', percent, message)
+  }
+
+  onUploadError = (message) => {
+    console.log('upload error', message)
+  }
+
+  onUploadFinish = ({ fileKey, publicUrl }) => {
+    console.log('upload finish', ...arguments)
+    const imageSrc = publicUrl.replace('/s3/', '/image-upload/')
+    this.setState({ fileKey, imageSrc })
   }
 
   changeValue = (event) => {
@@ -53,7 +65,7 @@ class FileInput extends React.Component {
     return (
       <div style={this.props.style}>
         <RaisedButton
-          label={this.state.file ? this.state.file.name : this.props.label}
+          label={this.props.label}
           fullWidth={this.props.fullWidth}
           onClick={this.openDialog}
         />
@@ -73,11 +85,18 @@ class FileInput extends React.Component {
           />
         </div>
 
-        <input
-          ref={this.setInputElement}
-          style={{ display: 'none' }}
-          type="file"
-          onChange={this.changeValue}
+        <S3Uploader
+          signingUrl="/upload/image/sign"
+          signingUrlMethod="GET"
+          accept="image/*"
+          preprocess={this.onUploadStart}
+          onProgress={this.onUploadProgress}
+          onError={this.onUploadError}
+          onFinish={this.onUploadFinish}
+          uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}  // this is the default
+          contentDisposition="auto"
+          scrubFilename={filename => filename.replace(/[^\w\d_\-.]+/ig, '')}
+          signingUrlWithCredentials
         />
       </div>
     )
