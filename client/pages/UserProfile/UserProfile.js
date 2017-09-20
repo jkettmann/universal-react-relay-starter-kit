@@ -38,7 +38,7 @@ Profile.propTypes = {
 export default createFragmentContainer(
   Profile,
   graphql`
-    fragment Profile_viewer on Viewer {
+    fragment UserProfile_viewer on Viewer {
       user {
         firstName
         lastName

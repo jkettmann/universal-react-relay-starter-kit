@@ -7,12 +7,23 @@ import Formsy from 'formsy-react'
 import { FormsyText } from 'formsy-material-ui'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import RegisterMutation from '../../mutation/RegisterMutation'
+import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
 
 const Wrapper = styled.div`
   margin-top: 50px;
   text-align: center;
+`
+
+const Hint = styled.div`
+  max-width: 400px;
+  margin: auto;
+  font-size: 14px;
+  line-height: 20px;
+`
+
+const Bold = styled.b`
+  font-weight: 400;
 `
 
 const Form = styled(Formsy.Form)`
@@ -21,7 +32,7 @@ const Form = styled(Formsy.Form)`
   margin-right: auto;
 `
 
-class RegisterPage extends React.Component {
+class LoginPage extends React.Component {
   static propTypes = {
     router: routerShape.isRequired,
     relay: PropTypes.shape({
@@ -32,47 +43,23 @@ class RegisterPage extends React.Component {
     }).isRequired,
   }
 
-  constructor() {
-    super()
-    this.state = {
-      canSubmit: false,
-    }
-  }
-
   setFormElement = (element) => {
     this.formElement = element
   }
 
-  goToLogin = () => {
-    this.props.router.push('/login')
-  }
-
-  enableButton = () => {
-    this.setState({
-      canSubmit: true,
-    })
-  }
-
-  disableButton = () => {
-    this.setState({
-      canSubmit: false,
-    })
-  }
-
-  register = ({ email, password, firstName, lastName }) => {
+  login = ({ email, password }) => {
     const environment = this.props.relay.environment
-
-    RegisterMutation.commit({
+    LoginMutation.commit({
       environment,
-      input: { email, password, firstName, lastName },
-      onCompleted: () => this.props.router.push('/login'),
+      input: { email, password },
+      onCompleted: () => this.props.router.go(-1),
       onError: (errors) => {
-        console.error('Registration Failed', errors[0])
+        console.error('login failed', errors[0])
         const formError = {}
         switch (errors[0]) {
-          case ERRORS.EmailAlreadyTaken:
-            formError.email =
-              'This email address is already taken.'
+          case ERRORS.WrongEmailOrPassword:
+            formError.email = 'Email or password is incorrect'
+            formError.password = 'Email or password is incorrect'
             break
           default:
             break
@@ -83,20 +70,26 @@ class RegisterPage extends React.Component {
   }
 
   render() {
-    if (this.props.viewer.isLoggedIn) {
+    const viewer = this.props.viewer
+    if (viewer.isLoggedIn) {
       this.props.router.push('/')
       return <div />
     }
 
+    const submitMargin = { marginTop: 20 }
+
     return (
       <Wrapper>
-        <h2>Register</h2>
+        <h2>Login</h2>
+
+        <Hint>
+          You can use <Bold>reader@test.com</Bold>, <Bold>publisher@test.com</Bold>,
+          <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
+        </Hint>
 
         <Form
           ref={this.setFormElement}
-          onValid={this.enableButton}
-          onInvalid={this.disableButton}
-          onSubmit={this.register}
+          onSubmit={this.login}
         >
 
           <FormsyText
@@ -105,7 +98,6 @@ class RegisterPage extends React.Component {
             fullWidth
             validations="isEmail"
             validationError="Please enter a valid email address"
-            required
           />
 
           <FormsyText
@@ -113,44 +105,22 @@ class RegisterPage extends React.Component {
             type="password"
             floatingLabelText="Passwort"
             fullWidth
-            validations="minLength:5"
-            validationError="Please enter at least 5 characters"
-            required
-          />
-
-          <FormsyText
-            name="firstName"
-            floatingLabelText="First Name"
-            fullWidth
-            validations="isWords"
-            validationError="Please enter your first name"
-            required
-          />
-
-          <FormsyText
-            name="lastName"
-            floatingLabelText="Last Name"
-            fullWidth
-            validations="isWords"
-            validationError="Please enter your last name"
-            required
           />
 
           <RaisedButton
             type="submit"
-            label="Register"
+            label="Login"
             secondary
             fullWidth
-            style={{ marginTop: 20 }}
-            disabled={!this.state.canSubmit}
+            style={submitMargin}
           />
 
           <RaisedButton
-            label="Login"
+            label="Register"
             primary
             fullWidth
-            style={{ marginTop: 20 }}
-            onClick={this.goToLogin}
+            style={submitMargin}
+            onClick={() => this.props.router.push('/register')}
           />
 
         </Form>
@@ -160,13 +130,12 @@ class RegisterPage extends React.Component {
   }
 }
 
-const container = createFragmentContainer(
-  RegisterPage,
+export default createFragmentContainer(
+  LoginPage,
   graphql`
-    fragment Register_viewer on Viewer {
+    fragment UserLogin_viewer on Viewer {
       isLoggedIn
+      canPublish
     }
   `,
 )
-
-export default container
