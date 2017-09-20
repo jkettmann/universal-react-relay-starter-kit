@@ -127,7 +127,7 @@ class CreatePostPage extends React.Component {
 const container = createFragmentContainer(
   CreatePostPage,
   graphql`
-    fragment CreatePost_viewer on Viewer {
+    fragment UserCreatePost_viewer on Viewer {
       canPublish
     }
   `,

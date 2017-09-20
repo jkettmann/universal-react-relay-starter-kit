@@ -9,7 +9,7 @@ import debug from 'debug'
 
 import { ServerFetcher } from '../client/fetcher'
 import { createResolver, historyMiddlewares, render } from '../client/Router'
-import Routes from '../client/pages/Routes'
+import Routes from '../client/Routes'
 import withIntl from '../client/intl/ismorphicIntlProvider'
 
 const log = debug('server:render')

@@ -54,7 +54,7 @@ PostDetail.propTypes = {
 export default createFragmentContainer(
   PostDetail,
   graphql`
-    fragment PostDetail_viewer on Viewer {
+    fragment PostDetails_viewer on Viewer {
       post (postId: $postId) {
         title
         description
