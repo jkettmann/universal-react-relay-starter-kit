@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { injectGlobal } from 'styled-components'
+import { injectGlobal, ThemeProvider } from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { Helmet } from 'react-helmet'
@@ -9,8 +9,7 @@ import { defineMessages, injectIntl, intlShape } from 'react-intl'
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
-import Header from './header/Header'
-import Navigation from './navigation/Navigation'
+import Navigation from './Navigation'
 
 // eslint-disable-next-line no-unused-expressions
 injectGlobal`
@@ -25,6 +24,40 @@ body {
   color: #555;
 }
 `
+
+const theme = {
+  color: {
+    primary: 'rgb(0, 188, 212)',
+    text: '#555555',
+    textAlternate: '#ffffff',
+    grey0: '#000000',
+    grey1: '#555555',
+    grey4: '#a7a7a7',
+    grey5: '#ffffff',
+  },
+  sizes: {
+    navigationHeight: {
+      value: 60,
+      unit: 'px',
+    },
+    icon: {
+      value: 24,
+      unit: 'px',
+    },
+  },
+  zIndex: {
+    navigationBar: 1100,
+    navigation: 1101,
+    navigationIcon: 1102,
+  },
+}
+
+theme.size = (name) => {
+  if (!theme.sizes[name]) {
+    console.error(`no size ${name} defined`)
+  }
+  return `${theme.sizes[name].value}${theme.sizes[name].unit}`
+}
 
 const messages = defineMessages({
   pageTitle: { id: 'App.pageTitle', defaultMessage: 'Universal Relay Starter Kit' },
@@ -62,52 +95,28 @@ class App extends React.Component {
     return { muiTheme: getMuiTheme(baseTheme) }
   }
 
-  toggleNavigation = () => {
-    const state = this.state
-    state.navigationOpen = !this.state.navigationOpen
-    this.setState(state)
-  }
-
-  closeNavigation = () => {
-    const state = this.state
-    state.navigationOpen = false
-    this.setState(state)
-  }
-
-  navigateTo = (route) => {
-    this.props.router.push(route)
-    this.closeNavigation()
-  }
-
   render() {
     const { viewer, children, intl } = this.props
+    const { navigationOpen } = this.state
 
     return (
-      <div id="container">
-        <Helmet>
-          <title>
-            {intl.formatMessage(messages.pageTitle)}
-          </title>
-          <meta
-            name="description"
-            content={intl.formatMessage(messages.metaDescription)}
-          />
-        </Helmet>
+      <ThemeProvider theme={theme}>
+        <div id="container">
+          <Helmet>
+            <title>
+              {intl.formatMessage(messages.pageTitle)}
+            </title>
+            <meta
+              name="description"
+              content={intl.formatMessage(messages.metaDescription)}
+            />
+          </Helmet>
 
-        <Header
-          viewer={viewer}
-          toggleNavigation={this.toggleNavigation}
-        />
+          <Navigation viewer={viewer} />
 
-        <Navigation
-          viewer={viewer}
-          open={this.state.navigationOpen}
-          close={this.closeNavigation}
-          navigateTo={this.navigateTo}
-        />
-
-        {children}
-      </div>
+          {children}
+        </div>
+      </ThemeProvider>
     )
   }
 }
@@ -116,7 +125,6 @@ export default createFragmentContainer(
   injectIntl(App),
   graphql`
     fragment App_viewer on Viewer {
-      ...Header_viewer
       ...Navigation_viewer
     }
   `,
