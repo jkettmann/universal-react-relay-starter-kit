@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import GridList from 'material-ui/GridList'
-import RaisedButton from 'material-ui/RaisedButton'
+import Button from '../Button'
 
 import PostListItem from './PostListItem'
 
@@ -84,7 +84,12 @@ class PostList extends React.Component {
               padding: '0 2px 0',
             }}
           >
-            <RaisedButton label="More" onClick={onMore} secondary fullWidth />
+            <Button
+              label="More"
+              onClick={onMore}
+              secondary
+              fullWidth
+            />
           </div>}
       </div>
     )

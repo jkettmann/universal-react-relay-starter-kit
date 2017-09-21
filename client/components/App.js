@@ -28,6 +28,7 @@ body {
 const theme = {
   color: {
     primary: 'rgb(0, 188, 212)',
+    secondary: '#ff4081',
     text: '#555555',
     textAlternate: '#ffffff',
     grey0: '#000000',
@@ -50,6 +51,7 @@ const theme = {
     navigation: 1101,
     navigationIcon: 1102,
   },
+  animation: '450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
 }
 
 theme.size = (name) => {

@@ -5,8 +5,8 @@ import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
 import { FormsyText } from 'formsy-material-ui'
-import RaisedButton from 'material-ui/RaisedButton'
 
+import Button from '../../components/Button'
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
 
@@ -107,20 +107,20 @@ class LoginPage extends React.Component {
             fullWidth
           />
 
-          <RaisedButton
+          <Button
             type="submit"
             label="Login"
-            secondary
-            fullWidth
             style={submitMargin}
+            fullWidth
+            secondary
           />
 
-          <RaisedButton
+          <Button
             label="Register"
-            primary
-            fullWidth
             style={submitMargin}
             onClick={() => this.props.router.push('/register')}
+            fullWidth
+            primary
           />
 
         </Form>

@@ -34,7 +34,6 @@ const PublisherMenu = [
 
 const ContentMenu = [
   { text: messages.posts, to: '/posts' },
-  { text: messages.posts, to: '/posts' },
 ]
 
 const Wrapper = styled.div`
@@ -49,7 +48,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   transform: translateX(-100%);
   background: ${props => props.theme.color.grey5};
-  transition: transform 0.5s;
+  transition: transform ${props => props.theme.animation};
   z-index: ${props => props.theme.zIndex.navigation};
 
   &.open {
@@ -75,13 +74,17 @@ const Divider = styled.div`
 // TODO refactor onClick
 const renderNavigationItems = (items, { intl, onItemClick }) =>
   items.map(({ text, to, onClick }) => (
-    <NavigationItem to={to} onClick={() => { onClick(); onItemClick() }}>
+    <NavigationItem
+      key={to}
+      to={to}
+      onClick={() => { onClick(); onItemClick() }}
+    >
       {intl.formatMessage(text)}
     </NavigationItem>
   ),
 )
 
-const Navigation = ({ open, viewer, ...itemProps }) => (
+const NavigationMenu = ({ open, viewer, ...itemProps }) => (
   <Wrapper className={open && 'open'}>
     {!viewer.isLoggedIn && renderNavigationItems(AnonymousMenu, itemProps)}
     {viewer.isLoggedIn && !viewer.canPublish && renderNavigationItems(ReaderMenu, itemProps)}
@@ -93,7 +96,7 @@ const Navigation = ({ open, viewer, ...itemProps }) => (
   </Wrapper>
 )
 
-Navigation.propTypes = {
+NavigationMenu.propTypes = {
   open: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -101,12 +104,12 @@ Navigation.propTypes = {
   viewer: PropTypes.object,
 }
 
-Navigation.defaultProps = {
+NavigationMenu.defaultProps = {
   viewer: {},
 }
 
 export default createFragmentContainer(
-  injectIntl(Navigation),
+  injectIntl(NavigationMenu),
   graphql`
     fragment NavigationMenu_viewer on Viewer {
       isLoggedIn

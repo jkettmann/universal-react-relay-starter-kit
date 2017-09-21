@@ -5,8 +5,8 @@ import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
 import { FormsyText } from 'formsy-material-ui'
-import RaisedButton from 'material-ui/RaisedButton'
 
+import Button from '../../components/Button'
 import RegisterMutation from '../../mutation/RegisterMutation'
 import { ERRORS } from '../../../config'
 
@@ -136,21 +136,21 @@ class RegisterPage extends React.Component {
             required
           />
 
-          <RaisedButton
+          <Button
             type="submit"
             label="Register"
-            secondary
-            fullWidth
             style={{ marginTop: 20 }}
             disabled={!this.state.canSubmit}
+            secondary
+            fullWidth
           />
 
-          <RaisedButton
+          <Button
             label="Login"
-            primary
-            fullWidth
             style={{ marginTop: 20 }}
             onClick={this.goToLogin}
+            primary
+            fullWidth
           />
 
         </Form>

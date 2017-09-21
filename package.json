@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "accept-language": "^3.0.17",
+    "classnames": "^2.2.5",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.2",
     "debug": "^3.0.1",
@@ -87,6 +88,7 @@
     "react-relay": "^1.0.0",
     "react-tap-event-plugin": "^2.0.1",
     "react-universal-component": "^2.5.4",
+    "recompose": "^0.25.0",
     "relay-compiler": "^1.0.0",
     "relay-runtime": "^1.0.0",
     "request": "^2.81.0",
