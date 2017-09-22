@@ -48,7 +48,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   transform: translateX(-100%);
   background: ${props => props.theme.color.grey5};
-  transition: transform ${props => props.theme.animation};
+  transition: transform ${props => props.theme.animation.default};
   z-index: ${props => props.theme.zIndex.navigation};
 
   &.open {

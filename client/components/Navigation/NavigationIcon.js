@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 const Icon = styled.div`
   position: relative;
   transform: rotate(0deg);
-  transition: ${props => props.theme.animation};
+  transition: ${props => props.theme.animation.default};
 `
 
 const Line = styled.span`
@@ -29,7 +29,7 @@ const Line = styled.span`
   opacity: 1;
   left: 0;
   transform: rotate(0deg);
-  transition: ${props => props.theme.animation};
+  transition: ${props => props.theme.animation.default};
 
   &.open {
     background: ${props => props.theme.color.text}

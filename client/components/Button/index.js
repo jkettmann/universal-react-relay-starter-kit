@@ -22,7 +22,7 @@ const Wrapper = styled.button`
   height: 36px;
   line-height: 36px;
   border-radius: 2px;
-  transition: all ${props => props.theme.animation};
+  transition: all ${props => props.theme.animation.default};
   text-align: center;
   color: ${props => props.theme.color.text};
 
@@ -45,7 +45,7 @@ const InnerOverlay = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 24px;
-  transition: all ${props => props.theme.animation};
+  transition: all ${props => props.theme.animation.default};
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
