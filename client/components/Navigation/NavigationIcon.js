@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   width: 34px;
-  height: 29px;
+  height: 26px;
   margin-right: 24px;
-  padding: 4px;
+  padding: 4px 6px;
   cursor: pointer;
   outline: none;
   -webkit-tap-highlight-color: transparent;
@@ -41,19 +41,17 @@ const Line = styled.span`
   }
 
   &:nth-child(2) {
-    top: 8px;
+    top: 7px;
     transform-origin: left center;
   }
 
   &:nth-child(3) {
-    top: 16px;
+    top: 14px;
     transform-origin: left center;
   }
 
   &:nth-child(1).open {
-    transform: rotate(45deg);
-    top: -1px;
-    left: 3px;
+    transform: translate(4px, -1px) rotate(45deg);
   }
 
   &:nth-child(2).open {
@@ -62,9 +60,7 @@ const Line = styled.span`
   }
 
   &:nth-child(3).open {
-    transform: rotate(-45deg);
-    top: 17px;
-    left: 3px;
+    transform: translate(4px, 1px) rotate(-45deg);
   }
 `
 
