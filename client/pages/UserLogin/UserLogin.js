@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
-import { FormsyText } from 'formsy-material-ui'
 
+import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
@@ -92,18 +92,18 @@ class LoginPage extends React.Component {
           onSubmit={this.login}
         >
 
-          <FormsyText
+          <TextInput
             name="email"
-            floatingLabelText="E-Mail"
-            fullWidth
+            label="E-Mail"
             validations="isEmail"
             validationError="Please enter a valid email address"
+            fullWidth
           />
 
-          <FormsyText
-            name="password"
+          <TextInput
             type="password"
-            floatingLabelText="Passwort"
+            name="password"
+            label="Passwort"
             fullWidth
           />
 
