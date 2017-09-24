@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createFragmentContainer, graphql } from 'react-relay'
 import styled from 'styled-components'
-import Link from 'found/lib/Link'
-import { defineMessages, injectIntl, intlShape } from 'react-intl'
+import { defineMessages } from 'react-intl'
+
+import NavigationItemList from './NavigationItemList'
 
 const messages = defineMessages({
   profile: { id: 'Navigation.User.Profile', defaultMessage: 'Profile' },
@@ -16,24 +17,24 @@ const messages = defineMessages({
 
 const logout = () => {}
 
-const AnonymousMenu = [
-  { text: messages.login, to: '/login' },
+const anonymousMenuItems = [
+  { messageId: messages.login, to: '/login' },
 ]
 
-const ReaderMenu = [
-  { text: messages.profile, to: '/user' },
-  { text: messages.logout, onClick: logout },
+const readMenuItems = [
+  { messageId: messages.profile, to: '/user' },
+  { messageId: messages.logout, onClick: logout },
 ]
 
-const PublisherMenu = [
-  { text: messages.profile, to: '/user' },
-  { text: messages.createPost, to: '/user/post/create' },
-  { text: messages.userPosts, to: '/user/posts' },
-  { text: messages.logout, onClick: logout },
+const publisherMenuItems = [
+  { messageId: messages.profile, to: '/user' },
+  { messageId: messages.createPost, to: '/user/post/create' },
+  { messageId: messages.userPosts, to: '/user/posts' },
+  { messageId: messages.logout, onClick: logout },
 ]
 
-const ContentMenu = [
-  { text: messages.posts, to: '/posts' },
+const contentMenuItems = [
+  { messageId: messages.posts, to: '/posts' },
 ]
 
 const Wrapper = styled.div`
@@ -56,14 +57,6 @@ const Wrapper = styled.div`
   }
 `
 
-const NavigationItem = styled(Link)`
-  width: 100%;
-  padding: 12px 24px;
-  text-decoration: none;
-  font-size: 20px;
-  color: ${props => props.theme.color.text}
-`
-
 const Divider = styled.div`
   height: 1px;
   width: 100%;
@@ -71,34 +64,46 @@ const Divider = styled.div`
   background: ${props => props.theme.color.grey4};
 `
 
-// TODO refactor onClick
-const renderNavigationItems = (items, { intl, onItemClick }) =>
-  items.map(({ text, to, onClick }) => (
-    <NavigationItem
-      key={to}
-      to={to}
-      onClick={() => { onClick(); onItemClick() }}
-    >
-      {intl.formatMessage(text)}
-    </NavigationItem>
-  ),
-)
-
-const NavigationMenu = ({ open, viewer, ...itemProps }) => (
+const NavigationMenu = ({ open, viewer, onItemClick }) => (
   <Wrapper className={open && 'open'}>
-    {!viewer.isLoggedIn && renderNavigationItems(AnonymousMenu, itemProps)}
-    {viewer.isLoggedIn && !viewer.canPublish && renderNavigationItems(ReaderMenu, itemProps)}
-    {viewer.canPublish && renderNavigationItems(PublisherMenu, itemProps)}
+    {
+      !viewer.isLoggedIn && (
+        <NavigationItemList
+          items={anonymousMenuItems}
+          onItemClick={onItemClick}
+        />
+      )
+    }
+
+    {
+      viewer.isLoggedIn && !viewer.canPublish && (
+        <NavigationItemList
+          items={readMenuItems}
+          onItemClick={onItemClick}
+        />
+      )
+    }
+
+    {
+      viewer.canPublish && (
+        <NavigationItemList
+          items={publisherMenuItems}
+          onItemClick={onItemClick}
+        />
+      )
+    }
 
     <Divider />
 
-    {renderNavigationItems(ContentMenu, itemProps)}
+    <NavigationItemList
+      items={contentMenuItems}
+      onItemClick={onItemClick}
+    />
   </Wrapper>
 )
 
 NavigationMenu.propTypes = {
   open: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
   onItemClick: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   viewer: PropTypes.object,
@@ -109,7 +114,7 @@ NavigationMenu.defaultProps = {
 }
 
 export default createFragmentContainer(
-  injectIntl(NavigationMenu),
+  NavigationMenu,
   graphql`
     fragment NavigationMenu_viewer on Viewer {
       isLoggedIn
