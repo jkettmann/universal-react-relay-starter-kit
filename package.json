@@ -5,7 +5,7 @@
   "main": "client/main.js",
   "scripts": {
     "clean": "rimraf buildClient buildServer",
-    "start:dev": "npm run relay-compiler:watch | DEBUG=server*,graphql-server* babel-node server",
+    "start:dev": "npm run relay-compiler:watch | DEBUG=server*,graphql-server* babel-node server -d",
     "start": "npm run clean && npm run start:dev",
     "relay-compiler": "relay-compiler --src client --schema server/graphql/schema.graphql",
     "relay-compiler:watch": "relay-compiler --src client --schema server/graphql/schema.graphql --watch",
