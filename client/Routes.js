@@ -1,11 +1,16 @@
 import React from 'react'
 import { graphql } from 'react-relay'
 import Route from 'found/lib/Route'
+import RedirectException from 'found/lib/RedirectException'
 import makeRouteConfig from 'found/lib/makeRouteConfig'
 import universal from 'react-universal-component'
 
 import App from './components/App'
 import Loading from './components/Loading'
+
+export const paths = {
+  unauthorized: '/unauthorized',
+}
 
 const POST_COUNT = 6
 
@@ -17,7 +22,7 @@ const loginQuery = graphql`query Routes_Login_Query { viewer { ...UserLogin_view
 const registerQuery = graphql`query Routes_Register_Query { viewer { ...UserRegister_viewer } }`
 const userProfileQuery = graphql`query Routes_Profile_Query { viewer { ...UserProfile_viewer } }`
 const userPostsQuery = graphql`query Routes_UserPosts_Query ($afterCursor: String, $count: Int!) { viewer { ...UserPosts_viewer } }`
-const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { ...UserCreatePost_viewer } }`
+const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { canPublish, ...UserCreatePost_viewer } }`
 
 const getPage = props => import(`./async/${props.page}`)
 
@@ -26,9 +31,17 @@ const UniversalComponent = universal(getPage, {
 })
 
 // eslint-disable-next-line react/prop-types
-const createRender = page => ({ props }) => (
-  <UniversalComponent page={page} {...props} isLoading={!props} />
-)
+const createRender = (page, authorizationFlag) => ({ props }) => {
+  if (authorizationFlag && !props) {
+    return null
+  }
+  // eslint-disable-next-line react/prop-types
+  if (authorizationFlag && props && props.viewer && !props.viewer[authorizationFlag]) {
+    throw new RedirectException(paths.unauthorized)
+  }
+
+  return <UniversalComponent page={page} {...props} isLoading={!props} />
+}
 
 export default makeRouteConfig(
   <Route
@@ -59,7 +72,13 @@ export default makeRouteConfig(
     />
 
     <Route
-      path="login"
+      path="/login"
+      render={createRender('UserLoginPage')}
+      query={loginQuery}
+    />
+
+    <Route
+      path={paths.unauthorized}
       render={createRender('UserLoginPage')}
       query={loginQuery}
     />
@@ -89,7 +108,7 @@ export default makeRouteConfig(
 
     <Route
       path="user/post/create"
-      render={createRender('UserCreatePostPage')}
+      render={createRender('UserCreatePostPage', 'canPublish')}
       query={createPostQuery}
     />
   </Route>,
