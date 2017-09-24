@@ -1,13 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import GridList from 'material-ui/GridList'
-import RaisedButton from 'material-ui/RaisedButton'
+import { Grid, GridTile } from '../Grid'
+import Button from '../Button'
 
 import PostListItem from './PostListItem'
-
-const DEFAULT_ITEM_WIDTH = 400
-const ITEM_PROPORTIONS = 0.75
 
 const styles = {
   root: {
@@ -52,17 +49,10 @@ class PostList extends React.Component {
 
   render() {
     const { posts, hasMore, onItemClick, onMore } = this.props
-    const numCols = parseInt(this.state.width / DEFAULT_ITEM_WIDTH, 10) || 1
-    const itemHeight = (this.state.width / numCols) * ITEM_PROPORTIONS
 
     return (
       <div ref={this.setContainerRef} style={styles.root}>
-        <GridList
-          style={styles.gridList}
-          cellHeight={itemHeight}
-          cols={numCols}
-        >
-
+        <Grid>
           {
             posts.map(({ node }) => (
               <PostListItem
@@ -73,7 +63,7 @@ class PostList extends React.Component {
             ))
           }
 
-        </GridList>
+        </Grid>
 
         {hasMore &&
           <div
@@ -84,7 +74,12 @@ class PostList extends React.Component {
               padding: '0 2px 0',
             }}
           >
-            <RaisedButton label="More" onClick={onMore} secondary fullWidth />
+            <Button
+              label="More"
+              onClick={onMore}
+              secondary
+              fullWidth
+            />
           </div>}
       </div>
     )
