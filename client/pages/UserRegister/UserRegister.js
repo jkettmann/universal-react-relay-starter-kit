@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
-import { FormsyText } from 'formsy-material-ui'
 
+import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
 import RegisterMutation from '../../mutation/RegisterMutation'
 import { ERRORS } from '../../../config'
@@ -99,40 +99,40 @@ class RegisterPage extends React.Component {
           onSubmit={this.register}
         >
 
-          <FormsyText
+          <TextInput
             name="email"
-            floatingLabelText="E-Mail"
-            fullWidth
+            label="E-Mail"
             validations="isEmail"
             validationError="Please enter a valid email address"
+            fullWidth
             required
           />
 
-          <FormsyText
+          <TextInput
             name="password"
             type="password"
-            floatingLabelText="Passwort"
-            fullWidth
+            label="Passwort"
             validations="minLength:5"
             validationError="Please enter at least 5 characters"
+            fullWidth
             required
           />
 
-          <FormsyText
+          <TextInput
             name="firstName"
-            floatingLabelText="First Name"
-            fullWidth
+            label="First Name"
             validations="isWords"
             validationError="Please enter your first name"
+            fullWidth
             required
           />
 
-          <FormsyText
+          <TextInput
             name="lastName"
-            floatingLabelText="Last Name"
-            fullWidth
+            label="Last Name"
             validations="isWords"
             validationError="Please enter your last name"
+            fullWidth
             required
           />
 
@@ -141,16 +141,16 @@ class RegisterPage extends React.Component {
             label="Register"
             style={{ marginTop: 20 }}
             disabled={!this.state.canSubmit}
-            secondary
             fullWidth
+            secondary
           />
 
           <Button
             label="Login"
             style={{ marginTop: 20 }}
             onClick={this.goToLogin}
-            primary
             fullWidth
+            primary
           />
 
         </Form>

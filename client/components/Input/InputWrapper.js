@@ -10,18 +10,23 @@ import ErrorMessage from './ErrorMessage'
 const Wrapper = styled.div`
   position: relative;
   padding-top: 34px;
+
+  &:fullWidth {
+    width: 100%;
+  }
 `
 
 const InputWrapper = ({
   active, // eslint-disable-line react/prop-types
   hasValue, // eslint-disable-line react/prop-types
   error, // eslint-disable-line react/prop-types
+  fullWidth,
   name,
   label,
   children,
   ...childProps
 }) => (
-  <Wrapper>
+  <Wrapper className={fullWidth && 'fullWidth'}>
     <FloatingLabel
       for={name}
       active={active}
@@ -42,15 +47,17 @@ const InputWrapper = ({
 )
 
 InputWrapper.propTypes = {
-  name: PropTypes.string,
-  label: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   children: PropTypes.node.isRequired,
+  fullWidth: PropTypes.bool,
+  label: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 InputWrapper.defaultProps = {
-  name: null,
+  fullWidth: false,
   label: null,
+  name: null,
   value: null,
 }
 
