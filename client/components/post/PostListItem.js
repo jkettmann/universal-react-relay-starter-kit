@@ -1,13 +1,14 @@
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import { AspectRatio, Tile, TileContent } from '../Grid'
 
 // ${props => props.theme.media.tablet`width: 50%`};
 // ${props => props.theme.media.tablet`width: 25%`};
 
-const StyledTile = Tile.extend`
+const StyledTile = styled(Tile)`
   width: 100%;
 
   ${props => props.theme.media.tablet`width: 50%`};
