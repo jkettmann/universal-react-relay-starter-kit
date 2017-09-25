@@ -17,7 +17,7 @@ body {
   margin: 0;
   font-family: Roboto, sans-serif;;
   font-weight: 300;
-  color: #555;
+  color: ${color.text};
 }
 `
 
