@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HOC } from 'formsy-react'
+import S3Uploader from 'react-s3-uploader'
+
 import Button from '../Button'
 
 class FileInput extends React.Component {
@@ -21,17 +23,28 @@ class FileInput extends React.Component {
   constructor() {
     super()
     this.state = {
-      file: null,
+      fileKey: null,
       imageSrc: null,
     }
   }
 
-  setInputElement = (element) => {
-    this.inputElement = element || {}
+  onUploadStart = (file, next) => {
+    console.log('upload start')
+    next(file)
   }
 
-  openDialog = () => {
-    this.inputElement.click()
+  onUploadProgress = (percent, message) => {
+    console.log('upload progress', percent, message)
+  }
+
+  onUploadError = (message) => {
+    console.log('upload error', message)
+  }
+
+  onUploadFinish = ({ fileKey, publicUrl }) => {
+    console.log('upload finish', ...arguments)
+    const imageSrc = publicUrl.replace('/s3/', '/image/')
+    this.setState({ fileKey, imageSrc })
   }
 
   changeValue = (event) => {
@@ -73,11 +86,18 @@ class FileInput extends React.Component {
           />
         </div>
 
-        <input
-          ref={this.setInputElement}
-          style={{ display: 'none' }}
-          type="file"
-          onChange={this.changeValue}
+        <S3Uploader
+          signingUrl="/image/sign"
+          signingUrlMethod="GET"
+          accept="image/*"
+          preprocess={this.onUploadStart}
+          onProgress={this.onUploadProgress}
+          onError={this.onUploadError}
+          onFinish={this.onUploadFinish}
+          uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}  // this is the default
+          contentDisposition="auto"
+          scrubFilename={filename => filename.replace(/[^\w\d_\-.]+/ig, '')}
+          signingUrlWithCredentials
         />
       </div>
     )
