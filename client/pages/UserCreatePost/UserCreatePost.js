@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import RedirectException from 'found/lib/RedirectException'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
@@ -66,13 +65,6 @@ class CreatePostPage extends React.Component {
   }
 
   render() {
-    const viewer = this.props.viewer
-    if (!viewer.canPublish) {
-      throw new RedirectException('/login')
-      this.props.router.push('/login')
-      return <div />
-    }
-
     return (
       <Wrapper>
         <h2>Create Post</h2>
