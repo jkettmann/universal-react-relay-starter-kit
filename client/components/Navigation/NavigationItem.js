@@ -1,10 +1,20 @@
-import React from 'react'
 import styled from 'styled-components'
+import Link from 'found/lib/Link'
+import { withProps } from 'recompose'
 
-const NavigationItem = styled.div`
+const NavigationItem = styled(Link)`
   width: 100%;
-  line-height: 24px;
-  padding: 16px;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-size: 20px;
+  color: ${props => props.theme.color.text}
 `
 
-export def
+const enhance = withProps(({ onClick, closeNavigation }) => ({
+  onClick: () => {
+    if (onClick) onClick()
+    closeNavigation()
+  },
+}))
+
+export default enhance(NavigationItem)
