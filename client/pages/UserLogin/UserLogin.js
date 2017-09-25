@@ -122,9 +122,7 @@ class LoginPage extends React.Component {
             fullWidth
             primary
           />
-
         </Form>
-
       </Wrapper>
     )
   }

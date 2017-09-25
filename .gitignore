@@ -19,3 +19,6 @@ __generated__
 # uploaded images
 static/images/upload/*
 !static/images/upload/README.md
+
+# VS Code
+.vscode
