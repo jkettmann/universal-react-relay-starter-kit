@@ -42,7 +42,7 @@ Aws.config.update({
 
 const app = express()
 
-app.use('/upload/image', S3Router({
+app.use('/image', S3Router({
   bucket: process.env.S3_IMAGE_BUCKET,
   region: 'eu-central-1',
   signatureVersion: 'v4',

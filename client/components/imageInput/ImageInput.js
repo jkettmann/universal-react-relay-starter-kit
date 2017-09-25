@@ -43,7 +43,7 @@ class FileInput extends React.Component {
 
   onUploadFinish = ({ fileKey, publicUrl }) => {
     console.log('upload finish', ...arguments)
-    const imageSrc = publicUrl.replace('/s3/', '/image-upload/')
+    const imageSrc = publicUrl.replace('/s3/', '/image/')
     this.setState({ fileKey, imageSrc })
   }
 
@@ -87,7 +87,7 @@ class FileInput extends React.Component {
         </div>
 
         <S3Uploader
-          signingUrl="/upload/image/sign"
+          signingUrl="/image/sign"
           signingUrlMethod="GET"
           accept="image/*"
           preprocess={this.onUploadStart}

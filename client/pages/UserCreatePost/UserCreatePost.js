@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
-import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
 
 import TextInput from '../../components/Input/FormsyText'
@@ -27,9 +26,6 @@ class CreatePostPage extends React.Component {
     router: routerShape.isRequired,
     relay: PropTypes.shape({
       environment: PropTypes.any.isRequired,
-    }).isRequired,
-    viewer: PropTypes.shape({
-      canPublish: PropTypes.bool,
     }).isRequired,
   }
 
@@ -116,13 +112,4 @@ class CreatePostPage extends React.Component {
   }
 }
 
-const container = createFragmentContainer(
-  CreatePostPage,
-  graphql`
-    fragment UserCreatePost_viewer on Viewer {
-      canPublish
-    }
-  `,
-)
-
-export default container
+export default CreatePostPage
