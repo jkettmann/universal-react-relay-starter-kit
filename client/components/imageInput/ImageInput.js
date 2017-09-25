@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { HOC } from 'formsy-react'
-import RaisedButton from 'material-ui/RaisedButton'
 import S3Uploader from 'react-s3-uploader'
+
+import Button from '../Button'
 
 class FileInput extends React.Component {
   static propTypes = {
@@ -64,8 +65,8 @@ class FileInput extends React.Component {
   render() {
     return (
       <div style={this.props.style}>
-        <RaisedButton
-          label={this.props.label}
+        <Button
+          label={this.state.file ? this.state.file.name : this.props.label}
           fullWidth={this.props.fullWidth}
           onClick={this.openDialog}
         />

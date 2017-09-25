@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import RedirectException from 'found/lib/RedirectException'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
-import { FormsyText } from 'formsy-material-ui'
-import RaisedButton from 'material-ui/RaisedButton'
 
+import TextInput from '../../components/Input/FormsyText'
+import Button from '../../components/Button'
 import ImageInput from '../../components/imageInput/ImageInput'
 import CreatePostMutation from '../../mutation/CreatePostMutation'
 
@@ -67,6 +68,7 @@ class CreatePostPage extends React.Component {
   render() {
     const viewer = this.props.viewer
     if (!viewer.canPublish) {
+      throw new RedirectException('/login')
       this.props.router.push('/login')
       return <div />
     }
@@ -81,21 +83,21 @@ class CreatePostPage extends React.Component {
           onSubmit={this.createPost}
         >
 
-          <FormsyText
+          <TextInput
             name="title"
-            floatingLabelText="Title"
-            fullWidth
+            label="Title"
             validations="isWords"
             validationError="Please enter a title"
+            fullWidth
             required
           />
 
-          <FormsyText
+          <TextInput
             name="description"
-            floatingLabelText="Description"
-            fullWidth
+            label="Description"
             validations="isWords"
             validationError="Please enter a description"
+            fullWidth
             required
           />
 
@@ -108,17 +110,15 @@ class CreatePostPage extends React.Component {
             fullWidth
           />
 
-          <RaisedButton
+          <Button
             type="submit"
             label="Save post"
-            secondary
-            fullWidth
             style={{ marginTop: 20 }}
             disabled={!this.state.canSubmit}
+            secondary
+            fullWidth
           />
-
         </Form>
-
       </Wrapper>
     )
   }
@@ -127,7 +127,7 @@ class CreatePostPage extends React.Component {
 const container = createFragmentContainer(
   CreatePostPage,
   graphql`
-    fragment CreatePost_viewer on Viewer {
+    fragment UserCreatePost_viewer on Viewer {
       canPublish
     }
   `,

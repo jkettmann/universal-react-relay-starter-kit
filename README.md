@@ -84,3 +84,7 @@ Based on [Essential React](https://github.com/pheuter/essential-react) starter k
 - [Comment](https://github.com/graphql/express-graphql/issues/9#issuecomment-143331902) on Relay issue by [murz](https://github.com/murz)
 
 ## [Changelog](CHANGELOG.md)
+
+## Icons
+
+User: Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)

@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 import Formsy from 'formsy-react'
-import { FormsyText } from 'formsy-material-ui'
-import RaisedButton from 'material-ui/RaisedButton'
 
+import TextInput from '../../components/Input/FormsyText'
+import Button from '../../components/Button'
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
 
@@ -92,39 +92,37 @@ class LoginPage extends React.Component {
           onSubmit={this.login}
         >
 
-          <FormsyText
+          <TextInput
             name="email"
-            floatingLabelText="E-Mail"
-            fullWidth
+            label="E-Mail"
             validations="isEmail"
             validationError="Please enter a valid email address"
-          />
-
-          <FormsyText
-            name="password"
-            type="password"
-            floatingLabelText="Passwort"
             fullWidth
           />
 
-          <RaisedButton
+          <TextInput
+            type="password"
+            name="password"
+            label="Passwort"
+            fullWidth
+          />
+
+          <Button
             type="submit"
             label="Login"
-            secondary
-            fullWidth
             style={submitMargin}
+            fullWidth
+            secondary
           />
 
-          <RaisedButton
+          <Button
             label="Register"
-            primary
-            fullWidth
             style={submitMargin}
             onClick={() => this.props.router.push('/register')}
+            fullWidth
+            primary
           />
-
         </Form>
-
       </Wrapper>
     )
   }
@@ -133,8 +131,9 @@ class LoginPage extends React.Component {
 export default createFragmentContainer(
   LoginPage,
   graphql`
-    fragment Login_viewer on Viewer {
+    fragment UserLogin_viewer on Viewer {
       isLoggedIn
+      canPublish
     }
   `,
 )
