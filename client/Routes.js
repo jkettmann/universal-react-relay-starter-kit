@@ -22,7 +22,7 @@ const loginQuery = graphql`query Routes_Login_Query { viewer { ...UserLogin_view
 const registerQuery = graphql`query Routes_Register_Query { viewer { ...UserRegister_viewer } }`
 const userProfileQuery = graphql`query Routes_Profile_Query { viewer { ...UserProfile_viewer } }`
 const userPostsQuery = graphql`query Routes_UserPosts_Query ($afterCursor: String, $count: Int!) { viewer { ...UserPosts_viewer } }`
-const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { canPublish, ...UserCreatePost_viewer } }`
+const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { canPublish } }`
 
 const getPage = props => import(`./async/${props.page}`)
 

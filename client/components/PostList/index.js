@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Grid } from '../Grid'
 import Button from '../Button'
 
-import PostListItem from './PostListItem'
+import PostListItem from '../PostListItem'
 
 const Wrapper = styled.div`
   display: flex;

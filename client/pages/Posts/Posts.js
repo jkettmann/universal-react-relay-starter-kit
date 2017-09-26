@@ -4,7 +4,7 @@ import { routerShape } from 'found/lib/PropTypes'
 import { Helmet } from 'react-helmet'
 import { createPaginationContainer, graphql } from 'react-relay'
 
-import PostList from '../../components/post/PostList'
+import PostList from '../../components/PostList'
 
 export const POST_COUNT = 6
 
