@@ -53,8 +53,7 @@ class CreatePostPage extends React.Component {
 
     CreatePostMutation.commit({
       environment,
-      input: { title, description },
-      files: image,
+      input: { title, description, image },
       onCompleted: () => this.props.router.push('/user/posts'),
       onError: errors => console.error('Creating post Failed', errors[0]),
     })
