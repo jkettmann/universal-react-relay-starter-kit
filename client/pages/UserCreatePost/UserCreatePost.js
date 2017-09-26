@@ -5,8 +5,8 @@ import { routerShape } from 'found/lib/PropTypes'
 import Formsy from 'formsy-react'
 
 import TextInput from '../../components/Input/FormsyText'
+import ImageInput from '../../components/Input/ImageInput'
 import Button from '../../components/Button'
-import ImageInput from '../../components/imageInput/ImageInput'
 import CreatePostMutation from '../../mutation/CreatePostMutation'
 
 const Wrapper = styled.div`
