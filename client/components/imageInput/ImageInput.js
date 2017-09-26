@@ -45,21 +45,7 @@ class FileInput extends React.Component {
     console.log('upload finish', ...arguments)
     const imageSrc = publicUrl.replace('/s3/', '/image/')
     this.setState({ fileKey, imageSrc })
-  }
-
-  changeValue = (event) => {
-    const target = event.currentTarget
-    this.props.setValue(target.files)
-
-    const file = target.files[0]
-    this.setState({ file })
-
-    // eslint-disable-next-line no-undef
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      this.setState({ imageSrc: e.target.result })
-    }
-    reader.readAsDataURL(file)
+    this.props.setValue({ fileKey, imageSrc })
   }
 
   render() {

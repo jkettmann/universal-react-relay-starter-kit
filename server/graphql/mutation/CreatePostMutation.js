@@ -16,10 +16,6 @@ export default mutationWithClientMutationId({
     description: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    image: {
-      description: 'image field is set by upload middleware automatically',
-      type: new GraphQLNonNull(GraphQLString),
-    },
   },
   outputFields: {
     postEdge: {
