@@ -1,6 +1,11 @@
 This starter kit aims at helping developers starting a professional app to create a basic setup quickly. It will use AWS infrastructure, but it should be simple to switch to other providers.
 
+## Content
+
 - [Technologies](#technologies)
+- [Design decisions](#design-decisions)
+- [Roadmap](#roadmap)
+- [Credits](#credits)
 
 ## Technologies
 
@@ -27,6 +32,8 @@ This starter kit aims at helping developers starting a professional app to creat
 - Server side security using [helmet](https://github.com/helmetjs/helmet)
 - Unit and snapshot tests using [Jest](https://github.com/facebook/jest) and end-to-end tests using [cypress](https://www.cypress.io/)
 
-## Icons
+## Credits
 
-User: Icons made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+### Icons
+
+User icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
