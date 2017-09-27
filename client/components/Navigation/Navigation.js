@@ -50,7 +50,7 @@ class Navigation extends React.PureComponent {
     return (
       <Wrapper>
         <NavigationIcon onClick={this.toggleNavigation} open={navigationOpen} />
-        <StyledLink to="/">Relay Authentication</StyledLink>
+        <StyledLink to="/">Universal React Relay</StyledLink>
 
         {viewer.isLoggedIn && <StyledUserIcon />}
 

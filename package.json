@@ -17,10 +17,19 @@
     "url": "https://github.com/jkettmann/universal-react-relay-starter-kit.git"
   },
   "keywords": [
-    "skeleton",
-    "template",
+    "starter-kit",
+    "boilerplater",
+    "graphql",
+    "relay",
     "react",
-    "quickstart"
+    "reactjs",
+    "ssr",
+    "server-side-rendering",
+    "universal",
+    "isomorphic",
+    "seo",
+    "internationalization",
+    "i18n"
   ],
   "author": "Johannes Kettmann",
   "license": "MIT",

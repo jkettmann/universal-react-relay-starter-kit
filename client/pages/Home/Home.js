@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 
 const HomePage = ({ viewer }) => (
   <Wrapper>
-    <h1>User Authentication with Relay</h1>
+    <h1>Universal React Relay Starter Kit</h1>
 
     <div>
       You are currently {!viewer.isLoggedIn && 'not'} logged in.
