@@ -1,18 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import { Grid } from '../Grid'
 import Button from '../Button'
 
+import Wrapper from './Wrapper'
 import PostListItem from '../PostListItem'
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding-bottom: 10px;
-`
 
 const PostList = ({ posts, hasMore, onItemClick, onMore }) => (
   <Wrapper>

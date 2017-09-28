@@ -1,36 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { createFragmentContainer, graphql } from 'react-relay'
-import Link from 'found/lib/Link'
-import styled from 'styled-components'
 
-import NavigationIcon from './NavigationIcon'
-import UserIcon from '../Icons/UserIcon'
-import NavigationMenu from './NavigationMenu'
+import Wrapper from './Wrapper'
+import Link from './Link'
+import NavigationIcon from '../NavigationIcon'
+import UserIcon from './UserIcon'
+import NavigationMenu from '../NavigationMenu'
 
-const StyledLink = styled(Link)`
-  flex: 1;
-  text-decoration: none;
-  color: ${props => props.theme.color.textAlternate};
-`
-
-const Wrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: ${props => props.theme.size('navigationHeight')};
-  z-index: ${props => props.theme.zIndex.navigationBar};
-  display: flex;
-  align-items: center;
-  padding-left: 24px;
-  padding-right: 24px;
-  background: ${props => props.theme.color.primary};
-  font-size: 24px;
-  font-weight: 400;
-`
-
-const StyledUserIcon = styled(UserIcon)`
-  fill: ${props => props.theme.color.textAlternate};
-`
 class Navigation extends React.PureComponent {
   state = {
     navigationOpen: false,
@@ -50,9 +27,9 @@ class Navigation extends React.PureComponent {
     return (
       <Wrapper>
         <NavigationIcon onClick={this.toggleNavigation} open={navigationOpen} />
-        <StyledLink to="/">Universal React Relay</StyledLink>
+        <Link to="/">Universal React Relay</Link>
 
-        {viewer.isLoggedIn && <StyledUserIcon />}
+        {viewer.isLoggedIn && <UserIcon />}
 
         <NavigationMenu
           viewer={viewer}

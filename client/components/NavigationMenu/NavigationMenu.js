@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { createFragmentContainer, graphql } from 'react-relay'
-import styled from 'styled-components'
 import { defineMessages } from 'react-intl'
 
-import NavigationItemList from './NavigationItemList'
+import Wrapper from './Wrapper'
+import Divider from './Divider'
+import NavigationItemList from '../NavigationItemList'
 
 const messages = defineMessages({
   profile: { id: 'Navigation.User.Profile', defaultMessage: 'Profile' },
@@ -36,33 +37,6 @@ const publisherMenuItems = [
 const contentMenuItems = [
   { messageId: messages.posts, to: '/posts' },
 ]
-
-const Wrapper = styled.div`
-  width: 400px;
-  max-width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  padding-top: ${props => props.theme.size('navigationHeight')};
-  display: flex;
-  flex-direction: column;
-  transform: translateX(-100%);
-  background: ${props => props.theme.color.grey5};
-  transition: transform ${props => props.theme.animation.default};
-  z-index: ${props => props.theme.zIndex.navigation};
-
-  &.open {
-    transform: translateX(0);
-  }
-`
-
-const Divider = styled.div`
-  height: 1px;
-  width: 100%;
-  margin: 8px 0;
-  background: ${props => props.theme.color.grey4};
-`
 
 const NavigationMenu = ({ open, viewer, onItemClick }) => (
   <Wrapper className={open && 'open'}>

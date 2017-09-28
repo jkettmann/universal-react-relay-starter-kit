@@ -5,8 +5,8 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { Helmet } from 'react-helmet'
 import { defineMessages, injectIntl, intlShape } from 'react-intl'
 
-import theme from '../theme'
-import Navigation from './Navigation'
+import theme from '../../theme'
+import Navigation from '../Navigation'
 
 const messages = defineMessages({
   pageTitle: { id: 'App.pageTitle', defaultMessage: 'Universal Relay Starter Kit' },
