@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Link from 'found/lib/Link'
 import { withProps } from 'recompose'
@@ -16,5 +17,14 @@ const enhance = withProps(({ onClick, closeNavigation }) => ({
     closeNavigation()
   },
 }))
+
+NavigationItem.propTypes = {
+  onClick: PropTypes.func,
+  closeNavigation: PropTypes.func.isRequired,
+}
+
+NavigationItem.defaultProps = {
+  onClick: null,
+}
 
 export default enhance(NavigationItem)

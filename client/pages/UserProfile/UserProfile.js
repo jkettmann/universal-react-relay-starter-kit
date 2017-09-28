@@ -1,12 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 
-const Wrapper = styled.div`
-  padding: 10px;
-`
+import Wrapper from './Wrapper'
 
 const Profile = ({ viewer, router }) => {
   const user = viewer.user

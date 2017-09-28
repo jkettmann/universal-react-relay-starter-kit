@@ -1,25 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
-import Formsy from 'formsy-react'
 
+import Wrapper from './Wrapper'
+import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import ImageInput from '../../components/Input/ImageInput'
 import Button from '../../components/Button'
 import CreatePostMutation from '../../mutation/CreatePostMutation'
-
-const Wrapper = styled.div`
-  margin-top: 50px;
-  text-align: center;
-`
-
-const Form = styled(Formsy.Form)`
-  max-width: 600px;
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-`
 
 class CreatePostPage extends React.Component {
   static propTypes = {

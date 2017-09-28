@@ -1,13 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { injectIntl, intlShape } from 'react-intl'
 
-import NavigationItem from './NavigationItem'
-
-const Wrapper = styled.div`
-  width: 100%;
-`
+import Wrapper from './Wrapper'
+import NavigationItem from '../NavigationItem'
 
 const NavigationItemList = ({ items, intl, onItemClick }) => (
   <Wrapper>

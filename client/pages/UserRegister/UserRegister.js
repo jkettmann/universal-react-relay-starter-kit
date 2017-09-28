@@ -1,25 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
-import Formsy from 'formsy-react'
 
+import Wrapper from './Wrapper'
+import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
 import RegisterMutation from '../../mutation/RegisterMutation'
 import { ERRORS } from '../../../config'
-
-const Wrapper = styled.div`
-  margin-top: 50px;
-  text-align: center;
-`
-
-const Form = styled(Formsy.Form)`
-  width: 200px;
-  margin-left: auto;
-  margin-right: auto;
-`
 
 class RegisterPage extends React.Component {
   static propTypes = {

@@ -1,36 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
-import Formsy from 'formsy-react'
 
+import Wrapper from './Wrapper'
+import Bold from './Bold'
+import Hint from './Hint'
+import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
-
-const Wrapper = styled.div`
-  margin-top: 50px;
-  text-align: center;
-`
-
-const Hint = styled.div`
-  max-width: 400px;
-  margin: auto;
-  font-size: 14px;
-  line-height: 20px;
-`
-
-const Bold = styled.b`
-  font-weight: 400;
-`
-
-const Form = styled(Formsy.Form)`
-  width: 200px;
-  margin-left: auto;
-  margin-right: auto;
-`
 
 class LoginPage extends React.Component {
   static propTypes = {
