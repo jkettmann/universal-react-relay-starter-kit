@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { compose, withHandlers, withState } from 'recompose'
 
 import Wrapper from './Wrapper'
 import Link from './Link'
@@ -8,50 +9,47 @@ import NavigationIcon from '../NavigationIcon'
 import UserIcon from './UserIcon'
 import NavigationMenu from '../NavigationMenu'
 
-class Navigation extends React.PureComponent {
-  state = {
-    navigationOpen: false,
-  }
+const Navigation = ({ viewer, isOpen, toggleOpen, close }) => (
+  <Wrapper>
+    <NavigationIcon onClick={toggleOpen} open={isOpen} />
+    <Link to="/">Universal React Relay</Link>
 
-  toggleNavigation = () => {
-    this.setState({ navigationOpen: !this.state.navigationOpen })
-  }
+    {viewer.isLoggedIn && <UserIcon />}
 
-  closeNavigation = () => {
-    this.setState({ navigationOpen: false })
-  }
-
-  render() {
-    const { viewer } = this.props
-    const { navigationOpen } = this.state
-    return (
-      <Wrapper>
-        <NavigationIcon onClick={this.toggleNavigation} open={navigationOpen} />
-        <Link to="/">Universal React Relay</Link>
-
-        {viewer.isLoggedIn && <UserIcon />}
-
-        <NavigationMenu
-          viewer={viewer}
-          onItemClick={this.closeNavigation}
-          open={navigationOpen}
-        />
-      </Wrapper>
-    )
-  }
-}
+    <NavigationMenu
+      viewer={viewer}
+      closeNavigation={close}
+      open={isOpen}
+    />
+  </Wrapper>
+)
 
 Navigation.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   viewer: PropTypes.object,
+  // following are set with recompose
+  isOpen: PropTypes.bool.isRequired,
+  toggleOpen: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 }
 
 Navigation.defaultProps = {
   viewer: null,
 }
 
+const state = withState('isOpen', 'setOpen', false)
+const handlers = withHandlers({
+  toggleOpen: ({ isOpen, setOpen }) => () => setOpen(!isOpen),
+  close: ({ setOpen }) => () => setOpen(false),
+})
+
+const enhance = compose(
+  state,
+  handlers,
+)
+
 export default createFragmentContainer(
-  Navigation,
+  enhance(Navigation),
   graphql`
     fragment Navigation_viewer on Viewer {
       isLoggedIn

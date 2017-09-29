@@ -55,7 +55,7 @@ export default makeRouteConfig(
     />
 
     <Route
-      path="posts"
+      path="/posts"
       render={createRender('PostsPage')}
       query={postsQuery}
       prepareVariables={params => ({
@@ -66,8 +66,8 @@ export default makeRouteConfig(
     />
 
     <Route
-      path="post/:postId"
-      render={createRender('PostDetailPage')}
+      path="/post/:postId"
+      render={createRender('PostDetailsPage')}
       query={postDetailQuery}
     />
 
@@ -84,19 +84,19 @@ export default makeRouteConfig(
     />
 
     <Route
-      path="register"
+      path="/register"
       render={createRender('UserRegisterPage')}
       query={registerQuery}
     />
 
     <Route
-      path="user"
+      path="/user"
       render={createRender('UserProfilePage')}
       query={userProfileQuery}
     />
 
     <Route
-      path="user/posts"
+      path="/user/posts"
       render={createRender('UserPostsPage')}
       query={userPostsQuery}
       prepareVariables={params => ({
@@ -107,7 +107,7 @@ export default makeRouteConfig(
     />
 
     <Route
-      path="user/post/create"
+      path="/user/post/create"
       render={createRender('UserCreatePostPage', 'canPublish')}
       query={createPostQuery}
     />

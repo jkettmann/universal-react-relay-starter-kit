@@ -5,17 +5,17 @@ import { injectIntl, intlShape } from 'react-intl'
 import Wrapper from './Wrapper'
 import NavigationItem from '../NavigationItem'
 
-const NavigationItemList = ({ items, intl, onItemClick }) => (
+const NavigationItemList = ({ items, intl, closeNavigation }) => (
   <Wrapper>
     {
-      items.map(({ messageId, to, onClick }) => (
+      items.map(({ message, to, onClick }) => (
         <NavigationItem
           key={to}
           to={to}
           onClick={onClick}
-          closeNavigation={onItemClick}
+          closeNavigation={closeNavigation}
         >
-          {intl.formatMessage(messageId)}
+          {intl.formatMessage(message)}
         </NavigationItem>
       ))
     }
@@ -25,12 +25,12 @@ const NavigationItemList = ({ items, intl, onItemClick }) => (
 
 NavigationItemList.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
-    messageId: PropTypes.string.isRequired,
+    message: PropTypes.object.isRequired,
     to: PropTypes.string,
     onClick: PropTypes.func,
   })).isRequired,
   intl: intlShape.isRequired,
-  onItemClick: PropTypes.func.isRequired,
+  closeNavigation: PropTypes.func.isRequired,
 }
 
 export default injectIntl(NavigationItemList)

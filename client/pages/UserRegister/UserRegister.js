@@ -72,8 +72,9 @@ class RegisterPage extends React.Component {
   }
 
   render() {
-    if (this.props.viewer.isLoggedIn) {
-      this.props.router.push('/')
+    const { viewer, router } = this.props
+    if (viewer.isLoggedIn) {
+      router.push('/')
       return <div />
     }
 

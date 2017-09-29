@@ -2,20 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Grid } from '../Grid'
-import Button from '../Button'
-
 import Wrapper from './Wrapper'
-import PostListItem from '../PostListItem'
+import Button from './Button'
+import PostTeaser from '../PostTeaser'
 
-const PostList = ({ posts, hasMore, onItemClick, onMore }) => (
+const PostList = ({ posts, hasMore, onMore }) => (
   <Wrapper>
     <Grid>
       {
         posts.map(({ node }) => (
-          <PostListItem
+          <PostTeaser
             key={node.id}
             post={node}
-            onClick={() => onItemClick(node.id)}
           />
         ))
       }
@@ -23,26 +21,17 @@ const PostList = ({ posts, hasMore, onItemClick, onMore }) => (
     </Grid>
 
     {hasMore &&
-      <div
-        style={{
-          marginTop: 15,
-          width: '100%',
-          maxWidth: 400,
-          padding: '0 2px 0',
-        }}
-      >
-        <Button
-          label="More"
-          onClick={onMore}
-          secondary
-          fullWidth
-        />
-      </div>}
+      <Button
+        label="More"
+        onClick={onMore}
+        secondary
+        fullWidth
+      />
+    }
   </Wrapper>
 )
 
 PostList.propTypes = {
-  onItemClick: PropTypes.func.isRequired,
   onMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
   posts: PropTypes.arrayOf(
