@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { routerShape } from 'found/lib/PropTypes'
 import { Helmet } from 'react-helmet'
 import { createPaginationContainer, graphql } from 'react-relay'
+import { compose, withHandlers, withProps, flattenProp } from 'recompose'
 
 import PostList from '../../components/PostList'
 
 export const POST_COUNT = 6
 
-const Posts = ({ viewer, router, relay }) => (
+const Posts = ({ posts, loadMore, hasMore }) => (
   <div>
     <Helmet>
       <title>Universal Relay Starter Kit - A list of posts</title>
@@ -16,30 +16,33 @@ const Posts = ({ viewer, router, relay }) => (
     </Helmet>
 
     <PostList
-      posts={viewer.posts.edges}
-      hasMore={relay.hasMore()}
-      onItemClick={id => router.push(`/post/${id}`)}
-      onMore={() => relay.isLoading() || relay.loadMore(POST_COUNT)}
+      posts={posts.edges}
+      hasMore={hasMore}
+      onMore={loadMore}
     />
   </div>
 )
 
 Posts.propTypes = {
-  relay: PropTypes.shape({
-    hasMore: PropTypes.func.isRequired,
-    isLoading: PropTypes.func.isRequired,
-    loadMore: PropTypes.func.isRequired,
+  posts: PropTypes.shape({
+    edges: PropTypes.array,
   }).isRequired,
-  router: routerShape.isRequired,
-  viewer: PropTypes.shape({
-    posts: PropTypes.shape({
-      edges: PropTypes.array,
-    }),
-  }).isRequired,
+  loadMore: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool.isRequired,
 }
 
+const props = withProps(({ relay }) => ({
+  hasMore: relay.hasMore(),
+}))
+
+const handlers = withHandlers({
+  loadMore: ({ relay }) => () => relay.isLoading() || relay.loadMore(POST_COUNT),
+})
+
+const enhance = compose(props, handlers, flattenProp('viewer'))
+
 export default createPaginationContainer(
-  Posts,
+  enhance(Posts),
   graphql`
     fragment Posts_viewer on Viewer {
       posts (after: $afterCursor first: $count) @connection(key: "Posts_posts") {
@@ -50,7 +53,7 @@ export default createPaginationContainer(
         edges {
           node {
             id
-            ...PostListItem_post
+            ...PostTeaser_post
           }
         }
       }
@@ -58,8 +61,8 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.viewer && props.viewer.posts
+    getConnectionFromProps({ viewer }) {
+      return viewer && viewer.posts
     },
     getFragmentVariables(prevVars, totalCount) {
       return {
@@ -67,7 +70,7 @@ export default createPaginationContainer(
         count: totalCount,
       }
     },
-    getVariables(props, { count, cursor }) {
+    getVariables(_props, { count, cursor }) {
       return {
         afterCursor: cursor,
         count,

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Link from 'found/lib/Link'
-import { withProps } from 'recompose'
+import { mapProps } from 'recompose'
 
 const NavigationItem = styled(Link)`
   width: 100%;
@@ -11,20 +11,21 @@ const NavigationItem = styled(Link)`
   color: ${props => props.theme.color.text}
 `
 
-const enhance = withProps(({ onClick, closeNavigation }) => ({
-  onClick: () => {
-    if (onClick) onClick()
-    closeNavigation()
-  },
-}))
-
 NavigationItem.propTypes = {
   onClick: PropTypes.func,
-  closeNavigation: PropTypes.func.isRequired,
+  closeNavigation: PropTypes.func,
 }
 
 NavigationItem.defaultProps = {
   onClick: null,
 }
+
+const enhance = mapProps(({ onClick, closeNavigation, ...others }) => ({
+  ...others,
+  onClick: () => {
+    if (onClick) onClick()
+    closeNavigation()
+  },
+}))
 
 export default enhance(NavigationItem)

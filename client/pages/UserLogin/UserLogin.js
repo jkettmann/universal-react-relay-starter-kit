@@ -50,7 +50,7 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const viewer = this.props.viewer
+    const { viewer, router } = this.props
     if (viewer.isLoggedIn) {
       this.props.router.push('/')
       return <div />
@@ -98,7 +98,7 @@ class LoginPage extends React.Component {
           <Button
             label="Register"
             style={submitMargin}
-            onClick={() => this.props.router.push('/register')}
+            onClick={() => router.push('/register')}
             fullWidth
             primary
           />

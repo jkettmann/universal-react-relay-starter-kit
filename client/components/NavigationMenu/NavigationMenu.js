@@ -19,32 +19,32 @@ const messages = defineMessages({
 const logout = () => {}
 
 const anonymousMenuItems = [
-  { messageId: messages.login, to: '/login' },
+  { message: messages.login, to: '/login' },
 ]
 
 const readMenuItems = [
-  { messageId: messages.profile, to: '/user' },
-  { messageId: messages.logout, onClick: logout },
+  { message: messages.profile, to: '/user' },
+  { message: messages.logout, onClick: logout },
 ]
 
 const publisherMenuItems = [
-  { messageId: messages.profile, to: '/user' },
-  { messageId: messages.createPost, to: '/user/post/create' },
-  { messageId: messages.userPosts, to: '/user/posts' },
-  { messageId: messages.logout, onClick: logout },
+  { message: messages.profile, to: '/user' },
+  { message: messages.createPost, to: '/user/post/create' },
+  { message: messages.userPosts, to: '/user/posts' },
+  { message: messages.logout, onClick: logout },
 ]
 
 const contentMenuItems = [
-  { messageId: messages.posts, to: '/posts' },
+  { message: messages.posts, to: '/posts' },
 ]
 
-const NavigationMenu = ({ open, viewer, onItemClick }) => (
+const NavigationMenu = ({ open, viewer, closeNavigation }) => (
   <Wrapper className={open && 'open'}>
     {
       !viewer.isLoggedIn && (
         <NavigationItemList
           items={anonymousMenuItems}
-          onItemClick={onItemClick}
+          closeNavigation={closeNavigation}
         />
       )
     }
@@ -53,7 +53,7 @@ const NavigationMenu = ({ open, viewer, onItemClick }) => (
       viewer.isLoggedIn && !viewer.canPublish && (
         <NavigationItemList
           items={readMenuItems}
-          onItemClick={onItemClick}
+          closeNavigation={closeNavigation}
         />
       )
     }
@@ -62,7 +62,7 @@ const NavigationMenu = ({ open, viewer, onItemClick }) => (
       viewer.canPublish && (
         <NavigationItemList
           items={publisherMenuItems}
-          onItemClick={onItemClick}
+          closeNavigation={closeNavigation}
         />
       )
     }
@@ -71,14 +71,14 @@ const NavigationMenu = ({ open, viewer, onItemClick }) => (
 
     <NavigationItemList
       items={contentMenuItems}
-      onItemClick={onItemClick}
+      closeNavigation={closeNavigation}
     />
   </Wrapper>
 )
 
 NavigationMenu.propTypes = {
   open: PropTypes.bool.isRequired,
-  onItemClick: PropTypes.func.isRequired,
+  closeNavigation: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   viewer: PropTypes.object,
 }

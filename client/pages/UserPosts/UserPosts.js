@@ -2,54 +2,59 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerShape } from 'found/lib/PropTypes'
 import { createPaginationContainer, graphql } from 'react-relay'
+import { compose, flattenProp, withHandlers, withProps } from 'recompose'
 
 import PostList from '../../components/PostList'
 
 export const POST_COUNT = 6
 
-const UserPosts = ({ viewer, relay, router }) => {
+const UserPosts = ({ viewer, posts, hasMore, loadMore, router }) => {
   if (!viewer.isLoggedIn) {
     router.push('/login')
     return <div />
   }
 
   if (!viewer.canPublish) {
-    this.props.router.push('/')
+    router.push('/')
     return <div />
   }
 
   return (
     <div>
       <PostList
-        posts={viewer.user.posts.edges}
-        hasMore={relay.hasMore()}
-        onItemClick={id => router.push(`/post/${id}`)}
-        onMore={() => relay.isLoading() || relay.loadMore(POST_COUNT)}
+        posts={posts.edges}
+        hasMore={hasMore}
+        onMore={loadMore}
       />
     </div>
   )
 }
 
 UserPosts.propTypes = {
-  relay: PropTypes.shape({
-    hasMore: PropTypes.func.isRequired,
-    isLoading: PropTypes.func.isRequired,
-    loadMore: PropTypes.func.isRequired,
-  }).isRequired,
   router: routerShape.isRequired,
   viewer: PropTypes.shape({
     isLoggedIn: PropTypes.bool,
     canPublish: PropTypes.bool,
-    user: PropTypes.shape({
-      posts: PropTypes.shape({
-        edges: PropTypes.array,
-      }),
-    }),
   }).isRequired,
+  posts: PropTypes.shape({
+    edges: PropTypes.array,
+  }).isRequired,
+  hasMore: PropTypes.bool.isRequired,
+  loadMore: PropTypes.func.isRequired,
 }
 
+const props = withProps(({ relay }) => ({
+  hasMore: relay.hasMore(),
+}))
+
+const handlers = withHandlers({
+  loadMore: ({ relay }) => () => relay.isLoading() || relay.loadMore(POST_COUNT),
+})
+
+const enhance = compose(props, handlers, flattenProp('viewer'), flattenProp('user'))
+
 export default createPaginationContainer(
-  UserPosts,
+  enhance(UserPosts),
   graphql`
     fragment UserPosts_viewer on Viewer {
       isLoggedIn
@@ -63,7 +68,7 @@ export default createPaginationContainer(
           edges {
             node {
               id
-              ...PostListItem_post
+              ...PostTeaser_post
             }
           }
         }
