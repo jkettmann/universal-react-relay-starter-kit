@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import { withHandlers } from 'recompose'
 
 import Wrapper from './Wrapper'
 import InnerOverlay from './InnerOverlay'
@@ -58,13 +57,4 @@ Button.defaultProps = {
   fullWidth: false,
 }
 
-const enhance = withHandlers({
-  onClick: ({ onClick }) => (event) => {
-    event.preventDefault()
-    event.stopPropagation()
-
-    if (onClick) onClick()
-  },
-})
-
-export default enhance(Button)
+export default Button

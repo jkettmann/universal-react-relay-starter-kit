@@ -28,24 +28,15 @@ class LoginPage extends React.Component {
   }
 
   login = ({ email, password }) => {
-    const environment = this.props.relay.environment
-    LoginMutation.commit({
-      environment,
-      input: { email, password },
-      onCompleted: () => this.props.router.go(-1),
-      onError: (errors) => {
-        console.error('login failed', errors[0])
-        const formError = {}
-        switch (errors[0]) {
-          case ERRORS.WrongEmailOrPassword:
-            formError.email = 'Email or password is incorrect'
-            formError.password = 'Email or password is incorrect'
-            break
-          default:
-            break
-        }
-        this.formElement.updateInputsWithError(formError)
+    fetch('/login/credentials', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ email, password }),
+    }).then(response => {
+      console.log('response', response.json())
     })
   }
 

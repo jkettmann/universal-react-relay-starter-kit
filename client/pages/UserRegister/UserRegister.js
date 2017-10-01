@@ -49,25 +49,15 @@ class RegisterPage extends React.Component {
   }
 
   register = ({ email, password, firstName, lastName }) => {
-    const environment = this.props.relay.environment
-
-    RegisterMutation.commit({
-      environment,
-      input: { email, password, firstName, lastName },
-      onCompleted: () => this.props.router.push('/login'),
-      onError: (errors) => {
-        console.error('Registration Failed', errors[0])
-        const formError = {}
-        switch (errors[0]) {
-          case ERRORS.EmailAlreadyTaken:
-            formError.email =
-              'This email address is already taken.'
-            break
-          default:
-            break
-        }
-        this.formElement.updateInputsWithError(formError)
+    fetch('/register/credentials', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ email, password, firstName, lastName }),
+    }).then(response => {
+      console.log('response', response.json())
     })
   }
 

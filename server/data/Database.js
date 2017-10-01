@@ -45,23 +45,27 @@ export default class Database {
 
   getUserById = userId => userId && this.users.find(({ id }) => id === userId)
 
-  getUserWithCredentials = (email, password) => {
+  getUserWithCredentials = ({ email, password }) => new Promise((resolve, reject) => {
     const user = this.users.find(
       userData => userData.email === email && userData.password === password,
     )
 
     if (!user) {
-      throw new Error(ERRORS.WrongEmailOrPassword)
+      const error = new Error(ERRORS.WrongEmailOrPassword)
+      error.name = 'WrongEmailOrPassword'
+      return reject(error)
     }
 
-    return user
-  }
+    return resolve(user)
+  })
 
-  createUser = ({ email, password, firstName, lastName, role }) => {
+  createUser = ({ email, password, firstName, lastName, role }) => new Promise((resolve, reject) => {
     const existingUser = this.users.find(user => user.email === email)
 
     if (existingUser) {
-      throw new Error(ERRORS.EmailAlreadyTaken)
+      const error = new Error(ERRORS.EmailAlreadyTaken)
+      error.name = 'EmailAlreadyTaken'
+      reject(error)
     }
 
     const newUser = new User({
@@ -74,6 +78,6 @@ export default class Database {
     })
 
     this.users.push(newUser)
-    return { user: newUser }
-  }
+    resolve(newUser)
+  })
 }
