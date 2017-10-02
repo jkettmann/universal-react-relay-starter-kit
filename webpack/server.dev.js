@@ -2,6 +2,9 @@ const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const WriteFilePlugin = require('write-file-webpack-plugin')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const res = p => path.resolve(__dirname, p)
 
@@ -54,7 +57,11 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('development')
+        NODE_ENV: JSON.stringify('development'),
+        PROTOCOL: JSON.stringify(process.env.PROTOCOL),
+        DOMAIN: JSON.stringify(process.env.DOMAIN),
+        PORT_AUTH: JSON.stringify(process.env.PORT_AUTH),
+        PORT_GRAPHQL: JSON.stringify(process.env.PORT_GRAPHQL),
       }
     })
   ]

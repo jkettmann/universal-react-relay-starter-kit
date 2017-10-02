@@ -14,13 +14,15 @@ export default function createGraphQlServer(port, database) {
 
   graphQLServer.use(
     '/graphql',
-    graphQLHTTP(({ session, tokenData }) => ({
+    graphQLHTTP(({ session, tokenData }) => {
+      console.log('graphQLHTTP', tokenData)
+      return ({
       graphiql: true,
       pretty: true,
       schema: Schema,
       context: { db: database },
       rootValue: { session, tokenData },
-    })),
+    })}),
   )
 
   return graphQLServer.listen(port, () =>

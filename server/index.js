@@ -15,7 +15,6 @@ import serverConfig from '../webpack/server.dev'
 import clientConfigProd from '../webpack/client.prod'
 import serverConfigProd from '../webpack/server.prod'
 
-import authentication from './authentication/authentication'
 import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
 import createGraphQlServer from './graphql/server'
@@ -32,9 +31,8 @@ const outputPath = clientConfig.output.path
 const DEV = process.env.NODE_ENV === 'development'
 
 let isBuilt = false
-const database = new Database()
 
-createGraphQlServer(PORT_GRAPHQL, database)
+createGraphQlServer(PORT_GRAPHQL, new Database())
 
 Aws.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -44,7 +42,6 @@ Aws.config.update({
 const app = express()
 
 app.use(cookieParser())
-authentication(app, database)
 
 app.use('/image', S3Router({
   bucket: process.env.S3_IMAGE_BUCKET,

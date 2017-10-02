@@ -28,9 +28,10 @@ class LoginPage extends React.Component {
   }
 
   login = ({ email, password }) => {
-    fetch('/login/credentials', {
+    const { PROTOCOL, DOMAIN, PORT_AUTH } = process.env
+    fetch(`${PROTOCOL}://${DOMAIN}:${PORT_AUTH}/login/credentials`, {
       method: 'POST',
-      credentials: 'same-origin',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

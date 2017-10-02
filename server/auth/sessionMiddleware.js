@@ -1,8 +1,10 @@
 import cookieSession from 'cookie-session'
 import debug from 'debug'
+import dotenv from 'dotenv'
 
 import { decodeToken } from './token'
 
+dotenv.config()
 const ONE_WEEK = 1000 * 60 * 60 * 24 * 7
 const log = debug('server:sessionMiddleware')
 
@@ -40,6 +42,7 @@ const cookieMiddleware = cookieSession({
   name: 'session',
   keys: ['id', 'token'],
   maxAge: ONE_WEEK,
+  domain: `${process.env.DOMAIN}:${process.env.PORT_APP}`,
 })
 
 export default () => (req, res, next) => {
