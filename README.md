@@ -2,10 +2,22 @@ This starter kit aims at helping developers starting a professional app to creat
 
 ## Content
 
+- [Installation](#installation)
 - [Technologies](#technologies)
 - [Design decisions](#design-decisions)
 - [Roadmap](#roadmap)
 - [Credits](#credits)
+
+## Installation
+- Install [watchman](https://facebook.github.io/watchman/)
+- (optional) When you installed `watchman` you can also easily switch to [yarn](https://yarnpkg.com/en/)
+
+- run following commands:
+  - `yarn install` or `npm install`
+  - `yarn run relay-compiler` or `npm run relay-compiler`
+  - `yarn start` or `npm start`
+
+- open [localhost:3000](http://localhost:3000) in your browser
 
 ## Technologies
 
