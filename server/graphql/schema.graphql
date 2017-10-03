@@ -4,18 +4,33 @@ schema {
 }
 
 input CreatePostInput {
+  # The posts title
   title: String!
+
+  # The posts description
   description: String!
 
-  # image field is set by upload middleware automatically
-  image: String!
+  # The posts image file key
+  image: ImageInput!
   clientMutationId: String
 }
 
 type CreatePostPayload {
-  postEdge: PostEdge
-  user: User
+  # The created post
+  post: Post
   clientMutationId: String
+}
+
+# An image
+type Image {
+  # The posts image
+  src: String
+}
+
+# An image input
+input ImageInput {
+  # The images fileKey
+  fileKey: String
 }
 
 input LoginInput {
@@ -72,7 +87,7 @@ type Post {
   title: String
 
   # The posts image
-  image: String
+  image: Image
 
   # The posts description
   description: String

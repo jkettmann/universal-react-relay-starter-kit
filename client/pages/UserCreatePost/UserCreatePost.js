@@ -37,14 +37,31 @@ class CreatePostPage extends React.Component {
     })
   }
 
+  onCompleted = ({ createPost }, errors) => {
+    if (errors) {
+      console.error(errors)
+      return
+    }
+
+    this.props.router.push(`/post/${createPost.post.id}`)
+  }
+
+  onError = (errors) => {
+    console.error('Creating post Failed', errors[0])
+  }
+
   createPost = ({ title, description, image }) => {
     const environment = this.props.relay.environment
 
     CreatePostMutation.commit({
       environment,
-      input: { title, description, image },
-      onCompleted: () => this.props.router.push('/user/posts'),
-      onError: errors => console.error('Creating post Failed', errors[0]),
+      input: {
+        title,
+        description,
+        image: { fileKey: image.fileKey },
+      },
+      onCompleted: this.onCompleted,
+      onError: this.onError,
     })
   }
 

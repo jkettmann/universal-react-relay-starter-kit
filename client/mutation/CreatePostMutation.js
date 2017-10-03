@@ -3,13 +3,8 @@ import { commitMutation, graphql } from 'react-relay'
 const mutation = graphql`
   mutation CreatePostMutation($input: CreatePostInput!) {
     createPost(input: $input) {
-      postEdge {
-        node {
-          id
-          title
-          description
-          image
-        }
+      post {
+        id
       }
     }
   }

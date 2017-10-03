@@ -56,8 +56,14 @@ class RegisterPage extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password, firstName, lastName }),
-    }).then(response => {
-      console.log('response', response.json())
+    }).then(response =>
+      response.json(),
+    ).then(({ error }) => {
+      if (error) {
+        console.error(error)
+      } else {
+        this.props.router.go('/')
+      }
     })
   }
 

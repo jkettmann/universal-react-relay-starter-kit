@@ -14,7 +14,7 @@ const PostTeaser = ({ id, image, title }) => (
         <Link to={`/post/${id}`}>
           <img
             style={{ width: '100%', height: '100%' }}
-            src={image}
+            src={image.src}
             alt={title}
           />
         </Link>
@@ -37,7 +37,9 @@ export default createFragmentContainer(
     fragment PostTeaser_post on Post {
       id
       title
-      image
+      image {
+        src
+      }
     }
   `,
 )

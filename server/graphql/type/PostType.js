@@ -2,6 +2,7 @@ import { GraphQLObjectType, GraphQLString } from 'graphql'
 import { globalIdField, connectionDefinitions } from 'graphql-relay'
 
 import UserType from './UserType'
+import ImageType from './ImageType'
 
 const PostType = new GraphQLObjectType({
   name: 'Post',
@@ -18,7 +19,7 @@ const PostType = new GraphQLObjectType({
       description: 'The posts title',
     },
     image: {
-      type: GraphQLString,
+      type: ImageType,
       description: 'The posts image',
     },
     description: {

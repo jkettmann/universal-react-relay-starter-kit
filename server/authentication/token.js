@@ -6,8 +6,6 @@ import { ROLES } from '../config'
 
 dotenv.config()
 
-console.log(process.env.JWT_SECRET)
-
 const log = debug('server:authentication')
 
 function createToken({ id, role } = {}) {

@@ -11,7 +11,7 @@ import UserInfo from './UserInfo'
 const PostDetail = ({ image, title, creator, description }) => (
   <div>
     <Image
-      src={image}
+      src={image.src}
       alt={title}
     />
 
@@ -48,7 +48,9 @@ export default createFragmentContainer(
       post (postId: $postId) {
         title
         description
-        image
+        image {
+          src
+        }
         creator {
           firstName
           lastName

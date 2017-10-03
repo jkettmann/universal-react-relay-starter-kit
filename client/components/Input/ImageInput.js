@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { compose, withHandlers, withProps } from 'recompose'
 import { HOC } from 'formsy-react'
 import S3Uploader from 'react-s3-uploader'
 
@@ -7,8 +8,12 @@ import Button from '../Button'
 
 class FileInput extends React.Component {
   static propTypes = {
-    setValue: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     label: PropTypes.node,
+    value: PropTypes.shape({
+      imageSrc: PropTypes.string,
+      fileKey: PropTypes.string,
+    }),
     fullWidth: PropTypes.bool,
     // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.object,
@@ -16,6 +21,7 @@ class FileInput extends React.Component {
 
   static defaultProps = {
     label: null,
+    value: null,
     fullWidth: false,
     style: null,
   }
@@ -44,16 +50,17 @@ class FileInput extends React.Component {
   onUploadFinish = ({ fileKey, publicUrl }) => {
     console.log('upload finish', ...arguments)
     const imageSrc = publicUrl.replace('/s3/', '/image/')
-    this.setState({ fileKey, imageSrc })
-    this.props.setValue({ fileKey, imageSrc })
+    this.props.onChange({ fileKey, imageSrc })
   }
 
   render() {
+    const { style, label, value, fullWidth } = this.props
+
     return (
-      <div style={this.props.style}>
+      <div style={style}>
         <Button
-          label={this.state.file ? this.state.file.name : this.props.label}
-          fullWidth={this.props.fullWidth}
+          label={label}
+          fullWidth={fullWidth}
           onClick={this.openDialog}
         />
 
@@ -62,13 +69,13 @@ class FileInput extends React.Component {
             width: '100%',
             height: 'auto',
             marginTop: 20,
-            display: this.state.imageSrc ? 'block' : 'none',
+            display: value && value.imageSrc ? 'block' : 'none',
           }}
         >
           <img
             style={{ width: '100%' }}
-            src={this.state.imageSrc}
-            alt={this.state.file ? this.state.file.name : 'new image'}
+            src={value && value.imageSrc}
+            alt="post"
           />
         </div>
 
@@ -90,4 +97,14 @@ class FileInput extends React.Component {
   }
 }
 
-export default HOC(FileInput)
+const props = withProps(({ getValue }) => ({
+  value: getValue(),
+}))
+
+const handlers = withHandlers({
+  onChange: ({ setValue }) => input => setValue(input),
+})
+
+const enhance = compose(handlers, props)
+
+export default HOC(enhance(FileInput))
