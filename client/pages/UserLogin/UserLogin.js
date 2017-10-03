@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
 
@@ -35,8 +36,14 @@ class LoginPage extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
-    }).then(response => {
-      console.log('response', response.json())
+    }).then(response =>
+      response.json(),
+    ).then(({ error }) => {
+      if (error) {
+        console.error(error)
+      } else {
+        this.props.router.go(-1)
+      }
     })
   }
 
@@ -100,7 +107,7 @@ class LoginPage extends React.Component {
 }
 
 export default createFragmentContainer(
-  LoginPage,
+  withRouter(LoginPage),
   graphql`
     fragment UserLogin_viewer on Viewer {
       isLoggedIn
