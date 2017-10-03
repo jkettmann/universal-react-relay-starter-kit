@@ -1,4 +1,6 @@
+import { branch, renderComponent } from 'recompose'
 import styled from 'styled-components'
+import Link from 'found/lib/Link'
 
 const Wrapper = styled.button`
   border: 10px;
@@ -37,4 +39,11 @@ const Wrapper = styled.button`
   }
 `
 
-export default Wrapper
+const LinkWrapper = Wrapper.withComponent(Link)
+
+const enhance = branch(
+  ({ to }) => !!to,
+  renderComponent(LinkWrapper),
+)
+
+export default enhance(Wrapper)

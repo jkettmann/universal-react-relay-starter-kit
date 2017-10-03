@@ -11,6 +11,7 @@ const Button = ({
   label,
   type,
   children,
+  to,
   onClick,
   primary,
   secondary,
@@ -26,6 +27,7 @@ const Button = ({
     style={style}
     type={type}
     onClick={onClick}
+    to={to}
   >
     <InnerOverlay>
       {label || children}
@@ -39,6 +41,7 @@ Button.propTypes = {
   label: PropTypes.node,
   type: PropTypes.string,
   children: PropTypes.node,
+  to: PropTypes.string,
   onClick: PropTypes.func,
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
@@ -51,6 +54,7 @@ Button.defaultProps = {
   label: null,
   type: null,
   children: null,
+  to: null,
   onClick: null,
   primary: false,
   secondary: false,
