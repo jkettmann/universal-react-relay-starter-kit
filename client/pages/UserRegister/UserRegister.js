@@ -7,15 +7,11 @@ import Wrapper from './Wrapper'
 import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
-import RegisterMutation from '../../mutation/RegisterMutation'
 import { ERRORS } from '../../../config'
 
 class RegisterPage extends React.Component {
   static propTypes = {
     router: routerShape.isRequired,
-    relay: PropTypes.shape({
-      environment: PropTypes.any.isRequired,
-    }).isRequired,
     viewer: PropTypes.shape({
       isLoggedIn: PropTypes.bool,
     }).isRequired,
@@ -30,10 +26,6 @@ class RegisterPage extends React.Component {
 
   setFormElement = (element) => {
     this.formElement = element
-  }
-
-  goToLogin = () => {
-    this.props.router.push('/login')
   }
 
   enableButton = () => {
@@ -60,7 +52,7 @@ class RegisterPage extends React.Component {
       response.json(),
     ).then(({ error }) => {
       if (error) {
-        console.error(error)
+        console.error(ERRORS[error.name])
       } else {
         this.props.router.go('/')
       }
@@ -134,7 +126,7 @@ class RegisterPage extends React.Component {
           <Button
             label="Login"
             style={{ marginTop: 20 }}
-            onClick={this.goToLogin}
+            to="/login"
             fullWidth
             primary
           />

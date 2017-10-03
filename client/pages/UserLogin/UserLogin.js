@@ -10,15 +10,11 @@ import Hint from './Hint'
 import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
-import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
 
 class LoginPage extends React.Component {
   static propTypes = {
     router: routerShape.isRequired,
-    relay: PropTypes.shape({
-      environment: PropTypes.any.isRequired,
-    }).isRequired,
     viewer: PropTypes.shape({
       isLoggedIn: PropTypes.bool,
     }).isRequired,
@@ -40,7 +36,7 @@ class LoginPage extends React.Component {
       response.json(),
     ).then(({ error }) => {
       if (error) {
-        console.error(error)
+        console.error(ERRORS[error.name])
       } else {
         this.props.router.go(-1)
       }
@@ -96,7 +92,7 @@ class LoginPage extends React.Component {
           <Button
             label="Register"
             style={submitMargin}
-            onClick={() => router.push('/register')}
+            to="/register"
             fullWidth
             primary
           />
