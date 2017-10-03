@@ -15,10 +15,10 @@ import serverConfig from '../webpack/server.dev'
 import clientConfigProd from '../webpack/client.prod'
 import serverConfigProd from '../webpack/server.prod'
 
-import authentication from './authentication/authentication'
+import authentication from './authentication/middleware'
 import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
-import createGraphQlServer from './graphql/server'
+import graphQlMiddleware from './graphql/middleware'
 
 dotenv.config()
 const log = debug('server')
@@ -34,8 +34,6 @@ const DEV = process.env.NODE_ENV === 'development'
 let isBuilt = false
 const database = new Database()
 
-createGraphQlServer(PORT_GRAPHQL, database)
-
 Aws.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -44,7 +42,9 @@ Aws.config.update({
 const app = express()
 
 app.use(cookieParser())
+app.use(intlMiddleware)
 authentication(app, database)
+app.use('/graphql', graphQlMiddleware(database))
 
 app.use('/image', S3Router({
   bucket: process.env.S3_IMAGE_BUCKET,
@@ -55,11 +55,6 @@ app.use('/image', S3Router({
   uniquePrefix: true,
 }))
 
-app.use(intlMiddleware)
-
-app.use('/graphql', (req, res) => {
-  req.pipe(request(`http://localhost:${PORT_GRAPHQL}/graphql`)).pipe(res)
-})
 
 const done = () => !isBuilt && app.listen(PORT_APP, () => {
   isBuilt = true
