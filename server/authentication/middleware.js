@@ -20,4 +20,12 @@ export default (app, database) => {
 
   app.post('/login/credentials', localStrategy.login(passport, database))
   app.post('/register/credentials', localStrategy.register(passport, database))
+
+  // Logout only deletes the token from the cookie. An attacker owning a token could
+  // still access user data. See following question for approaches to this problem
+  // https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
+  app.post('/logout', (req, res) => {
+    req.session.token = null
+    res.status(200).json({ message: 'Logout successful' })
+  })
 }
