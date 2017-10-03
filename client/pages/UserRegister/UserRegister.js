@@ -54,7 +54,7 @@ class RegisterPage extends React.Component {
       if (error) {
         console.error(ERRORS[error.name])
       } else {
-        this.props.router.go('/')
+        this.props.router.replace('/')
       }
     })
   }
