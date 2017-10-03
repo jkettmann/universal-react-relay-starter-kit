@@ -1,6 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 const WriteFilePlugin = require('write-file-webpack-plugin') // here so you can see what chunks are built
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 module.exports = {
   name: 'client',
@@ -40,7 +43,8 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('development')
+        NODE_ENV: JSON.stringify('development'),
+        HOST_AUTH: JSON.stringify(process.env.HOST_AUTH),
       }
     })
   ]

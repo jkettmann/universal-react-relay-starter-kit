@@ -7,6 +7,8 @@ import Wrapper from './Wrapper'
 import Divider from './Divider'
 import NavigationItemList from '../NavigationItemList'
 
+import { logout as logoutUser } from '../../auth'
+
 const messages = defineMessages({
   profile: { id: 'Navigation.User.Profile', defaultMessage: 'Profile' },
   createPost: { id: 'Navigation.User.CreatePost', defaultMessage: 'Create Post' },
@@ -20,11 +22,8 @@ const logout = (event) => {
   event.preventDefault()
   event.stopPropagation()
 
-  fetch('/logout', {
-    method: 'POST',
-    credentials: 'same-origin',
-  }).then((response) => {
-    if (response.ok) {
+  logoutUser().then((error) => {
+    if (!error) {
       // redirect to home on success to reload all data
       // eslint-disable-next-line no-undef
       location.assign(`${location.protocol}//${location.host}`)

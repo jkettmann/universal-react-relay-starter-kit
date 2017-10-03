@@ -2,12 +2,15 @@ const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const WriteFilePlugin = require('write-file-webpack-plugin')
+const dotenv = require('dotenv')
 
 const res = p => path.resolve(__dirname, p)
 
 const nodeModules = res('../node_modules')
 const entry = res('../server/render.js')
 const output = res('../buildServer')
+
+dotenv.config()
 
 // if you're specifying externals to leave unbundled, you need to tell Webpack
 // to still bundle `react-universal-component`, `webpack-flush-chunks` and
@@ -54,7 +57,8 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('development')
+        NODE_ENV: JSON.stringify('development'),
+        HOST_AUTH: JSON.stringify(process.env.HOST_AUTH),
       }
     })
   ]

@@ -10,6 +10,8 @@ import Hint from './Hint'
 import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
+
+import { login as loginUser } from '../../auth'
 import { ERRORS } from '../../../config'
 
 class LoginPage extends React.Component {
@@ -25,22 +27,14 @@ class LoginPage extends React.Component {
   }
 
   login = ({ email, password }) => {
-    fetch('/login/credentials', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    }).then(response =>
-      response.json(),
-    ).then(({ error }) => {
-      if (error) {
-        console.error(ERRORS[error.name])
-      } else {
-        this.props.router.go(-1)
-      }
-    })
+    loginUser({ email, password })
+      .then((error) => {
+        if (error) {
+          console.error(ERRORS[error.name])
+        } else {
+          this.props.router.go(-1)
+        }
+      })
   }
 
   render() {

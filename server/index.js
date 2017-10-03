@@ -15,7 +15,7 @@ import serverConfig from '../webpack/server.dev'
 import clientConfigProd from '../webpack/client.prod'
 import serverConfigProd from '../webpack/server.prod'
 
-import authentication from './authentication/middleware'
+import sessionMiddleware from './sessionMiddleware'
 import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
 import graphQlMiddleware from './graphql/middleware'
@@ -41,9 +41,9 @@ Aws.config.update({
 
 const app = express()
 
+app.use(sessionMiddleware())
 app.use(cookieParser())
 app.use(intlMiddleware)
-authentication(app, database)
 app.use('/graphql', graphQlMiddleware(database))
 
 app.use('/image', S3Router({

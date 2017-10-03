@@ -7,6 +7,7 @@ import Wrapper from './Wrapper'
 import Form from './Form'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
+import { register as registerUser } from '../../auth'
 import { ERRORS } from '../../../config'
 
 class RegisterPage extends React.Component {
@@ -41,22 +42,14 @@ class RegisterPage extends React.Component {
   }
 
   register = ({ email, password, firstName, lastName }) => {
-    fetch('/register/credentials', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password, firstName, lastName }),
-    }).then(response =>
-      response.json(),
-    ).then(({ error }) => {
-      if (error) {
-        console.error(ERRORS[error.name])
-      } else {
-        this.props.router.replace('/')
-      }
-    })
+    registerUser({ email, password, firstName, lastName })
+      .then((error) => {
+        if (error) {
+          console.error(ERRORS[error.name])
+        } else {
+          this.props.router.replace('/')
+        }
+      })
   }
 
   render() {

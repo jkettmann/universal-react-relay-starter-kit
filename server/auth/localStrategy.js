@@ -1,5 +1,5 @@
 import { Strategy } from 'passport-local'
-import { createToken } from './token'
+import { createToken } from '../token'
 
 const strategyOptions = {
   // by default, local strategy uses username and password, we will override with email
