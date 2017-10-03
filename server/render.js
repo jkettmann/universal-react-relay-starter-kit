@@ -49,7 +49,10 @@ async function renderAsync(req) {
   global.navigator = global.navigator || {}
   global.navigator.userAgent = req.headers['user-agent'] || 'all'
 
-  const fetcher = new ServerFetcher('http://localhost:8080/graphql')
+  const fetcher = new ServerFetcher(
+    'http://localhost:3000/graphql',
+    { headers: { cookie: req.headers.cookie } },
+  )
   const { redirect, status, element } = await getFarceResult({
     url: req.url,
     historyMiddlewares,
