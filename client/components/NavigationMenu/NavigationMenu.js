@@ -22,13 +22,7 @@ const logout = (event) => {
   event.preventDefault()
   event.stopPropagation()
 
-  logoutUser().then((error) => {
-    if (!error) {
-      // redirect to home on success to reload all data
-      // eslint-disable-next-line no-undef
-      location.assign(`${location.protocol}//${location.host}`)
-    }
-  })
+  logoutUser()
 }
 
 const anonymousMenuItems = [

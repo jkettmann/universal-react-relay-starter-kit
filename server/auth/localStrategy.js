@@ -9,7 +9,7 @@ const strategyOptions = {
   passReqToCallback: true,
 }
 
-export const register = (passport, db) => {
+export default function init(router, passport, db) {
   const registerVerifyCallback = async (req, email, password, done) => {
     try {
       const user = await db.createUser({ email, password })
@@ -24,17 +24,15 @@ export const register = (passport, db) => {
 
   passport.use('register-with-credentials', localStrategyRegister)
 
-  return (req, res, next) => passport.authenticate('register-with-credentials', (error, sessionToken, user) => {
+  router.use('/register/credentials', (req, res, next) => passport.authenticate('register-with-credentials', (error, sessionToken, user) => {
     if (error) {
       return res.status(409).json({ error })
     }
 
     req.session.token = sessionToken
     return res.status(200).json({ userId: user.id, role: user.role })
-  })(req, res, next)
-}
+  })(req, res, next))
 
-export const login = (passport, db) => {
   const loginVerifyCallback = async (req, email, password, done) => {
     try {
       const user = await db.getUserWithCredentials({ email, password })
@@ -49,13 +47,13 @@ export const login = (passport, db) => {
 
   passport.use('login-with-credentials', localStrategyLogin)
 
-  return (req, res, next) => passport.authenticate('login-with-credentials', (error, sessionToken, user) => {
+  router.post('/login/credentials', (req, res, next) => passport.authenticate('login-with-credentials', (error, sessionToken, user) => {
     if (error) {
       return res.status(400).json({ error })
     }
 
     req.session.token = sessionToken
     return res.status(200).json({ userId: user.id, role: user.role })
-  })(req, res, next)
+  })(req, res, next))
 }
 

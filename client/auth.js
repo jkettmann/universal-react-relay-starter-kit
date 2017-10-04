@@ -1,5 +1,7 @@
 const HOST_AUTH = process.env.HOST_AUTH
 
+export const loginWithFacebookRoute = `${HOST_AUTH}/login/facebook`
+
 export function login({ email, password }) {
   return fetch(`${HOST_AUTH}/login/credentials`, {
     method: 'POST',
@@ -32,7 +34,11 @@ export function logout() {
   return fetch(`${HOST_AUTH}/logout`, {
     method: 'POST',
     credentials: 'include',
-  }).then(response =>
-    !response.ok,
-  )
+  }).then((response) => {
+    if (response.ok) {
+      // redirect to home on success to reload all data
+      // eslint-disable-next-line no-undef
+      location.assign(`${location.protocol}//${location.host}`)
+    }
+  })
 }

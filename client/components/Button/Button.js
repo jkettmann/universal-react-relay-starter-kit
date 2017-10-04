@@ -12,9 +12,11 @@ const Button = ({
   type,
   children,
   to,
+  href,
   onClick,
   primary,
   secondary,
+  external,
   fullWidth,
 }) => (
   <Wrapper
@@ -28,6 +30,8 @@ const Button = ({
     type={type}
     onClick={onClick}
     to={to}
+    href={href}
+    external={external}
   >
     <InnerOverlay>
       {label || children}
@@ -42,9 +46,11 @@ Button.propTypes = {
   type: PropTypes.string,
   children: PropTypes.node,
   to: PropTypes.string,
+  href: PropTypes.string,
   onClick: PropTypes.func,
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
+  external: PropTypes.bool,
   fullWidth: PropTypes.bool,
 }
 
@@ -55,9 +61,11 @@ Button.defaultProps = {
   type: null,
   children: null,
   to: null,
+  href: null,
   onClick: null,
   primary: false,
   secondary: false,
+  external: false,
   fullWidth: false,
 }
 

@@ -3,15 +3,19 @@ import PropTypes from 'prop-types'
 import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import Formsy from 'formsy-react'
 
 import Wrapper from './Wrapper'
 import Bold from './Bold'
 import Hint from './Hint'
-import Form from './Form'
+import FormWraper from './FormWrapper'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
 
-import { login as loginUser } from '../../auth'
+import {
+  login as loginUser,
+  loginWithFacebookRoute,
+} from '../../auth'
 import { ERRORS } from '../../../config'
 
 class LoginPage extends React.Component {
@@ -55,33 +59,44 @@ class LoginPage extends React.Component {
           <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
         </Hint>
 
-        <Form
-          ref={this.setFormElement}
-          onSubmit={this.login}
-        >
-
-          <TextInput
-            name="email"
-            label="E-Mail"
-            validations="isEmail"
-            validationError="Please enter a valid email address"
-            fullWidth
-          />
-
-          <TextInput
-            type="password"
-            name="password"
-            label="Passwort"
-            fullWidth
-          />
+        <FormWraper>
 
           <Button
-            type="submit"
-            label="Login"
+            label="Login with facebook"
             style={submitMargin}
+            href={loginWithFacebookRoute}
+            external
             fullWidth
             secondary
           />
+
+          <Formsy.Form
+            ref={this.setFormElement}
+            onSubmit={this.login}
+          >
+            <TextInput
+              name="email"
+              label="E-Mail"
+              validations="isEmail"
+              validationError="Please enter a valid email address"
+              fullWidth
+            />
+
+            <TextInput
+              type="password"
+              name="password"
+              label="Passwort"
+              fullWidth
+            />
+
+            <Button
+              type="submit"
+              label="Login"
+              style={submitMargin}
+              fullWidth
+              secondary
+            />
+          </Formsy.Form>
 
           <Button
             label="Register"
@@ -90,7 +105,7 @@ class LoginPage extends React.Component {
             fullWidth
             primary
           />
-        </Form>
+        </FormWraper>
       </Wrapper>
     )
   }

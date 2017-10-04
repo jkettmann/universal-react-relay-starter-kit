@@ -7,7 +7,8 @@ import dotenv from 'dotenv'
 
 import Database from '../data/Database'
 import sessionMiddleware from '../sessionMiddleware'
-import * as localStrategy from './localStrategy'
+import localStrategy from './localStrategy'
+import facebookStrategy from './facebookStrategy'
 
 dotenv.config()
 
@@ -32,8 +33,8 @@ app.use(sessionMiddleware())
 app.use(bodyParser())
 app.use(passport.initialize())
 
-app.post('/login/credentials', localStrategy.login(passport, database))
-app.post('/register/credentials', localStrategy.register(passport, database))
+localStrategy(app, passport, database)
+facebookStrategy(app, passport, database)
 
 // Logout only deletes the token from the cookie. An attacker owning a token could
 // still access user data. See following question for approaches to this problem

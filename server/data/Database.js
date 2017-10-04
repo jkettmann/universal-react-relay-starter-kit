@@ -59,7 +59,7 @@ export default class Database {
     return resolve(user)
   })
 
-  createUser = ({ email, password, firstName, lastName, role }) => new Promise((resolve, reject) => {
+  createUser = ({ id, email, password, firstName, lastName, role }) => new Promise((resolve, reject) => {
     const existingUser = this.users.find(user => user.email === email)
 
     if (existingUser) {
@@ -69,7 +69,7 @@ export default class Database {
     }
 
     const newUser = new User({
-      id: `${this.users.length + 1}`,
+      id: id || `${this.users.length + 1}`,
       email,
       password,
       firstName,
