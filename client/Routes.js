@@ -20,6 +20,7 @@ const postsQuery = graphql`query Routes_Posts_Query ($afterCursor: String, $coun
 const postDetailQuery = graphql`query Routes_PostDetails_Query ($postId: String!) { viewer { ...PostDetails_viewer } }`
 const loginQuery = graphql`query Routes_Login_Query { viewer { ...UserLogin_viewer } }`
 const registerQuery = graphql`query Routes_Register_Query { viewer { ...UserRegister_viewer } }`
+const userVerifyQuery = graphql`query Routes_UserVerify_Query { viewer { ...UserVerify_viewer } }`
 const userProfileQuery = graphql`query Routes_Profile_Query { viewer { ...UserProfile_viewer } }`
 const userPostsQuery = graphql`query Routes_UserPosts_Query ($afterCursor: String, $count: Int!) { viewer { ...UserPosts_viewer } }`
 const createPostQuery = graphql`query Routes_CreatePost_Query { viewer { canPublish } }`
@@ -87,6 +88,12 @@ export default makeRouteConfig(
       path="/register"
       render={createRender('UserRegisterPage')}
       query={registerQuery}
+    />
+
+    <Route
+      path="/verify/:email"
+      render={createRender('UserVerifyPage')}
+      query={userVerifyQuery}
     />
 
     <Route

@@ -16,7 +16,10 @@ const messages = defineMessages({
   posts: { id: 'Navigation.Posts', defaultMessage: 'Posts' },
 })
 
-const logout = () => {}
+const logout = (event) => {
+  event.preventDefault()
+  event.stopPropagation()
+}
 
 const anonymousMenuItems = [
   { message: messages.login, to: '/login' },
@@ -24,14 +27,14 @@ const anonymousMenuItems = [
 
 const readMenuItems = [
   { message: messages.profile, to: '/user' },
-  { message: messages.logout, onClick: logout },
+  { message: messages.logout, to: '/', onClick: logout },
 ]
 
 const publisherMenuItems = [
   { message: messages.profile, to: '/user' },
   { message: messages.createPost, to: '/user/post/create' },
   { message: messages.userPosts, to: '/user/posts' },
-  { message: messages.logout, onClick: logout },
+  { message: messages.logout, to: '/', onClick: logout },
 ]
 
 const contentMenuItems = [

@@ -22,8 +22,8 @@ NavigationItem.defaultProps = {
 
 const enhance = mapProps(({ onClick, closeNavigation, ...others }) => ({
   ...others,
-  onClick: () => {
-    if (onClick) onClick()
+  onClick: (event) => {
+    if (onClick) onClick(event)
     closeNavigation()
   },
 }))
