@@ -1,7 +1,7 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
-import { createToken, decodeToken } from '../../authentication'
+import login from '../../auth/login'
 
 import UserType from '../type/UserType'
 
@@ -22,15 +22,13 @@ export default mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: ({ email, password }, { db }, { rootValue }) => {
-    const user = db.getUserWithCredentials(email, password)
-
-    // set session token so that user is authenticated on next requests via a cookie
-    if (user) {
-      /* eslint-disable no-param-reassign */
-      rootValue.session.token = createToken(user)
-      rootValue.tokenData = decodeToken(rootValue.session.token)
-      /* eslint-enable no-param-reassign */
-    }
-    return { user }
+    return login({ email, password })
+      .then((token) => {
+        console.log('login successful', token)
+        /* eslint-disable no-param-reassign */
+        rootValue.session.token = token
+        /* eslint-enable no-param-reassign */
+        return { email }
+      })
   },
 })

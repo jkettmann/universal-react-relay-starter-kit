@@ -6,9 +6,6 @@ schema {
 input CreatePostInput {
   title: String!
   description: String!
-
-  # image field is set by upload middleware automatically
-  image: String!
   clientMutationId: String
 }
 
@@ -42,6 +39,8 @@ type Mutation {
   register(input: RegisterInput!): RegisterPayload
   login(input: LoginInput!): LoginPayload
   logout(input: LogoutInput!): LogoutPayload
+  resendVerification(input: ResendVerificationInput!): ResendVerificationPayload
+  verifyAccount(input: VerifyAccountInput!): VerifyAccountPayload
   createPost(input: CreatePostInput!): CreatePostPayload
 }
 
@@ -109,6 +108,16 @@ type RegisterPayload {
   clientMutationId: String
 }
 
+input ResendVerificationInput {
+  email: String!
+  clientMutationId: String
+}
+
+type ResendVerificationPayload {
+  success: Boolean
+  clientMutationId: String
+}
+
 type Root {
   viewer: Viewer
 }
@@ -129,6 +138,17 @@ type User {
   # the users role
   role: String
   posts(after: String, first: Int, before: String, last: Int): PostConnection
+}
+
+input VerifyAccountInput {
+  email: String!
+  pin: String!
+  clientMutationId: String
+}
+
+type VerifyAccountPayload {
+  success: Boolean
+  clientMutationId: String
 }
 
 type Viewer {
