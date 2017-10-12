@@ -1,23 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import Formsy from 'formsy-react'
 
 import Wrapper from './Wrapper'
 import Bold from './Bold'
 import Hint from './Hint'
-import Form from './Form'
+import FormWraper from './FormWrapper'
 import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
-import LoginMutation from '../../mutation/LoginMutation'
+
+import loginUser from '../../auth/login'
 import { ERRORS } from '../../../config'
 
 class LoginPage extends React.Component {
   static propTypes = {
     router: routerShape.isRequired,
-    relay: PropTypes.shape({
-      environment: PropTypes.any.isRequired,
-    }).isRequired,
     viewer: PropTypes.shape({
       isLoggedIn: PropTypes.bool,
     }).isRequired,
@@ -28,29 +28,18 @@ class LoginPage extends React.Component {
   }
 
   login = ({ email, password }) => {
-    const environment = this.props.relay.environment
-    LoginMutation.commit({
-      environment,
-      input: { email, password },
-      onCompleted: () => this.props.router.go(-1),
-      onError: (errors) => {
-        console.error('login failed', errors[0])
-        const formError = {}
-        switch (errors[0]) {
-          case ERRORS.WrongEmailOrPassword:
-            formError.email = 'Email or password is incorrect'
-            formError.password = 'Email or password is incorrect'
-            break
-          default:
-            break
-        }
-        this.formElement.updateInputsWithError(formError)
-      },
-    })
+    loginUser({ email, password })
+      .then((result) => {
+        console.log('successfully logged in', result)
+        // this.props.router.go(-1)
+      })
+      .catch((error) => {
+        console.error(ERRORS[error.name])
+      })
   }
 
   render() {
-    const { viewer, router } = this.props
+    const { viewer } = this.props
     if (viewer.isLoggedIn) {
       this.props.router.push('/')
       return <div />
@@ -67,49 +56,60 @@ class LoginPage extends React.Component {
           <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
         </Hint>
 
-        <Form
-          ref={this.setFormElement}
-          onSubmit={this.login}
-        >
-
-          <TextInput
-            name="email"
-            label="E-Mail"
-            validations="isEmail"
-            validationError="Please enter a valid email address"
-            fullWidth
-          />
-
-          <TextInput
-            type="password"
-            name="password"
-            label="Passwort"
-            fullWidth
-          />
+        <FormWraper>
 
           <Button
-            type="submit"
-            label="Login"
+            label="Login with facebook"
             style={submitMargin}
+            href="/facebook"
+            external
             fullWidth
             secondary
           />
 
+          <Formsy.Form
+            ref={this.setFormElement}
+            onSubmit={this.login}
+          >
+            <TextInput
+              name="email"
+              label="E-Mail"
+              validations="isEmail"
+              validationError="Please enter a valid email address"
+              fullWidth
+            />
+
+            <TextInput
+              type="password"
+              name="password"
+              label="Passwort"
+              fullWidth
+            />
+
+            <Button
+              type="submit"
+              label="Login"
+              style={submitMargin}
+              fullWidth
+              secondary
+            />
+          </Formsy.Form>
+
           <Button
             label="Register"
             style={submitMargin}
-            onClick={() => router.push('/register')}
+            to="/register"
             fullWidth
             primary
           />
-        </Form>
+        </FormWraper>
       </Wrapper>
     )
   }
 }
 
 export default createFragmentContainer(
-  LoginPage,
+  withRouter(LoginPage),
   graphql`
     fragment UserLogin_viewer on Viewer {
       isLoggedIn

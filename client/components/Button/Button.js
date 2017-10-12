@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import { withHandlers } from 'recompose'
 
 import Wrapper from './Wrapper'
 import InnerOverlay from './InnerOverlay'
@@ -12,9 +11,12 @@ const Button = ({
   label,
   type,
   children,
+  to,
+  href,
   onClick,
   primary,
   secondary,
+  external,
   fullWidth,
 }) => (
   <Wrapper
@@ -27,6 +29,9 @@ const Button = ({
     style={style}
     type={type}
     onClick={onClick}
+    to={to}
+    href={href}
+    external={external}
   >
     <InnerOverlay>
       {label || children}
@@ -40,9 +45,12 @@ Button.propTypes = {
   label: PropTypes.node,
   type: PropTypes.string,
   children: PropTypes.node,
+  to: PropTypes.string,
+  href: PropTypes.string,
   onClick: PropTypes.func,
   primary: PropTypes.bool,
   secondary: PropTypes.bool,
+  external: PropTypes.bool,
   fullWidth: PropTypes.bool,
 }
 
@@ -52,19 +60,13 @@ Button.defaultProps = {
   label: null,
   type: null,
   children: null,
+  to: null,
+  href: null,
   onClick: null,
   primary: false,
   secondary: false,
+  external: false,
   fullWidth: false,
 }
 
-const enhance = withHandlers({
-  onClick: ({ onClick }) => (event) => {
-    event.preventDefault()
-    event.stopPropagation()
-
-    if (onClick) onClick()
-  },
-})
-
-export default enhance(Button)
+export default Button
