@@ -1,15 +1,15 @@
 import { commitMutation, graphql } from 'react-relay'
 
 const mutation = graphql`
-  mutation LogoutMutation($input: LogoutInput!) {
-    logout(input: $input) {
+  mutation ResendVerificationMutation($input: ResendVerificationInput!) {
+    resendVerification(input: $input) {
       success
     }
   }
 `
 
-function commit({ environment, onCompleted, onError }) {
-  const variables = { input: {} }
+function commit({ environment, input, onCompleted, onError }) {
+  const variables = { input }
 
   commitMutation(environment, {
     mutation,

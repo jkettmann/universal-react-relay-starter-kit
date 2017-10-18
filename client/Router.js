@@ -23,7 +23,7 @@ export const render = createRender({})
 
 export function createClientResolver() {
   // eslint-disable-next-line no-underscore-dangle, no-undef
-  const fetcher = new ClientFetcher('/graphql', window.__RELAY_PAYLOADS__)
+  const fetcher = new ClientFetcher(process.env.GRAPHQL_ENDPOINT, window.__RELAY_PAYLOADS__)
   return createResolver(fetcher)
 }
 

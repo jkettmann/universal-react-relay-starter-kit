@@ -6,13 +6,15 @@ import RedirectException from 'found/lib/RedirectException'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Helmet } from 'react-helmet'
+import dotenv from 'dotenv'
 import debug from 'debug'
 
-import { ServerFetcher } from '../client/fetcher'
-import { createResolver, historyMiddlewares, render } from '../client/Router'
-import Routes, { paths } from '../client/Routes'
-import withIntl from '../client/intl/ismorphicIntlProvider'
+import { ServerFetcher } from '../../client/fetcher'
+import { createResolver, historyMiddlewares, render } from '../../client/Router'
+import Routes, { paths } from '../../client/Routes'
+import withIntl from '../../client/intl/ismorphicIntlProvider'
 
+dotenv.config()
 const log = debug('server:render')
 
 const renderHtml = ({ title, meta, styleTags, relayPayload, app, js }) => `
@@ -45,11 +47,7 @@ function getStatusCode(url) {
 }
 
 async function renderAsync(req) {
-  // for material ui
-  global.navigator = global.navigator || {}
-  global.navigator.userAgent = req.headers['user-agent'] || 'all'
-
-  const fetcher = new ServerFetcher('http://localhost:8080/graphql')
+  const fetcher = new ServerFetcher(process.env.GRAPHQL_ENDPOINT, { cookie: req.headers.cookie })
   const { redirect, status, element } = await getFarceResult({
     url: req.url,
     historyMiddlewares,

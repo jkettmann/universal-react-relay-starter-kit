@@ -1,18 +1,19 @@
+import { GraphQLBoolean } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
-
-import UserType from '../type/UserType'
 
 export default mutationWithClientMutationId({
   name: 'Logout',
   outputFields: {
-    user: {
-      type: UserType,
-      resolve: ({ user }) => user,
+    success: {
+      type: GraphQLBoolean,
+      resolve: ({ success }) => success,
     },
   },
   mutateAndGetPayload: (obj, { db }, { rootValue }) => {
-    // eslint-disable-next-line no-param-reassign
-    rootValue.session.token = null
-    return { user: null }
+    /* eslint-disable no-param-reassign */
+    rootValue.session.accessToken = null
+    rootValue.session.idToken = null
+    /* eslint-enable no-param-reassign */
+    return { success: true }
   },
 })

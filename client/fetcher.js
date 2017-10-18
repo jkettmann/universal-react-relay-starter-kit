@@ -2,15 +2,18 @@
 import 'isomorphic-fetch'
 
 class FetcherBase {
-  constructor(url) {
+  constructor(url, headers) {
     this.url = url
+    this.headers = headers || null
   }
 
   async fetch(operation, variables) {
     const response = await fetch(this.url, {
       method: 'POST',
-      credentials: 'same-origin',
+      credentials: 'include',
       headers: {
+        ...this.headers,
+        Accept: '*/*',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query: operation.text, variables }),
@@ -21,9 +24,8 @@ class FetcherBase {
 }
 
 export class ServerFetcher extends FetcherBase {
-  constructor(url) {
-    super(url)
-
+  constructor(url, headers) {
+    super(url, headers)
     this.payloads = []
   }
 
@@ -43,7 +45,6 @@ export class ServerFetcher extends FetcherBase {
 export class ClientFetcher extends FetcherBase {
   constructor(url, payloads) {
     super(url)
-
     this.payloads = payloads || []
   }
 

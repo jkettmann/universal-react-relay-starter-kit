@@ -1,5 +1,5 @@
 import User from '../../data/model/User'
-import { ROLES } from '../../config'
+import { ROLES } from '../../../config'
 
 const user1 = new User({
   id: '1',

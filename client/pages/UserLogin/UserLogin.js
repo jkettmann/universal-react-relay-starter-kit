@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import Formsy from 'formsy-react'
 
 import Wrapper from './Wrapper'
 import Bold from './Bold'
 import Hint from './Hint'
-import Form from './Form'
+import FormWraper from './FormWrapper'
 import TextInput from '../../components/Input/FormsyText'
-import Button from '../../components/Button'
+import Button, { FacebookLoginButton } from '../../components/Button'
+
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
 
@@ -23,15 +26,26 @@ class LoginPage extends React.Component {
     }).isRequired,
   }
 
+  onFacebookLoginSuccess = (result) => {
+    const { email } = result.profile
+    const { accessToken } = result.token
+
+    this.login({ email, facebookToken: accessToken })
+  }
+
+  onFacebookLoginFailure = (error) => {
+    console.log('facebook failure', error)
+  }
+
   setFormElement = (element) => {
     this.formElement = element
   }
 
-  login = ({ email, password }) => {
+  login = ({ email, password, facebookToken }) => {
     const environment = this.props.relay.environment
     LoginMutation.commit({
       environment,
-      input: { email, password },
+      input: { email, password, facebookToken },
       onCompleted: () => this.props.router.go(-1),
       onError: (errors) => {
         console.error('login failed', errors[0])
@@ -52,7 +66,7 @@ class LoginPage extends React.Component {
   render() {
     const { viewer, router } = this.props
     if (viewer.isLoggedIn) {
-      this.props.router.push('/')
+      router.push('/')
       return <div />
     }
 
@@ -67,49 +81,60 @@ class LoginPage extends React.Component {
           <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
         </Hint>
 
-        <Form
-          ref={this.setFormElement}
-          onSubmit={this.login}
-        >
+        <FormWraper>
 
-          <TextInput
-            name="email"
-            label="E-Mail"
-            validations="isEmail"
-            validationError="Please enter a valid email address"
-            fullWidth
-          />
-
-          <TextInput
-            type="password"
-            name="password"
-            label="Passwort"
-            fullWidth
-          />
-
-          <Button
-            type="submit"
-            label="Login"
+          <FacebookLoginButton
+            label="Login with facebook"
             style={submitMargin}
+            onLoginSuccess={this.onFacebookLoginSuccess}
+            onLoginFailure={this.onFacebookLoginFailure}
             fullWidth
             secondary
           />
 
+          <Formsy.Form
+            ref={this.setFormElement}
+            onSubmit={this.login}
+          >
+            <TextInput
+              name="email"
+              label="E-Mail"
+              validations="isEmail"
+              validationError="Please enter a valid email address"
+              fullWidth
+            />
+
+            <TextInput
+              type="password"
+              name="password"
+              label="Passwort"
+              fullWidth
+            />
+
+            <Button
+              type="submit"
+              label="Login"
+              style={submitMargin}
+              fullWidth
+              secondary
+            />
+          </Formsy.Form>
+
           <Button
             label="Register"
             style={submitMargin}
-            onClick={() => router.push('/register')}
+            to="/register"
             fullWidth
             primary
           />
-        </Form>
+        </FormWraper>
       </Wrapper>
     )
   }
 }
 
 export default createFragmentContainer(
-  LoginPage,
+  withRouter(LoginPage),
   graphql`
     fragment UserLogin_viewer on Viewer {
       isLoggedIn

@@ -1,7 +1,7 @@
 import { GraphQLSchema } from 'graphql'
 
 import QueryType from './type/QueryType'
-import MutationType from './type/MutationType'
+import MutationType from './mutation/MutationType'
 
 export default new GraphQLSchema({
   query: QueryType,
