@@ -51,7 +51,6 @@ function verifyToken(jwtToken, shouldBeAccessToken) {
         log('Unauthorized signature for this JWT Token')
         reject('Unauthorized signature for this JWT Token')
       } else {
-        console.log(payload)
         resolve(payload)
       }
     })

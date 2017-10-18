@@ -28,9 +28,10 @@ export default mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({ email, password, facebookToken }, { db }, { rootValue }) => {
     return login({ email, password, facebookToken })
-      .then(({ accessToken, idToken, refreshToken }) => {
+      .then(({ userId, accessToken, idToken, refreshToken }) => {
         console.log('login successful', accessToken)
         /* eslint-disable no-param-reassign */
+        rootValue.session.userId = userId
         rootValue.session.accessToken = accessToken
         rootValue.session.idToken = idToken
         // rootValue.res.cookie('accessToken', accessToken, { httpOnly: true, domain: process.env.APP_DOMAIN })

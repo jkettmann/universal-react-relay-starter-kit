@@ -47,9 +47,9 @@ function loginWithCredentials({ email, password }) {
 
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: (result) => {
-        console.log(result)
         updateCredentials({ cognitoToken: result.getIdToken().getJwtToken() })
           .then(() => res({
+            userId: AWS.config.credentials.data.IdentityId,
             accessToken: result.getAccessToken().getJwtToken(),
             idToken: result.getIdToken().getJwtToken(),
             // refreshToken: result.getRefreshToken().getJwtToken(),

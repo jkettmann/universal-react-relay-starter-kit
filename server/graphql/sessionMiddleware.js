@@ -16,7 +16,7 @@ function loadSessionData(req) {
     return verifyAccessToken(req.session.accessToken)
       .then(() => verifyIdToken(req.session.idToken))
       .then(payload => ({
-        userId: payload.sub,
+        userId: req.session.userId,
         emailVerified: payload.email_verified,
         email: payload.email,
         role: payload['custom:role'],
