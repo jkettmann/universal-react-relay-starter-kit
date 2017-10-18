@@ -6,6 +6,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+global.navigator = global.navigator || {}
+
 const {
   AWS_COGNITO_REGION,
   AWS_COGNITO_USER_POOL_ID,

@@ -3,9 +3,7 @@ import { commitMutation, graphql } from 'react-relay'
 const mutation = graphql`
   mutation LogoutMutation($input: LogoutInput!) {
     logout(input: $input) {
-      user {
-        role
-      }
+      success
     }
   }
 `

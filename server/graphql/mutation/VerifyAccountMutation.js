@@ -1,7 +1,7 @@
 import { GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
-import verify from '../../auth/verify'
+import verify from '../auth/verify'
 
 export default mutationWithClientMutationId({
   name: 'VerifyAccount',

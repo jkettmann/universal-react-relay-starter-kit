@@ -1,18 +1,23 @@
-import { GraphQLNonNull, GraphQLString } from 'graphql'
+import { GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
+import dotenv from 'dotenv'
 
-import login from '../../auth/login'
-
+import login from '../auth/login'
 import UserType from '../type/UserType'
+
+dotenv.config()
 
 export default mutationWithClientMutationId({
   name: 'Login',
   inputFields: {
     email: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
     },
     password: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLString,
+    },
+    facebookToken: {
+      type: GraphQLString,
     },
   },
   outputFields: {
@@ -21,12 +26,14 @@ export default mutationWithClientMutationId({
       resolve: ({ user }) => user,
     },
   },
-  mutateAndGetPayload: ({ email, password }, { db }, { rootValue }) => {
-    return login({ email, password })
-      .then((token) => {
-        console.log('login successful', token)
+  mutateAndGetPayload: ({ email, password, facebookToken }, { db }, { rootValue }) => {
+    return login({ email, password, facebookToken })
+      .then(({ accessToken, idToken, refreshToken }) => {
+        console.log('login successful', accessToken)
         /* eslint-disable no-param-reassign */
-        rootValue.session.token = token
+        rootValue.session.accessToken = accessToken
+        rootValue.session.idToken = idToken
+        // rootValue.res.cookie('accessToken', accessToken, { httpOnly: true, domain: process.env.APP_DOMAIN })
         /* eslint-enable no-param-reassign */
         return { email }
       })

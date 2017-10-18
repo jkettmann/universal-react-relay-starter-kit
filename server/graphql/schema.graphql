@@ -16,8 +16,9 @@ type CreatePostPayload {
 }
 
 input LoginInput {
-  email: String!
-  password: String!
+  email: String
+  password: String
+  facebookToken: String
   clientMutationId: String
 }
 
@@ -31,7 +32,7 @@ input LogoutInput {
 }
 
 type LogoutPayload {
-  user: User
+  success: Boolean
   clientMutationId: String
 }
 

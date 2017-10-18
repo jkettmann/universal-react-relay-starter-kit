@@ -10,7 +10,7 @@ import Bold from './Bold'
 import Hint from './Hint'
 import FormWraper from './FormWrapper'
 import TextInput from '../../components/Input/FormsyText'
-import Button from '../../components/Button'
+import Button, { FacebookLoginButton } from '../../components/Button'
 
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../config'
@@ -26,15 +26,26 @@ class LoginPage extends React.Component {
     }).isRequired,
   }
 
+  onFacebookLoginSuccess = (result) => {
+    const { email } = result.profile
+    const { accessToken } = result.token
+
+    this.login({ email, facebookToken: accessToken })
+  }
+
+  onFacebookLoginFailure = (error) => {
+    console.log('facebook failure', error)
+  }
+
   setFormElement = (element) => {
     this.formElement = element
   }
 
-  login = ({ email, password }) => {
+  login = ({ email, password, facebookToken }) => {
     const environment = this.props.relay.environment
     LoginMutation.commit({
       environment,
-      input: { email, password },
+      input: { email, password, facebookToken },
       onCompleted: () => this.props.router.go(-1),
       onError: (errors) => {
         console.error('login failed', errors[0])
@@ -72,11 +83,11 @@ class LoginPage extends React.Component {
 
         <FormWraper>
 
-          <Button
+          <FacebookLoginButton
             label="Login with facebook"
             style={submitMargin}
-            href="/facebook"
-            external
+            onLoginSuccess={this.onFacebookLoginSuccess}
+            onLoginFailure={this.onFacebookLoginFailure}
             fullWidth
             secondary
           />

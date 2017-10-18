@@ -1,11 +1,11 @@
 import { posts } from './testData/posts'
 import { users } from './testData/users'
-import { ROLES, ERRORS } from '../config'
+import { ROLES, ERRORS } from '../../config'
 
 import User from '../data/model/User'
 import Post from '../data/model/Post'
 
-import { isLoggedIn, canPublish } from '../authentication'
+import { isLoggedIn, canPublish } from '../auth/utils'
 
 export default class Database {
 

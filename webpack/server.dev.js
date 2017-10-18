@@ -9,7 +9,7 @@ dotenv.config()
 const res = p => path.resolve(__dirname, p)
 
 const nodeModules = res('../node_modules')
-const entry = res('../server/render.js')
+const entry = res('../server/render/render.js')
 const output = res('../buildServer')
 
 // if you're specifying externals to leave unbundled, you need to tell Webpack
@@ -58,9 +58,11 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
+        GRAPHQL_ENDPOINT: JSON.stringify(process.env.GRAPHQL_ENDPOINT),
         AWS_COGNITO_USER_POOL_ID: JSON.stringify(process.env.AWS_COGNITO_USER_POOL_ID),
         AWS_COGNITO_USER_POOL_CLIENT_ID: JSON.stringify(process.env.AWS_COGNITO_USER_POOL_CLIENT_ID),
         AWS_COGNITO_IDENTITY_POOL_ID: JSON.stringify(process.env.AWS_COGNITO_IDENTITY_POOL_ID),
+        FACEBOOK_APP_ID: JSON.stringify(process.env.FACEBOOK_APP_ID),
       },
     }),
   ],

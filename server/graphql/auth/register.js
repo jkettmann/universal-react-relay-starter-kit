@@ -7,7 +7,7 @@ export default function register({ email, password, firstName, lastName }) {
     const dataEmail = { Name: 'email', Value: email }
     const dataFirstName = { Name: 'given_name', Value: firstName }
     const dataLastName = { Name: 'family_name', Value: lastName }
-    const dataRole = { Name: 'custom:role', Value: 'reader' }
+    const dataRole = { Name: 'custom:role', Value: 'publisher' }
 
     const attributeList = [
       new CognitoUserAttribute(dataEmail),

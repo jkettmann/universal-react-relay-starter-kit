@@ -1,7 +1,7 @@
 import { GraphQLNonNull, GraphQLString, GraphQLBoolean } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
-import resendVerification from '../../auth/resendVerification'
+import resendVerification from '../auth/resendVerification'
 
 export default mutationWithClientMutationId({
   name: 'ResendVerification',

@@ -1,23 +1,33 @@
 import cookieSession from 'cookie-session'
+import dotenv from 'dotenv'
 import debug from 'debug'
 
-import { decodeToken } from '../authentication'
+import {
+  verifyAccessToken,
+  verifyIdToken,
+} from './auth/verifyToken'
 
-const log = debug('server:sessionMiddleware')
+dotenv.config()
+const log = debug('graphql:sessionMiddleware')
+const ONE_WEEK = 100 * 60 * 60 * 24 * 7
 
 function loadSessionData(req) {
-  if (req.session && req.session.token) {
-    return new Promise((resolve) => {
-      let tokenData = null
-      try {
-        tokenData = decodeToken(req.session.token)
-      } catch (err) {
+  if (req.session && req.session.accessToken && req.session.idToken) {
+    return verifyAccessToken(req.session.accessToken)
+      .then(() => verifyIdToken(req.session.idToken))
+      .then(payload => ({
+        userId: payload.sub,
+        emailVerified: payload.email_verified,
+        email: payload.email,
+        role: payload['custom:role'],
+      }))
+      .catch((err) => {
         // eslint-disable-next-line no-undef
         log(err)
-      }
-      resolve(tokenData)
-    })
+      })
   }
+
+  log('no session token')
 
   return new Promise((resolve) => {
     resolve(null)
@@ -37,7 +47,9 @@ function getSessionData(req, res, next) {
 
 const cookieMiddleware = cookieSession({
   name: 'session',
-  keys: ['id', 'token'],
+  keys: ['token'],
+  maxAge: ONE_WEEK,
+  domain: 'localhost',
 })
 
 export default (req, res, next) => {

@@ -2,7 +2,7 @@ import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
 import UserType from '../type/UserType'
-import register from '../../auth/register'
+import register from '../auth/register'
 
 export default mutationWithClientMutationId({
   name: 'Register',
