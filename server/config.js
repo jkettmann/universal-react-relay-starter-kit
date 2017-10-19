@@ -1,4 +1,4 @@
-import { ERRORS as COMMON_ERRORS } from '../config'
+import { ERRORS as COMMON_ERRORS } from '../common/config'
 
 export const SECRET = 'server_secret'
 

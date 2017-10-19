@@ -10,7 +10,7 @@ import TextInput from '../../components/Input/FormsyText'
 import Button from '../../components/Button'
 import RegisterMutation from '../../mutation/RegisterMutation'
 
-import { ERRORS } from '../../../config'
+import { ERRORS } from '../../../common/config'
 
 class RegisterPage extends React.Component {
   static propTypes = {
