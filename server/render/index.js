@@ -55,13 +55,18 @@ if (DEV) {
 
   compiler.plugin('done', done)
 } else {
-  /** ****************
-   *
-   * Express server for production
-   *
-   *****************/
-  app.listen(PORT, () =>
-  // eslint-disable-next-line no-undef
-  log('Essential React listening at http://%s:%s', host, PORT),
-)
+  const clientConfig = require('../../webpack/client.prod')
+  const serverConfig = require('../../webpack/server.prod')
+  const publicPath = clientConfig.output.publicPath
+  const outputPath = clientConfig.output.path
+
+  webpack([clientConfig, serverConfig]).run((err, stats) => {
+    const clientStats = stats.toJson().children[0]
+    const serverRender = require('../../buildClientSSR/main.js').default
+
+    app.use(publicPath, express.static(outputPath))
+    app.use(serverRender({ clientStats }))
+
+    done()
+  })
 }
