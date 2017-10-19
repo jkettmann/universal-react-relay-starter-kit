@@ -64,7 +64,6 @@
     "nodemon": "^1.12.1",
     "npm-run-all": "^4.1.1",
     "react-addons-test-utils": "^15.5.1",
-    "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.10.2",
     "webpack-hot-middleware": "^2.18.0",
     "webpack-hot-server-middleware": "^0.1.0",
@@ -113,10 +112,10 @@
     "recompose": "^0.25.0",
     "relay-compiler": "^1.4.0",
     "relay-runtime": "^1.4.0",
-    "request": "^2.82.0",
     "sanitize-filename": "^1.6.1",
     "serialize-javascript": "^1.4.0",
     "styled-components": "^2.1.2",
+    "webpack": "^3.8.1",
     "webpack-flush-chunks": "^1.1.23"
   }
 }
