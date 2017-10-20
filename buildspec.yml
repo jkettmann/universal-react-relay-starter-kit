@@ -20,4 +20,4 @@ artifacts:
     - 'package.json'
     - 'node_modules/*'
     - 'node_modules/.bin/*'
-    - 'build/*'
+    - 'build/**/*'
