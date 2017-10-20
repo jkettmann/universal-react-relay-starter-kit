@@ -7,6 +7,8 @@ This starter kit aims at helping developers starting a professional app to creat
 - [Design decisions](#design-decisions)
 - [How to create a new route](#how-to-create-a-new-route)
 - [Functional components](#functional-components)
+- [Production setup](#production-setup)
+  - [AWS CodeBuild](#aws-codebuild)
 - [Roadmap](#roadmap)
 - [Credits](#credits)
 
@@ -176,6 +178,36 @@ export default enhance(Button)
 ```
 
 See [recompose](https://github.com/acdlite/recompose) for more information.
+
+## Production setup
+
+### AWS CodeBuild
+
+Go to to your [AWS console](https://console.aws.amazon.com/console/home) and login. First you need to create a S3 Bucket to store the build atrifacts.
+
+- Select S3 from the menu.
+- Create a new bucket with name `universal-react-relay-starter-kit-codebuild-artifacts` or any other name you prefer.
+- Click through the standard settings until the bucket is created.
+
+Now you can start setting up CodeBuild.
+
+- Select CodeBuild from the menu.
+- Create a new project.
+- Enter `Universal-React-Relay-Starter-Kit` as name (or any other name you prefer).
+- Under `Source provider` select `GitHub` ff your repository is hosted there.
+- Connect CodeBuild with your GitHub account.
+- Select `Use a repository in my account` and choose the repository.
+- This project uses `Node 8`, which is currently not directly available on AWS.
+  - Under `Environment` select `Specify a docker image`.
+  - Select `Linux` as `Environment type`
+  - Select `Other` as `Custom image type`
+  - Enter `library/node:8.4` at `Custom image ID`
+- `Use the buildspec.yml in the source code root directory` should be enabled as `Build specification`. This will execute the steps you can find inside `buildspec.yml` in this repository.
+- To save artifacts choose `Amazon S3` as type and select the bucket your created previously.
+- Leave the selection for `Service role` at `Create a service role in your account`. If you decide to go back after clicking `Continue` you might have to select `Choose an existing service role from my account` since this role will be created on clicking on `Continue`.
+- This project doesn't use environment variables in the build step. If you have to define some anyway click on `Show advanced settings` and enter the key-value-pairs there.
+- Click on `Continue`. Review and confirm the settings.
+- After creating the project you can start a test build and check the S3 Bucket if everything went fine.
 
 ## Roadmap
 
