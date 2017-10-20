@@ -1,0 +1,23 @@
+version: 0.1
+
+phases:
+  install:
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - echo "pre build phase"
+  build:
+    commands:
+      - echo "build phase"
+      - npm run build
+  post_build:
+    commands:
+      - echo "post build phase"
+artifacts:
+  files:
+    - '.gitignore'
+    - 'package.json'
+    - 'node_modules/*'
+    - 'node_modules/.bin/*'
+    - 'build/*'
