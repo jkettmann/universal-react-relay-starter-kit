@@ -2,6 +2,7 @@ import express from 'express'
 import graphQLHTTP from 'express-graphql'
 import { maskErrors } from 'graphql-errors'
 import cors from 'cors'
+import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import debug from 'debug'
@@ -25,6 +26,7 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
+app.use(helmet())
 app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(intlMiddleware)
