@@ -13,7 +13,7 @@ import TextInput from '../../components/Input/FormsyText'
 import Button, { FacebookLoginButton } from '../../components/Button'
 
 import LoginMutation from '../../mutation/LoginMutation'
-import { ERRORS } from '../../../config'
+import { ERRORS } from '../../../common/config'
 
 class LoginPage extends React.Component {
   static propTypes = {

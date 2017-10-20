@@ -12,7 +12,7 @@ import Button from '../../components/Button'
 
 import ResendVerificationMutation from '../../mutation/ResendVerificationMutation'
 import VerifyAccountMutation from '../../mutation/VerifyAccountMutation'
-import { ERRORS } from '../../../config'
+import { ERRORS } from '../../../common/config'
 
 const messages = defineMessages({
   resendVerification: {
