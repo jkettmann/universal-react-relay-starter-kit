@@ -102,7 +102,7 @@ export default ({ clientStats }) => async (req, res) => {
       return
     }
 
-    console.log('ssr error', err)
+    log('ssr error', err)
   }
 
   const chunkNames = flushChunkNames()

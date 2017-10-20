@@ -1,11 +1,13 @@
 import { GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import dotenv from 'dotenv'
+import debug from 'debug'
 
 import login from '../auth/login'
 import UserType from '../type/UserType'
 
 dotenv.config()
+const log = debug('graphql:LoginMutation')
 
 export default mutationWithClientMutationId({
   name: 'Login',
@@ -29,7 +31,7 @@ export default mutationWithClientMutationId({
   mutateAndGetPayload: ({ email, password, facebookToken }, { db }, { rootValue }) => {
     return login({ email, password, facebookToken })
       .then(({ userId, accessToken, idToken, refreshToken }) => {
-        console.log('login successful', accessToken)
+        log('login successful', accessToken)
         /* eslint-disable no-param-reassign */
         rootValue.session.userId = userId
         rootValue.session.accessToken = accessToken

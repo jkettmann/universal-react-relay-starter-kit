@@ -1,6 +1,9 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
+import debug from 'debug'
 
 import { userPool } from './config'
+
+const log = debug('graphql:verify')
 
 export default function verify({ email, pin }) {
   return new Promise((res, rej) => {
@@ -11,12 +14,12 @@ export default function verify({ email, pin }) {
     const cognitoUser = new CognitoUser(userData)
     cognitoUser.confirmRegistration(pin, true, (error, result) => {
       if (error) {
-        console.log(error)
+        log(error)
         rej(error)
         return
       }
       if (result === 'SUCCESS') {
-        console.log('Successfully verified account!')
+        log('Successfully verified account!')
         cognitoUser.signOut()
         res()
       } else {

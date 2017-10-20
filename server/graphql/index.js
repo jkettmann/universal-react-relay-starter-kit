@@ -16,7 +16,6 @@ const log = debug('graphql')
 const PORT = process.env.PORT_GRAPHQL
 
 const app = express()
-console.log(process.env.APP_ENDPOINT)
 
 const corsOptions = {
   origin: process.env.APP_ENDPOINT,
