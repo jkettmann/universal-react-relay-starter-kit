@@ -1,5 +1,6 @@
 import express from 'express'
 import webpack from 'webpack' // aliased to webpack-universal
+import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import Aws from 'aws-sdk'
 import S3Router from 'react-s3-uploader/s3router'
@@ -21,6 +22,7 @@ Aws.config.update({
 
 const app = express()
 
+app.use(helmet())
 app.use(cookieParser())
 
 app.use('/image', S3Router({

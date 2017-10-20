@@ -1,6 +1,9 @@
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js'
+import debug from 'debug'
 
 import { userPool } from './config'
+
+const log = debug('graphql:register')
 
 export default function register({ email, password, firstName, lastName }) {
   return new Promise((resolve, reject) => {
@@ -17,7 +20,7 @@ export default function register({ email, password, firstName, lastName }) {
     ]
 
     userPool.signUp(email, password, attributeList, null, (error, result) => {
-      console.log(error, result)
+      log(error, result)
       if (error) {
         reject(error)
         return

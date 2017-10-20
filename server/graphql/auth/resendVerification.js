@@ -1,6 +1,9 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
+import debug from 'debug'
 
 import { userPool } from './config'
+
+const log = debug('graphql:resendVerification')
 
 export default function resendVerification({ email }) {
   return new Promise((res, rej) => {
@@ -10,7 +13,7 @@ export default function resendVerification({ email }) {
     }
     const cognitoUser = new CognitoUser(userData)
     cognitoUser.resendConfirmationCode((error) => {
-      console.log('resent verfication', error)
+      log('resent verfication', error)
       if (error) {
         rej(error)
         return
