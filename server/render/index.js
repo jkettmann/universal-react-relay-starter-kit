@@ -25,6 +25,10 @@ const app = express()
 app.use(helmet())
 app.use(cookieParser())
 
+app.get('/health', (req, res) => {
+  res.sendStatus(isBuilt ? 200 : 400)
+})
+
 app.use('/image', S3Router({
   bucket: process.env.S3_IMAGE_BUCKET,
   region: 'eu-central-1',
