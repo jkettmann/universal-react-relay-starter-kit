@@ -13,7 +13,7 @@ This starter kit aims at helping developers starting a professional app to creat
 - [Credits](#credits)
 
 ## Installation
-This project uses [dotenv]() to set environment variables from a `.env` file. Therefore you need to add a file named `.env` to the root of the project. The content should be as follows. Please fill out `...` with your AWS or Facebook keys etc.
+This project uses [dotenv](https://github.com/motdotla/dotenv) to set environment variables from a `.env` file. Therefore you need to add a file named `.env` to the root of the project. The content should be as follows. Please fill out `...` with your AWS or Facebook keys etc.
 
 ```
 NODE_ENV=production
