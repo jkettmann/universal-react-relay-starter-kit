@@ -13,6 +13,29 @@ This starter kit aims at helping developers starting a professional app to creat
 - [Credits](#credits)
 
 ## Installation
+This project uses [dotenv]() to set environment variables from a `.env` file. Therefore you need to add a file named `.env` to the root of the project. The content should be as follows. Please fill out `...` with your AWS or Facebook keys etc.
+
+```
+NODE_ENV=production
+PORT_APP=3000
+PORT_GRAPHQL=8080
+APP_ENDPOINT=http://localhost:3000
+APP_DOMAIN=localhost:3000
+GRAPHQL_ENDPOINT=http://localhost:8080
+IMAGE_BASE_URL=/image/uploads
+
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_COGNITO_USER_POOL_ID=...
+AWS_COGNITO_USER_POOL_CLIENT_ID=...
+AWS_COGNITO_IDENTITY_POOL_ID=...
+AWS_COGNITO_REGION=...
+S3_IMAGE_BUCKET=...
+
+FACEBOOK_APP_ID=...
+FACEBOOK_APP_SECRET=...
+```
+
 - Install [watchman](https://facebook.github.io/watchman/)
 - (optional) When you installed `watchman` you can also easily switch to [yarn](https://yarnpkg.com/en/)
 
