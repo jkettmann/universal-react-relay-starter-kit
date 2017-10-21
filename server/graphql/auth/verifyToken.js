@@ -3,13 +3,14 @@ import jwkToPem from 'jwk-to-pem'
 import dotenv from 'dotenv'
 import debug from 'debug'
 
+import jwkSet from './JwkSet.json'
+
 dotenv.config()
 
 const log = debug('graphql:verifyToken')
 const userPoolId = 'https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_kYvMedesC'
-const jwtSet = JSON.parse(process.env.AWS_COGNITO_JWT_SET)
 
-const pems = jwtSet.keys.reduce((tmpPems, key) => {
+const pems = jwkSet.keys.reduce((tmpPems, key) => {
   const pem = jwkToPem({
     kty: key.kty,
     n: key.n,
