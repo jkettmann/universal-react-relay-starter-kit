@@ -6,7 +6,7 @@
   ],
   "plugins": [
     "transform-runtime",
-    "dynamic-import-webpack",
+    "syntax-dynamic-import",
     ["relay", {
       "schema": "graphql/schema.graphql"
     }],
