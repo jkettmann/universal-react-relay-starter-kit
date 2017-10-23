@@ -45,6 +45,7 @@ module.exports = {
                 messagesDir: './build/intl/messages/',
               }],
               'universal-import',
+              'react-hot-loader/babel',
             ],
           },
         },

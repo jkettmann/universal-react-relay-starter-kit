@@ -29,6 +29,11 @@ const getPage = props => import(`./async/${props.page}`)
 
 const UniversalComponent = universal(getPage, {
   loading: Loading,
+  error: (ref) => {
+    console.log(ref)
+    console.error(ref.error.stack)
+    return <div>{ref.error.message}</div>
+  },
 })
 
 // eslint-disable-next-line react/prop-types
