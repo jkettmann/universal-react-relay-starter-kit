@@ -32,6 +32,7 @@ module.exports = {
               'env',
               'react',
               'stage-0',
+              'stage-2',
             ],
             plugins: [
               'transform-runtime',

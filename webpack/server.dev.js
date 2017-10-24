@@ -43,32 +43,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              'env',
-              'react',
-              'stage-0',
-            ],
-            plugins: [
-              'transform-runtime',
-              ['relay', {
-                schema: 'graphql/schema.graphql',
-              }],
-              ['babel-plugin-styled-components', {
-                ssr: true,
-              }],
-              ['react-intl', {
-                messagesDir: './build/intl/messages/',
-              }],
-              ['universal-import', {
-                babelServer: true,
-              }],
-              'react-hot-loader/babel',
-            ],
-          },
-        },
+        use: 'babel-loader',
       },
     ],
   },

@@ -8,7 +8,7 @@ module.exports = {
   name: 'client',
   target: 'web',
   devtool: 'source-map',
-  entry: [path.resolve(__dirname, '../client/index.js')],
+  entry: [path.resolve(__dirname, '../clientUncompiled/index.js')],
   output: {
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
@@ -27,6 +27,7 @@ module.exports = {
               'env',
               'react',
               'stage-0',
+              'stage-2',
             ],
             plugins: [
               'transform-runtime',
