@@ -36,7 +36,6 @@ export default mutationWithClientMutationId({
         rootValue.session.userId = userId
         rootValue.session.accessToken = accessToken
         rootValue.session.idToken = idToken
-        // rootValue.res.cookie('accessToken', accessToken, { httpOnly: true, domain: process.env.APP_DOMAIN })
         /* eslint-enable no-param-reassign */
         return { email }
       })

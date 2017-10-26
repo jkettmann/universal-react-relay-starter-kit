@@ -49,7 +49,7 @@ const cookieMiddleware = cookieSession({
   name: 'session',
   keys: ['token'],
   maxAge: ONE_WEEK,
-  domain: 'localhost',
+  domain: process.env.COOKIE_DOMAIN,
 })
 
 export default (req, res, next) => {
