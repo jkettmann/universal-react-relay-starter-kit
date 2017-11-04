@@ -19,11 +19,6 @@ export default mutationWithClientMutationId({
     lastName: {
       type: new GraphQLNonNull(GraphQLString),
     },
-    // uncomment following if you want to allow the user
-    // to choose its role
-    // role: {
-    //   type: new GraphQLNonNull(GraphQLString),
-    // },
   },
   outputFields: {
     user: {
@@ -31,5 +26,6 @@ export default mutationWithClientMutationId({
       resolve: payload => payload.user,
     },
   },
-  mutateAndGetPayload: input => register(input),
+  mutateAndGetPayload: (input, { db }) => register(input)
+    .then(result => db.createUser({ ...input, ...result })),
 })

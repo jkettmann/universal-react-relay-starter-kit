@@ -84,23 +84,27 @@ export default class Database {
     return user
   }
 
-  createUser = ({ email, password, firstName, lastName, role }) => {
-    const existingUser = this.users.find(user => user.email === email)
+  createUser = ({ id, email, firstName, lastName }) => {
+    return new Promise((resolve, reject) => {
+      const user = new User({
+        id,
+        email,
+        firstName,
+        lastName,
+      })
 
-    if (existingUser) {
-      throw new Error(ERRORS.EmailAlreadyTaken)
-    }
+      const params = {
+        TableName: 'User',
+        Item: user,
+      }
 
-    const newUser = new User({
-      id: `${this.users.length + 1}`,
-      email,
-      password,
-      firstName,
-      lastName,
-      role: role || ROLES.reader,
+      this.client.put(params, (err, data) => {
+        if (err) {
+          reject(err)
+        }
+        console.log('created new user', user, data)
+        resolve(user)
+      })
     })
-
-    this.users.push(newUser)
-    return { user: newUser }
   }
 }

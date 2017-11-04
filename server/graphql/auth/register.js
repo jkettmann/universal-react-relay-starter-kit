@@ -23,7 +23,7 @@ export default function register({ email, password, firstName, lastName }) {
         reject(error)
         return
       }
-      resolve({ email })
+      resolve({ id: result.userSub, email })
     })
   })
 }
