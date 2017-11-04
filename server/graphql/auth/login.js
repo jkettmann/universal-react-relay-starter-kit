@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 import debug from 'debug'
 
 import { userPool, USER_POOL_ID, IDENTITY_POOL_ID } from './config'
+import { ROLES } from '../../config'
 
 const log = debug('graphql:login')
 
@@ -16,6 +17,18 @@ function getLogins({ cognitoToken, facebookToken }) {
   }
 
   throw Error('Login: No supported token provided.')
+}
+
+function getRoleFromGroups(groups) {
+  if (groups.includes(ROLES.admin)) {
+    return ROLES.admin
+  }
+
+  if (groups.includes(ROLES.publisher)) {
+    return ROLES.publisher
+  }
+
+  return ROLES.reader
 }
 
 function updateCredentials(token) {
@@ -49,10 +62,11 @@ function loginWithCredentials({ email, password }) {
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: (result) => {
         const decodedIdToken = jwt.decode(result.getIdToken().getJwtToken(), { complete: true })
+        const groups = decodedIdToken.payload['cognito:groups'] || []
         res({
           userId: decodedIdToken.payload.sub,
           emailVerified: decodedIdToken.payload.email_verified,
-          role: decodedIdToken.payload['custom:role'],
+          role: getRoleFromGroups(groups),
           accessToken: result.getAccessToken().getJwtToken(),
           refreshToken: result.getRefreshToken().getToken(),
         })
