@@ -69,10 +69,6 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
         GRAPHQL_ENDPOINT: JSON.stringify(process.env.GRAPHQL_ENDPOINT),
-        AWS_COGNITO_REGION: JSON.stringify(process.env.AWS_COGNITO_REGION),
-        AWS_COGNITO_USER_POOL_ID: JSON.stringify(process.env.AWS_COGNITO_USER_POOL_ID),
-        AWS_COGNITO_USER_POOL_CLIENT_ID: JSON.stringify(process.env.AWS_COGNITO_USER_POOL_CLIENT_ID),
-        AWS_COGNITO_IDENTITY_POOL_ID: JSON.stringify(process.env.AWS_COGNITO_IDENTITY_POOL_ID),
         FACEBOOK_APP_ID: JSON.stringify(process.env.FACEBOOK_APP_ID),
       },
     }),
