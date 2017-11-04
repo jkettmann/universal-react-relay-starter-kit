@@ -1,0 +1,1 @@
+The deploy script is used to update the AWS Elastic Beanstalk application via GitLab CI.
