@@ -37,11 +37,12 @@ app.use(intlMiddleware)
 app.use(sessionMiddleware)
 
 maskErrors(Schema)
+const db = new Database()
 app.use('/', graphQLHTTP(({ session, tokenData }, res) => ({
   graphiql: true,
   pretty: true,
   schema: Schema,
-  context: { db: new Database() },
+  context: { db },
   rootValue: { session, tokenData, res },
 })))
 
