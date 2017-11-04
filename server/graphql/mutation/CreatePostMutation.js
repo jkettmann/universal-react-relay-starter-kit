@@ -31,6 +31,5 @@ export default mutationWithClientMutationId({
         db.getUserById(user.id),
     },
   },
-  mutateAndGetPayload: (data, { db, user }) =>
-    db.createPost(data, user),
+  mutateAndGetPayload: (data, { db, user }) => db.createPost(data, user),
 })

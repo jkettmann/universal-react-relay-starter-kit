@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk'
+import uuid from 'uuid/v4'
 
 import { posts } from './testData/posts'
 import { users } from './testData/users'
@@ -23,14 +24,32 @@ export default class Database {
   }
 
   createPost = ({ creatorId, title, description, image }, user) => {
-    if (!canPublish(user)) {
-      throw new Error(ERRORS.Forbidden)
-    }
+    return new Promise((resolve, reject) => {
+      if (!canPublish(user)) {
+        reject(new Error(ERRORS.Forbidden))
+      }
 
-    const id = `${this.posts.length + 1}`
-    const newPost = new Post({ id, creatorId: id, title, image, description })
-    this.posts.push(newPost)
-    return newPost
+      const post = new Post({
+        id: uuid(),
+        creatorId: user.id,
+        title,
+        image,
+        description,
+      })
+
+      const params = {
+        TableName: 'Post',
+        Item: post,
+      }
+
+      this.client.put(params, (err, data) => {
+        if (err) {
+          reject(err)
+        }
+        console.log('created new post', post, data)
+        resolve(post)
+      })
+    })
   }
 
   getPost = id => this.posts.find(post => post.id === id)

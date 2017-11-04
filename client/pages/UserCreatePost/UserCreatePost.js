@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { createFragmentContainer, graphql } from 'react-relay'
 import { routerShape } from 'found/lib/PropTypes'
 
 import Wrapper from './Wrapper'
@@ -99,4 +100,11 @@ class CreatePostPage extends React.Component {
   }
 }
 
-export default CreatePostPage
+export default createFragmentContainer(
+  CreatePostPage,
+  graphql`
+    fragment UserCreatePost_viewer on Viewer {
+      canPublish
+    }
+  `,
+)
