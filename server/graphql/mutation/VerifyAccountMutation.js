@@ -19,5 +19,10 @@ export default mutationWithClientMutationId({
       resolve: ({ success }) => success,
     },
   },
-  mutateAndGetPayload: ({ email, pin }) => verify({ email, pin }),
+  mutateAndGetPayload: ({ email, pin }, { session }) => verify({ email, pin })
+    .then(() => {
+      /* eslint-disable no-param-reassign */
+      session.emailVerified = true
+      /* eslint-enable no-param-reassign */
+    }),
 })
