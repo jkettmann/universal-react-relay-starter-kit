@@ -14,7 +14,7 @@ function loadSessionData(req) {
   if (req.session && req.session.accessToken) {
     return verifyAccessToken(req.session.accessToken)
       .then(payload => ({
-        userId: req.session.userId,
+        id: req.session.userId,
         role: req.session.role,
         emailVerified: req.session.emailVerified,
         email: payload.email,
@@ -34,8 +34,8 @@ function loadSessionData(req) {
 
 function getSessionData(req, res, next) {
   loadSessionData(req)
-    .then((tokenData) => {
-      req.tokenData = tokenData || {}
+    .then((userData) => {
+      req.user = userData || {}
       next()
     })
     .catch(() => {

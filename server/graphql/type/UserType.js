@@ -30,8 +30,8 @@ export default new GraphQLObjectType({
     posts: {
       type: PostConnection.connectionType,
       args: connectionArgs,
-      resolve: (user, args, { db }, { rootValue: { tokenData } }) =>
-        connectionFromArray(db.getPostsForCreator(tokenData), args),
+      resolve: (obj, args, { db, user }) =>
+        connectionFromArray(db.getPostsForCreator(user), args),
     },
   },
 })

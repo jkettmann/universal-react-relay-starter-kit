@@ -31,5 +31,5 @@ export default mutationWithClientMutationId({
       resolve: payload => payload.user,
     },
   },
-  mutateAndGetPayload: (input, { db }) => register(input),
+  mutateAndGetPayload: input => register(input),
 })

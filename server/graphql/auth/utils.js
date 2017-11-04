@@ -1,6 +1,6 @@
 import debug from 'debug'
 
-import { ROLES } from './config'
+import { ROLES } from '../../config'
 
 const log = debug('server:authentication')
 

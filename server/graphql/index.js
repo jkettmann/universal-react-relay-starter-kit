@@ -38,12 +38,15 @@ app.use(sessionMiddleware)
 
 maskErrors(Schema)
 const db = new Database()
-app.use('/', graphQLHTTP(({ session, tokenData }, res) => ({
+app.use('/', graphQLHTTP(({ session, user }) => ({
   graphiql: true,
   pretty: true,
   schema: Schema,
-  context: { db },
-  rootValue: { session, tokenData, res },
+  context: {
+    db,
+    session,
+    user,
+  },
 })))
 
 app.listen(PORT, () =>

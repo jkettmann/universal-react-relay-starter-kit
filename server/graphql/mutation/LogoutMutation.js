@@ -9,10 +9,12 @@ export default mutationWithClientMutationId({
       resolve: ({ success }) => success,
     },
   },
-  mutateAndGetPayload: (obj, { db }, { rootValue }) => {
+  mutateAndGetPayload: (obj, { session }) => {
     /* eslint-disable no-param-reassign */
-    rootValue.session.accessToken = null
-    rootValue.session.idToken = null
+    session.userId = null
+    session.role = null
+    session.accessToken = null
+    session.refreshToken = null
     /* eslint-enable no-param-reassign */
     return { success: true }
   },
