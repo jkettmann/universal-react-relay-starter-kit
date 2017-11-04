@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk'
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js'
+import jwt from 'jsonwebtoken'
 import debug from 'debug'
 
 import { userPool, USER_POOL_ID, IDENTITY_POOL_ID } from './config'
@@ -47,14 +48,14 @@ function loginWithCredentials({ email, password }) {
 
     cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: (result) => {
-        updateCredentials({ cognitoToken: result.getIdToken().getJwtToken() })
-          .then(() => res({
-            userId: AWS.config.credentials.data.IdentityId,
-            accessToken: result.getAccessToken().getJwtToken(),
-            idToken: result.getIdToken().getJwtToken(),
-            // refreshToken: result.getRefreshToken().getJwtToken(),
-          }),
-        )
+        const decodedIdToken = jwt.decode(result.getIdToken().getJwtToken(), { complete: true })
+        res({
+          userId: decodedIdToken.payload.sub,
+          emailVerified: decodedIdToken.payload.email_verified,
+          role: decodedIdToken.payload['custom:role'],
+          accessToken: result.getAccessToken().getJwtToken(),
+          refreshToken: result.getRefreshToken().getToken(),
+        })
       },
       onFailure: (err) => {
         log('login failed', err)

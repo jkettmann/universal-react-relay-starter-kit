@@ -4,7 +4,6 @@ import debug from 'debug'
 
 import {
   verifyAccessToken,
-  verifyIdToken,
 } from './auth/verifyToken'
 
 dotenv.config()
@@ -12,14 +11,13 @@ const log = debug('graphql:sessionMiddleware')
 const ONE_WEEK = 100 * 60 * 60 * 24 * 7
 
 function loadSessionData(req) {
-  if (req.session && req.session.accessToken && req.session.idToken) {
+  if (req.session && req.session.accessToken) {
     return verifyAccessToken(req.session.accessToken)
-      .then(() => verifyIdToken(req.session.idToken))
       .then(payload => ({
         userId: req.session.userId,
-        emailVerified: payload.email_verified,
+        role: req.session.role,
+        emailVerified: req.session.emailVerified,
         email: payload.email,
-        role: payload['custom:role'],
       }))
       .catch((err) => {
         // eslint-disable-next-line no-undef

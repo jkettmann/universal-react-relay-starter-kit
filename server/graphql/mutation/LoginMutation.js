@@ -30,12 +30,13 @@ export default mutationWithClientMutationId({
   },
   mutateAndGetPayload: ({ email, password, facebookToken }, { db }, { rootValue }) => {
     return login({ email, password, facebookToken })
-      .then(({ userId, accessToken, idToken, refreshToken }) => {
-        log('login successful', accessToken)
+      .then(({ userId, role, accessToken, refreshToken }) => {
+        log('login successful', userId, accessToken)
         /* eslint-disable no-param-reassign */
         rootValue.session.userId = userId
+        rootValue.session.role = role
         rootValue.session.accessToken = accessToken
-        rootValue.session.idToken = idToken
+        rootValue.session.refreshToken = refreshToken
         /* eslint-enable no-param-reassign */
         return { email }
       })
