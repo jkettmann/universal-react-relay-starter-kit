@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql'
 import {
   connectionArgs,
-  connectionFromArray,
+  connectionFromPromisedArray,
   globalIdField,
 } from 'graphql-relay'
 
@@ -31,7 +31,7 @@ export default new GraphQLObjectType({
       type: PostConnection.connectionType,
       args: connectionArgs,
       resolve: (obj, args, { db, user }) =>
-        connectionFromArray(db.getPostsForCreator(user), args),
+        connectionFromPromisedArray(db.getPostsForCreator(user), args),
     },
   },
 })

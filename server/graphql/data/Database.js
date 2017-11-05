@@ -23,88 +23,129 @@ export default class Database {
     this.posts = posts.map(post => new Post(post))
   }
 
-  createPost = ({ creatorId, title, description, image }, user) => {
-    return new Promise((resolve, reject) => {
-      if (!canPublish(user)) {
-        reject(new Error(ERRORS.Forbidden))
-      }
+  createPost = ({ creatorId, title, description, image }, user) => new Promise((resolve, reject) => {
+    if (!canPublish(user)) {
+      reject(new Error(ERRORS.Forbidden))
+      return
+    }
 
-      const post = new Post({
-        id: uuid(),
-        creatorId: user.id,
-        title,
-        image,
-        description,
-      })
-
-      const params = {
-        TableName: 'Post',
-        Item: post,
-      }
-
-      this.client.put(params, (err, data) => {
-        if (err) {
-          reject(err)
-        }
-        console.log('created new post', post, data)
-        resolve(post)
-      })
+    const isoDate = new Date().toISOString()
+    const post = new Post({
+      id: uuid(),
+      creatorId: user.id,
+      createdAt: isoDate,
+      updatedAt: isoDate,
+      title,
+      image,
+      description,
     })
-  }
 
-  getPost = id => this.posts.find(post => post.id === id)
+    const params = {
+      TableName: 'Post',
+      Item: post,
+    }
 
-  getPosts = () => this.posts
+    this.client.put(params, (err, data) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      console.log('created new post', post, data)
+      resolve(post)
+    })
+  })
 
-  getPostsForCreator = ({ id, role } = {}) => {
+  getPost = id => new Promise((resolve, reject) => {
+    const params = {
+      Key: { id },
+      TableName: 'Post',
+    }
+
+    this.client.get(params, (error, data) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve(new Post(data.Item))
+    })
+  })
+
+  getPosts = () => new Promise((resolve, reject) => {
+    const params = {
+      TableName: 'Post',
+    }
+
+    this.client.scan(params, (error, data) => {
+      if (error) {
+        reject(error)
+        return
+      }
+      resolve(data.Items.map(item => new Post(item)))
+    })
+  })
+
+  getPostsForCreator = ({ id, role } = {}) => new Promise((resolve, reject) => {
     if (!isLoggedIn({ role })) {
-      return []
+      resolve([])
+      return
     }
 
-    return this.posts.filter(post => post.creatorId === id)
-  }
-
-  getPostCreator = (post) => {
-    // this is accessible by anyone so only return public data (no email etc.)
-    const { firstName, lastName } = this.getUserById(post.creatorId)
-    return { firstName, lastName }
-  }
-
-  getUserById = id => id && this.users.find(user => user.id === id)
-
-  getUserWithCredentials = (email, password) => {
-    const user = this.users.find(
-      userData => userData.email === email && userData.password === password,
-    )
-
-    if (!user) {
-      throw new Error(ERRORS.WrongEmailOrPassword)
+    const params = {
+      TableName: 'Post',
+      FilterExpression: '#creatorId = :creatorId',
+      ExpressionAttributeNames: {
+        '#creatorId': 'creatorId',
+      },
+      ExpressionAttributeValues: {
+        ':creatorId': id,
+      },
     }
 
-    return user
-  }
+    this.client.scan(params, (error, data) => {
+      if (error) {
+        reject(error)
+        return
+      }
+      resolve(data.Items.map(item => new Post(item)))
+    })
+  })
 
-  createUser = ({ id, email, firstName, lastName }) => {
-    return new Promise((resolve, reject) => {
-      const user = new User({
-        id,
-        email,
-        firstName,
-        lastName,
-      })
+  // this is accessible by anyone so only return public data (no email etc.)
+  getPostCreator = post => this.getUserById(post.creatorId)
+    .then(({ firstName, lastName }) => ({ firstName, lastName }))
 
-      const params = {
-        TableName: 'User',
-        Item: user,
+  getUserById = id => new Promise((resolve, reject) => {
+    const params = {
+      Key: { id },
+      TableName: 'User',
+    }
+
+    this.client.get(params, (error, data) => {
+      if (error) {
+        reject(error)
+        return
       }
 
-      this.client.put(params, (err, data) => {
-        if (err) {
-          reject(err)
-        }
-        console.log('created new user', user, data)
-        resolve(user)
-      })
+      resolve(new User(data.Item))
     })
-  }
+  })
+
+  createUser = userData => new Promise((resolve, reject) => {
+    const user = new User(userData)
+
+    const params = {
+      TableName: 'User',
+      Item: user,
+    }
+
+    this.client.put(params, (err, data) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      console.log('created new user', user, data)
+      resolve(user)
+    })
+  })
 }
