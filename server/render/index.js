@@ -33,7 +33,7 @@ app.get('/health', (req, res) => {
 
 app.use('/image', S3Router({
   bucket: process.env.S3_IMAGE_BUCKET,
-  region: 'eu-central-1',
+  region: process.env.AWS_REGION,
   signatureVersion: 'v4',
   headers: { 'Access-Control-Allow-Origin': '*' },
   ACL: 'public-read',
