@@ -60,26 +60,22 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
         GRAPHQL_ENDPOINT: JSON.stringify(process.env.GRAPHQL_ENDPOINT),
-        AWS_COGNITO_REGION: JSON.stringify(process.env.AWS_COGNITO_REGION),
-        AWS_COGNITO_USER_POOL_ID: JSON.stringify(process.env.AWS_COGNITO_USER_POOL_ID),
-        AWS_COGNITO_USER_POOL_CLIENT_ID: JSON.stringify(process.env.AWS_COGNITO_USER_POOL_CLIENT_ID),
-        AWS_COGNITO_IDENTITY_POOL_ID: JSON.stringify(process.env.AWS_COGNITO_IDENTITY_POOL_ID),
         FACEBOOK_APP_ID: JSON.stringify(process.env.FACEBOOK_APP_ID),
       },
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         screw_ie8: true,
-        warnings: false
+        warnings: false,
       },
       mangle: {
-        screw_ie8: true
+        screw_ie8: true,
       },
       output: {
         screw_ie8: true,
-        comments: false
+        comments: false,
       },
-      sourceMap: true
+      sourceMap: true,
     }),
     new webpack.HashedModuleIdsPlugin(), // not needed for strategy to work (just good practice)
   ],

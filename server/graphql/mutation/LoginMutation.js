@@ -28,16 +28,17 @@ export default mutationWithClientMutationId({
       resolve: ({ user }) => user,
     },
   },
-  mutateAndGetPayload: ({ email, password, facebookToken }, { db }, { rootValue }) => {
-    return login({ email, password, facebookToken })
-      .then(({ userId, accessToken, idToken, refreshToken }) => {
-        log('login successful', accessToken)
+  mutateAndGetPayload: ({ email, password, facebookToken }, { session }) =>
+    login({ email, password, facebookToken })
+      .then(({ userId, role, emailVerified, accessToken, refreshToken }) => {
+        log('login successful', userId, accessToken)
         /* eslint-disable no-param-reassign */
-        rootValue.session.userId = userId
-        rootValue.session.accessToken = accessToken
-        rootValue.session.idToken = idToken
+        session.userId = userId
+        session.role = role
+        session.emailVerified = emailVerified
+        session.accessToken = accessToken
+        session.refreshToken = refreshToken
         /* eslint-enable no-param-reassign */
         return { email }
-      })
-  },
+      }),
 })

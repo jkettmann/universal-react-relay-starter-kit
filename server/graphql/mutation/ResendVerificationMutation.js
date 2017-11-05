@@ -16,5 +16,5 @@ export default mutationWithClientMutationId({
       resolve: ({ success }) => success,
     },
   },
-  mutateAndGetPayload: ({ email }, { db }, { rootValue }) => resendVerification({ email }),
+  mutateAndGetPayload: ({ email }) => resendVerification({ email }),
 })

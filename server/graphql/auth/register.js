@@ -10,13 +10,11 @@ export default function register({ email, password, firstName, lastName }) {
     const dataEmail = { Name: 'email', Value: email }
     const dataFirstName = { Name: 'given_name', Value: firstName }
     const dataLastName = { Name: 'family_name', Value: lastName }
-    const dataRole = { Name: 'custom:role', Value: 'publisher' }
 
     const attributeList = [
       new CognitoUserAttribute(dataEmail),
       new CognitoUserAttribute(dataFirstName),
       new CognitoUserAttribute(dataLastName),
-      new CognitoUserAttribute(dataRole),
     ]
 
     userPool.signUp(email, password, attributeList, null, (error, result) => {
@@ -25,7 +23,7 @@ export default function register({ email, password, firstName, lastName }) {
         reject(error)
         return
       }
-      resolve({ email })
+      resolve({ id: result.userSub, email })
     })
   })
 }
