@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from 'graphql'
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLBoolean } from 'graphql'
 import {
   connectionArgs,
   connectionFromPromisedArray,
@@ -13,6 +13,11 @@ import { ROLES } from '../../config'
 export default new GraphQLObjectType({
   name: 'Viewer',
   fields: () => ({
+    id: {
+      type: GraphQLID,
+      // set a constant viewer id to allow Relay to update its store after mutations
+      resolve: () => 'viewerId',
+    },
     isLoggedIn: {
       type: GraphQLBoolean,
       resolve: (obj, args, { user }) =>
@@ -23,7 +28,7 @@ export default new GraphQLObjectType({
     canPublish: {
       type: GraphQLBoolean,
       resolve: (obj, args, { user }) =>
-      user.role === ROLES.admin || user.role === ROLES.publisher,
+        user.role === ROLES.admin || user.role === ROLES.publisher,
     },
     user: {
       type: UserType,

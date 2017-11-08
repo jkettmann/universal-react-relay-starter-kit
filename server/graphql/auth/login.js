@@ -1,10 +1,11 @@
 import AWS from 'aws-sdk'
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js'
 import jwt from 'jsonwebtoken'
+import { UserError } from 'graphql-errors'
 import debug from 'debug'
 
 import { userPool, USER_POOL_ID, IDENTITY_POOL_ID } from './config'
-import { ROLES } from '../../config'
+import { ROLES, ERRORS } from '../../config'
 
 const log = debug('graphql:login')
 
@@ -73,7 +74,13 @@ function loginWithCredentials({ email, password }) {
       },
       onFailure: (err) => {
         log('login failed', err)
-        rej(err)
+
+        // TODO this code shouldn't know about graphql errors. refactor to use separate layers
+        if (err.code === 'NotAuthorizedException') {
+          rej(new UserError(ERRORS.WrongEmailOrPassword))
+        } else {
+          rej(err)
+        }
       },
     })
   })

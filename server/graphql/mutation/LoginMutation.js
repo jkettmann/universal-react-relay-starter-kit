@@ -5,6 +5,7 @@ import debug from 'debug'
 
 import login from '../auth/login'
 import UserType from '../type/UserType'
+import ViewerType from '../type/ViewerType'
 
 dotenv.config()
 const log = debug('graphql:LoginMutation')
@@ -25,20 +26,23 @@ export default mutationWithClientMutationId({
   outputFields: {
     user: {
       type: UserType,
-      resolve: ({ user }) => user,
+      resolve: user => user,
+    },
+    viewer: {
+      type: ViewerType,
+      resolve: () => ({ isLoggedIn: true }),
     },
   },
-  mutateAndGetPayload: ({ email, password, facebookToken }, { session }) =>
+  mutateAndGetPayload: ({ email, password, facebookToken }, context) =>
     login({ email, password, facebookToken })
-      .then(({ userId, role, emailVerified, accessToken, refreshToken }) => {
-        log('login successful', userId, accessToken)
+      .then((payload) => {
+        log('login successful', payload.userId)
         /* eslint-disable no-param-reassign */
-        session.userId = userId
-        session.role = role
-        session.emailVerified = emailVerified
-        session.accessToken = accessToken
-        session.refreshToken = refreshToken
+        context.user = {
+          ...payload,
+          email,
+        }
         /* eslint-enable no-param-reassign */
-        return { email }
+        return { id: payload.userId }
       }),
 })
