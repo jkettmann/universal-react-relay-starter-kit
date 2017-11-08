@@ -6,6 +6,10 @@ const mutation = graphql`
       user {
         id
       }
+      viewer {
+        isLoggedIn
+        canPublish
+      }
     }
   }
 `
