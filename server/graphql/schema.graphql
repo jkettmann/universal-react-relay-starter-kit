@@ -24,6 +24,7 @@ input LoginInput {
 
 type LoginPayload {
   user: User
+  viewer: Viewer
   clientMutationId: String
 }
 
@@ -153,6 +154,7 @@ type VerifyAccountPayload {
 }
 
 type Viewer {
+  id: ID
   isLoggedIn: Boolean
   canPublish: Boolean
   user: User
