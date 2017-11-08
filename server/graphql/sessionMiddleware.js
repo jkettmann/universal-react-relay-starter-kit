@@ -10,37 +10,36 @@ dotenv.config()
 const log = debug('graphql:sessionMiddleware')
 const ONE_WEEK = 100 * 60 * 60 * 24 * 7
 
-function loadSessionData(req) {
+export const getUserFromSession = session => ({
+  id: session.userId,
+  role: session.role,
+  email: session.email,
+  emailVerified: session.emailVerified,
+})
+
+export const setUserToSession = (session, payload) => {
+  /* eslint-disable no-param-reassign */
+  session.userId = payload.userId
+  session.role = payload.role
+  session.email = payload.email
+  session.emailVerified = payload.emailVerified
+  session.accessToken = payload.accessToken
+  session.refreshToken = payload.refreshToken
+  /* eslint-enable no-param-reassign */
+}
+
+function verifyToken(req, res, next) {
   if (req.session && req.session.accessToken) {
-    return verifyAccessToken(req.session.accessToken)
-      .then(payload => ({
-        id: req.session.userId,
-        role: req.session.role,
-        emailVerified: req.session.emailVerified,
-        email: payload.email,
-      }))
+    verifyAccessToken(req.session.accessToken)
+      .then(() => next())
       .catch((err) => {
         // eslint-disable-next-line no-undef
         log(err)
+        res.sendStatus(400)
       })
+  } else {
+    next()
   }
-
-  log('no session token')
-
-  return new Promise((resolve) => {
-    resolve(null)
-  })
-}
-
-function getSessionData(req, res, next) {
-  loadSessionData(req)
-    .then((userData) => {
-      req.user = userData || {}
-      next()
-    })
-    .catch(() => {
-      res.sendStatus(400)
-    })
 }
 
 const cookieMiddleware = cookieSession({
@@ -51,5 +50,5 @@ const cookieMiddleware = cookieSession({
 })
 
 export default (req, res, next) => {
-  cookieMiddleware(req, res, () => getSessionData(req, res, next))
+  cookieMiddleware(req, res, () => verifyToken(req, res, next))
 }

@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import debug from 'debug'
 
-import sessionMiddleware from './sessionMiddleware'
+import sessionMiddleware, { setUserToSession, getUserFromSession } from './sessionMiddleware'
 import Schema from './schema'
 import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
@@ -38,14 +38,15 @@ app.use(sessionMiddleware)
 
 maskErrors(Schema)
 const db = new Database()
-app.use('/', graphQLHTTP(({ session, user }) => ({
+app.use('/', graphQLHTTP(({ session }) => ({
   graphiql: true,
   pretty: true,
   schema: Schema,
   context: {
     db,
     session,
-    user,
+    get user() { return getUserFromSession(session) },
+    set user(payload) { setUserToSession(session, payload) },
   },
 })))
 

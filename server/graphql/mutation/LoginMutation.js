@@ -33,17 +33,16 @@ export default mutationWithClientMutationId({
       resolve: () => ({ isLoggedIn: true }),
     },
   },
-  mutateAndGetPayload: ({ email, password, facebookToken }, { session }) =>
+  mutateAndGetPayload: ({ email, password, facebookToken }, context) =>
     login({ email, password, facebookToken })
-      .then(({ userId, role, emailVerified, accessToken, refreshToken }) => {
-        log('login successful', userId, accessToken)
+      .then((payload) => {
+        log('login successful', payload.userId)
         /* eslint-disable no-param-reassign */
-        session.userId = userId
-        session.role = role
-        session.emailVerified = emailVerified
-        session.accessToken = accessToken
-        session.refreshToken = refreshToken
+        context.user = {
+          ...payload,
+          email,
+        }
         /* eslint-enable no-param-reassign */
-        return { email }
+        return { id: payload.userId }
       }),
 })
