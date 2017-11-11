@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 import { defineMessages, injectIntl, intlShape } from 'react-intl'
 
 import theme from '../../theme'
-import Navigation from '../Navigation'
+import Navigation from '../../components/Navigation'
 
 const messages = defineMessages({
   pageTitle: { id: 'App.pageTitle', defaultMessage: 'Universal Relay Starter Kit' },
