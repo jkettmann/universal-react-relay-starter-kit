@@ -11,8 +11,7 @@ import dotenv from 'dotenv'
 import debug from 'debug'
 
 import { ServerFetcher } from '../../client/fetcher'
-import { createResolver, historyMiddlewares, render } from '../../client/Router'
-import Routes, { paths } from '../../client/Routes'
+import { createResolver, historyMiddlewares, render, routeConfig, paths } from '../../client/Router'
 import withIntl from '../../client/intl/ismorphicIntlProvider'
 
 dotenv.config()
@@ -52,7 +51,7 @@ async function renderAsync(req, res) {
   const { redirect, status, element } = await getFarceResult({
     url: req.url,
     historyMiddlewares,
-    routeConfig: Routes,
+    routeConfig,
     resolver: createResolver(fetcher),
     render,
   })
