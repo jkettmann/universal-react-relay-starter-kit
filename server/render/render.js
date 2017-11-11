@@ -6,6 +6,7 @@ import RedirectException from 'found/lib/RedirectException'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Helmet } from 'react-helmet'
+import Cookies from 'cookies'
 import dotenv from 'dotenv'
 import debug from 'debug'
 
@@ -46,7 +47,7 @@ function getStatusCode(url) {
   }
 }
 
-async function renderAsync(req) {
+async function renderAsync(req, res) {
   const fetcher = new ServerFetcher(process.env.GRAPHQL_ENDPOINT, { cookie: req.headers.cookie })
   const { redirect, status, element } = await getFarceResult({
     url: req.url,
@@ -56,7 +57,8 @@ async function renderAsync(req) {
     render,
   })
 
-  const locale = req.cookies && req.cookies.locale
+  const cookies = new Cookies(req, res)
+  const locale = cookies.locale
   const elementwithIntl = withIntl(element, locale)
   const sheet = new ServerStyleSheet()
   const app = ReactDOM.renderToString(sheet.collectStyles(elementwithIntl))
@@ -81,7 +83,7 @@ export default ({ clientStats }) => async (req, res) => {
   let app = ''
 
   try {
-    const renderResult = await renderAsync(req)
+    const renderResult = await renderAsync(req, res)
 
     const redirectUrl = renderResult.redirect && renderResult.redirect.url
     if (redirectUrl) {
