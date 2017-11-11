@@ -39,12 +39,12 @@ const handlers = withHandlers({
   loadMore: ({ relay }) => () => relay.isLoading() || relay.loadMore(POST_COUNT),
 })
 
-const enhance = compose(props, handlers, flattenProp('viewer'))
+const enhance = compose(props, handlers, flattenProp('data'))
 
 export default createPaginationContainer(
   enhance(Posts),
   graphql`
-    fragment Posts_viewer on Viewer {
+    fragment Posts on Query {
       posts (after: $afterCursor first: $count) @connection(key: "Posts_posts") {
         pageInfo {
           hasNextPage
@@ -61,9 +61,6 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps({ viewer }) {
-      return viewer && viewer.posts
-    },
     getFragmentVariables(prevVars, totalCount) {
       return {
         ...prevVars,
@@ -78,9 +75,7 @@ export default createPaginationContainer(
     },
     query: graphql`
       query PostsPaginationQuery($afterCursor: String, $count: Int!) {
-        viewer {
-          ...Posts_viewer
-        }
+        ...Posts
       }
     `,
   },

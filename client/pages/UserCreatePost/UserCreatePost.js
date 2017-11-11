@@ -103,8 +103,10 @@ class CreatePostPage extends React.Component {
 export default createFragmentContainer(
   CreatePostPage,
   graphql`
-    fragment UserCreatePost_viewer on Viewer {
-      canPublish
+    fragment UserCreatePost on Query {
+      permission {
+        canPublish
+      }
     }
   `,
 )

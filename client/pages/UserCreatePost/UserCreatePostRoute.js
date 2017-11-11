@@ -2,7 +2,8 @@ import { graphql } from 'react-relay'
 
 const query = graphql`
   query UserCreatePostRoute_Query {
-    viewer {
+    ...UserCreatePost
+    permission {
       canPublish
     }
   }

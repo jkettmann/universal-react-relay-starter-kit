@@ -39,12 +39,12 @@ const commonMenuItems = [
   { message: messages.posts, to: '/posts' },
 ]
 
-const getUserMenuItems = (viewer, handlers) => {
-  if (!viewer.isLoggedIn) {
+const getUserMenuItems = (permission, handlers) => {
+  if (!permission.isLoggedIn) {
     return anonymousMenuItems
   }
 
-  if (viewer.isLoggedIn && !viewer.canPublish) {
+  if (permission.isLoggedIn && !permission.canPublish) {
     return createReaderMenuItems(handlers)
   }
 
@@ -84,11 +84,11 @@ NavigationMenu.propTypes = {
 }
 
 NavigationMenu.defaultProps = {
-  viewer: {},
+  permission: {},
 }
 
 const propTypes = {
-  viewer: PropTypes.shape({
+  permission: PropTypes.shape({
     isLoggedIn: PropTypes.bool.isRequired,
     canPublish: PropTypes.bool.isRequired,
   }),
@@ -114,8 +114,8 @@ const handlers = withHandlers({
   },
 })
 
-const props = withProps(({ viewer, logout }) => ({
-  userMenuItems: getUserMenuItems(viewer, { logout }),
+const props = withProps(({ permission, logout }) => ({
+  userMenuItems: getUserMenuItems(permission, { logout }),
   commonMenuItems,
 }))
 
@@ -124,7 +124,7 @@ const enhance = compose(setPropTypes(propTypes), handlers, props)
 export default createFragmentContainer(
   enhance(NavigationMenu),
   graphql`
-    fragment NavigationMenu_viewer on Viewer {
+    fragment NavigationMenu_permission on Permission {
       isLoggedIn
       canPublish
     }

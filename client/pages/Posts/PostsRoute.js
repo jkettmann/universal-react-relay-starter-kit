@@ -4,9 +4,7 @@ const POST_COUNT = 6
 
 const query = graphql`
   query PostsRoute_Query ($afterCursor: String, $count: Int!) {
-    viewer {
-      ...Posts_viewer
-    }
+    ...Posts
   }
 `
 

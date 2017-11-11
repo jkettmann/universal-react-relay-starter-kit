@@ -9,7 +9,7 @@ import { PostConnection } from './PostType'
 
 export default new GraphQLObjectType({
   name: 'User',
-  fields: {
+  fields: () => ({
     id: globalIdField('User'),
     email: {
       description: 'the users email address',
@@ -33,5 +33,5 @@ export default new GraphQLObjectType({
       resolve: (obj, args, { db, user }) =>
         connectionFromPromisedArray(db.getPostsForCreator(user), args),
     },
-  },
+  }),
 })

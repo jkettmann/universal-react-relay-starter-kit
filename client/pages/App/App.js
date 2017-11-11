@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ThemeProvider } from 'styled-components'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { compose, flattenProp } from 'recompose'
 import { Helmet } from 'react-helmet'
 import { defineMessages, injectIntl, intlShape } from 'react-intl'
 
@@ -13,7 +14,7 @@ const messages = defineMessages({
   metaDescription: { id: 'App.metaDescription', defaultMessage: 'The description to be displayed in google search results' },
 })
 
-const App = ({ viewer, children, intl }) => (
+const App = ({ permission, children, intl }) => (
   <ThemeProvider theme={theme}>
     <div id="container">
       <Helmet>
@@ -26,7 +27,7 @@ const App = ({ viewer, children, intl }) => (
         />
       </Helmet>
 
-      <Navigation viewer={viewer} />
+      <Navigation permission={permission} />
 
       {children}
     </div>
@@ -35,23 +36,28 @@ const App = ({ viewer, children, intl }) => (
 
 App.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  viewer: PropTypes.shape({
-    user: PropTypes.object,
-  }),
+  permission: PropTypes.object,
   children: PropTypes.node.isRequired,
   intl: intlShape.isRequired,
 }
 
 App.defaultProps = {
-  viewer: {},
+  permission: {},
   isLoading: false,
 }
 
+const enhance = compose(
+  injectIntl,
+  flattenProp('data'),
+)
+
 export default createFragmentContainer(
-  injectIntl(App),
+  enhance(App),
   graphql`
-    fragment App_viewer on Viewer {
-      ...Navigation_viewer
+    fragment App on Query {
+      permission {
+        ...Navigation_permission
+      }
     }
   `,
 )

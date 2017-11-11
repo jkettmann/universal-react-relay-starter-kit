@@ -6,7 +6,7 @@ const mutation = graphql`
       user {
         id
       }
-      viewer {
+      permission {
         isLoggedIn
         canPublish
       }

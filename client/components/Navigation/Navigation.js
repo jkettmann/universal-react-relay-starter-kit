@@ -9,15 +9,15 @@ import NavigationIcon from '../NavigationIcon'
 import UserIcon from './UserIcon'
 import NavigationMenu from '../NavigationMenu'
 
-const Navigation = ({ viewer, isOpen, toggleOpen, close }) => (
+const Navigation = ({ permission, isOpen, toggleOpen, close }) => (
   <Wrapper>
     <NavigationIcon onClick={toggleOpen} open={isOpen} />
     <Link to="/">Universal React Relay</Link>
 
-    {viewer.isLoggedIn && <UserIcon />}
+    {permission.isLoggedIn && <UserIcon />}
 
     <NavigationMenu
-      viewer={viewer}
+      permission={permission}
       closeNavigation={close}
       open={isOpen}
     />
@@ -26,7 +26,7 @@ const Navigation = ({ viewer, isOpen, toggleOpen, close }) => (
 
 Navigation.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  viewer: PropTypes.object,
+  permission: PropTypes.object,
   // following are set with recompose
   isOpen: PropTypes.bool.isRequired,
   toggleOpen: PropTypes.func.isRequired,
@@ -34,7 +34,7 @@ Navigation.propTypes = {
 }
 
 Navigation.defaultProps = {
-  viewer: null,
+  permission: null,
 }
 
 const state = withState('isOpen', 'setOpen', false)
@@ -51,9 +51,9 @@ const enhance = compose(
 export default createFragmentContainer(
   enhance(Navigation),
   graphql`
-    fragment Navigation_viewer on Viewer {
+    fragment Navigation_permission on Permission {
       isLoggedIn
-      ...NavigationMenu_viewer
+      ...NavigationMenu_permission
     }
   `,
 )

@@ -1,13 +1,40 @@
-import { GraphQLObjectType } from 'graphql'
+import { GraphQLObjectType, GraphQLString } from 'graphql'
 
-import ViewerType from './ViewerType'
+import {
+  connectionArgs,
+  connectionFromPromisedArray,
+  fromGlobalId,
+} from 'graphql-relay'
+
+import PermissionType from './PermissionType'
+import PostType, { PostConnection } from './PostType'
+import UserType from './UserType'
 
 export default new GraphQLObjectType({
-  name: 'Root',
+  name: 'Query',
   fields: () => ({
-    viewer: {
-      type: ViewerType,
+    permission: {
+      type: PermissionType,
       resolve: () => ({}),
+    },
+    posts: {
+      type: PostConnection.connectionType,
+      args: connectionArgs,
+      resolve: (obj, args, { db }) => connectionFromPromisedArray(db.getPosts(), args),
+    },
+    post: {
+      type: PostType,
+      args: {
+        postId: { type: GraphQLString },
+      },
+      resolve: (obj, { postId }, { db }) => db.getPost(fromGlobalId(postId).id),
+    },
+    user: {
+      type: UserType,
+      // tokenData origins from a cookie containing session data
+      // and is set in server/authentication.js
+      resolve: (obj, args, { db, user }) =>
+        db.getUserById(user.id),
     },
   }),
 })
