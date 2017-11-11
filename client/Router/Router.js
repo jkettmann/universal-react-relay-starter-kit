@@ -5,8 +5,8 @@ import createRender from 'found/lib/createRender'
 import { Resolver } from 'found-relay'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 
-import { ClientFetcher } from './fetcher'
-import routes from './Routes'
+import { ClientFetcher } from '../fetcher'
+import routeConfig from './routeConfig'
 
 export const historyMiddlewares = [queryMiddleware]
 
@@ -32,7 +32,7 @@ export async function createClientRouter(resolver) {
   const Router = await createInitialFarceRouter({
     historyProtocol,
     historyMiddlewares,
-    routeConfig: routes,
+    routeConfig,
     resolver,
     render,
   })

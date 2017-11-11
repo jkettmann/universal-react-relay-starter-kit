@@ -22,7 +22,7 @@ async function render(createRouter) {
 }
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept('./Router.js', () => {
+  module.hot.accept('./Router/index.js', () => {
     render(require('./Router').createClientRouter)
   })
 }

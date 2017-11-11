@@ -4,24 +4,22 @@ import RedirectException from 'found/lib/RedirectException'
 import makeRouteConfig from 'found/lib/makeRouteConfig'
 import universal from 'react-universal-component'
 
-import Loading from './components/Loading'
+import Loading from '../components/Loading'
 
-import AppRouteConfig from './pages/App/AppRoute'
-import HomeRouteConfig from './pages/Home/HomeRoute'
-import PostDetailsRouteConfig from './pages/PostDetails/PostDetailsRoute'
-import PostsRouteConfig from './pages/Posts/PostsRoute'
-import UserCreatePostRouteConfig from './pages/UserCreatePost/UserCreatePostRoute'
-import UserLoginRouteConfig from './pages/UserLogin/UserLoginRoute'
-import UserPostsRouteConfig from './pages/UserPosts/UserPostsRoute'
-import UserProfileRouteConfig from './pages/UserProfile/UserProfileRoute'
-import UserRegisterRouteConfig from './pages/UserRegister/UserRegisterRoute'
-import UserVerifyRouteConfig from './pages/UserVerify/UserVerifyRoute'
+import AppRouteConfig from '../pages/App/AppRoute'
+import HomeRouteConfig from '../pages/Home/HomeRoute'
+import PostDetailsRouteConfig from '../pages/PostDetails/PostDetailsRoute'
+import PostsRouteConfig from '../pages/Posts/PostsRoute'
+import UserCreatePostRouteConfig from '../pages/UserCreatePost/UserCreatePostRoute'
+import UserLoginRouteConfig from '../pages/UserLogin/UserLoginRoute'
+import UserPostsRouteConfig from '../pages/UserPosts/UserPostsRoute'
+import UserProfileRouteConfig from '../pages/UserProfile/UserProfileRoute'
+import UserRegisterRouteConfig from '../pages/UserRegister/UserRegisterRoute'
+import UserVerifyRouteConfig from '../pages/UserVerify/UserVerifyRoute'
 
-export const paths = {
-  unauthorized: '/unauthorized',
-}
+import paths from './paths'
 
-const getPage = props => import(`./async/${props.page}`)
+const getPage = props => import(`../async/${props.page}`)
 
 const UniversalComponent = universal(getPage, {
   loading: Loading,
