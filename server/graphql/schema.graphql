@@ -122,6 +122,7 @@ type ResendVerificationPayload {
 
 type Root {
   viewer: Viewer
+  posts(after: String, first: Int, before: String, last: Int): PostConnection
 }
 
 type User {
@@ -158,6 +159,5 @@ type Viewer {
   isLoggedIn: Boolean
   canPublish: Boolean
   user: User
-  posts(after: String, first: Int, before: String, last: Int): PostConnection
   post(postId: String): Post
 }

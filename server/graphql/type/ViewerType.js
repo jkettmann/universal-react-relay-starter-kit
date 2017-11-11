@@ -37,11 +37,6 @@ export default new GraphQLObjectType({
       resolve: (obj, args, { db, user }) =>
         db.getUserById(user.id),
     },
-    posts: {
-      type: PostConnection.connectionType,
-      args: connectionArgs,
-      resolve: (obj, args, { db }) => connectionFromPromisedArray(db.getPosts(), args),
-    },
     post: {
       type: PostType,
       args: {
