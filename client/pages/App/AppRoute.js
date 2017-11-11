@@ -10,7 +10,6 @@ const query = graphql`
 `
 
 export default {
-  path: '/',
   Component: App,
   query,
 }

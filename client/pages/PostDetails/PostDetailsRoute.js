@@ -9,7 +9,6 @@ const query = graphql`
 `
 
 export default {
-  path: '/post/:postId',
   render: 'PostDetailsPage',
   query,
 }

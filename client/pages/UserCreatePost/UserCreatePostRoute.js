@@ -9,7 +9,6 @@ const query = graphql`
 `
 
 export default {
-  path: '/user/post/create',
   render: 'UserCreatePostPage',
   permission: 'canPublish',
   query,

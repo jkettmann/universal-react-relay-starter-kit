@@ -9,7 +9,6 @@ const query = graphql`
 `
 
 export default {
-  path: '/login',
   render: 'UserLoginPage',
   query,
 }

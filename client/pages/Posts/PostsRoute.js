@@ -11,7 +11,6 @@ const query = graphql`
 `
 
 export default {
-  path: '/posts',
   render: 'PostsPage',
   query,
   prepareVariables: params => ({

@@ -49,16 +49,16 @@ const prepareRouteConfig = ({ render, permissions, ...config }) => ({
 })
 
 export default makeRouteConfig(
-  <Route {...prepareRouteConfig(AppRouteConfig)}>
-    <Route {...prepareRouteConfig(HomeRouteConfig)} />
-    <Route {...prepareRouteConfig(PostsRouteConfig)} />
-    <Route {...prepareRouteConfig(PostDetailsRouteConfig)} />
-    <Route {...prepareRouteConfig(UserLoginRouteConfig)} />
-    <Route {...prepareRouteConfig({ ...UserLoginRouteConfig, path: paths.unauthorized })} />
-    <Route {...prepareRouteConfig(UserRegisterRouteConfig)} />
-    <Route {...prepareRouteConfig(UserVerifyRouteConfig)} />
-    <Route {...prepareRouteConfig(UserProfileRouteConfig)} />
-    <Route {...prepareRouteConfig(UserPostsRouteConfig)} />
-    <Route {...prepareRouteConfig(UserCreatePostRouteConfig)} />
+  <Route path={paths.app} {...prepareRouteConfig(AppRouteConfig)}>
+    <Route path={paths.home} {...prepareRouteConfig(HomeRouteConfig)} />
+    <Route path={paths.posts} {...prepareRouteConfig(PostsRouteConfig)} />
+    <Route path={paths.postDetails} {...prepareRouteConfig(PostDetailsRouteConfig)} />
+    <Route path={paths.userLogin} {...prepareRouteConfig(UserLoginRouteConfig)} />
+    <Route path={paths.unauthorized} {...prepareRouteConfig(UserLoginRouteConfig)} />
+    <Route path={paths.userRegister} {...prepareRouteConfig(UserRegisterRouteConfig)} />
+    <Route path={paths.userVerify} {...prepareRouteConfig(UserVerifyRouteConfig)} />
+    <Route path={paths.userProfile} {...prepareRouteConfig(UserProfileRouteConfig)} />
+    <Route path={paths.userPosts} {...prepareRouteConfig(UserPostsRouteConfig)} />
+    <Route path={paths.userCreatePost} {...prepareRouteConfig(UserCreatePostRouteConfig)} />
   </Route>,
 )

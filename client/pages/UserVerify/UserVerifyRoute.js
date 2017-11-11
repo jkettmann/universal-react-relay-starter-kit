@@ -9,7 +9,6 @@ const query = graphql`
 `
 
 export default {
-  path: '/verify/:email',
   render: 'UserVerifyPage',
   query,
 }
