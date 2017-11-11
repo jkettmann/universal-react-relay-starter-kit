@@ -19,12 +19,12 @@ Profile.propTypes = {
   email: PropTypes.string.isRequired,
 }
 
-const enhance = compose(flattenProp('viewer'), flattenProp('user'))
+const enhance = compose(flattenProp('data'), flattenProp('user'))
 
 export default createFragmentContainer(
   enhance(Profile),
   graphql`
-    fragment UserProfile_viewer on Viewer {
+    fragment UserProfile on Query {
       user {
         firstName
         lastName

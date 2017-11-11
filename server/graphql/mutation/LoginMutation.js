@@ -5,7 +5,7 @@ import debug from 'debug'
 
 import login from '../auth/login'
 import UserType from '../type/UserType'
-import ViewerType from '../type/ViewerType'
+import PermissionType from '../type/PermissionType'
 
 dotenv.config()
 const log = debug('graphql:LoginMutation')
@@ -28,8 +28,8 @@ export default mutationWithClientMutationId({
       type: UserType,
       resolve: user => user,
     },
-    viewer: {
-      type: ViewerType,
+    permission: {
+      type: PermissionType,
       resolve: () => ({ isLoggedIn: true }),
     },
   },

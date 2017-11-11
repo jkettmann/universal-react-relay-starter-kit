@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { compose, flattenProp } from 'recompose'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import Wrapper from './Wrapper'
@@ -34,9 +35,7 @@ class UserVerifyPage extends React.Component {
     relay: PropTypes.shape({
       environment: PropTypes.any.isRequired,
     }).isRequired,
-    viewer: PropTypes.shape({
-      isLoggedIn: PropTypes.bool,
-    }).isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
   }
 
   state = {
@@ -107,8 +106,8 @@ class UserVerifyPage extends React.Component {
   }
 
   render() {
-    const { viewer, router, params } = this.props
-    if (viewer.isLoggedIn) {
+    const { isLoggedIn, router, params } = this.props
+    if (isLoggedIn) {
       router.push('/')
       return <div />
     }
@@ -163,11 +162,18 @@ class UserVerifyPage extends React.Component {
   }
 }
 
+const enhance = compose(
+  flattenProp('data'),
+  flattenProp('permission'),
+)
+
 const container = createFragmentContainer(
-  UserVerifyPage,
+  enhance(UserVerifyPage),
   graphql`
-    fragment UserVerify_viewer on Viewer {
-      isLoggedIn
+    fragment UserVerify on Query {
+      permission {
+        isLoggedIn
+      }
     }
   `,
 )

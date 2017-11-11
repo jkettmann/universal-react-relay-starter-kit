@@ -8,13 +8,13 @@ import PostList from '../../components/PostList'
 
 export const POST_COUNT = 6
 
-const UserPosts = ({ viewer, posts, hasMore, loadMore, router }) => {
-  if (!viewer.isLoggedIn) {
+const UserPosts = ({ permission, posts, hasMore, loadMore, router }) => {
+  if (!permission.isLoggedIn) {
     router.push('/login')
     return <div />
   }
 
-  if (!viewer.canPublish) {
+  if (!permission.canPublish) {
     router.push('/')
     return <div />
   }
@@ -32,7 +32,7 @@ const UserPosts = ({ viewer, posts, hasMore, loadMore, router }) => {
 
 UserPosts.propTypes = {
   router: routerShape.isRequired,
-  viewer: PropTypes.shape({
+  permission: PropTypes.shape({
     isLoggedIn: PropTypes.bool,
     canPublish: PropTypes.bool,
   }).isRequired,
@@ -51,14 +51,16 @@ const handlers = withHandlers({
   loadMore: ({ relay }) => () => relay.isLoading() || relay.loadMore(POST_COUNT),
 })
 
-const enhance = compose(props, handlers, flattenProp('viewer'), flattenProp('user'))
+const enhance = compose(props, handlers, flattenProp('data'), flattenProp('user'))
 
 export default createPaginationContainer(
   enhance(UserPosts),
   graphql`
-    fragment UserPosts_viewer on Viewer {
-      isLoggedIn
-      canPublish
+    fragment UserPosts on Query {
+      permission {
+        isLoggedIn
+        canPublish
+      }
       user {
         posts (after: $afterCursor first: $count) @connection(key: "UserPosts_posts") {
           pageInfo {
@@ -77,16 +79,13 @@ export default createPaginationContainer(
   `,
   {
     direction: 'forward',
-    getConnectionFromProps(props) {
-      return props.viewer && props.viewer.user && props.viewer.user.posts
-    },
     getFragmentVariables(prevVars, totalCount) {
       return {
         ...prevVars,
         count: totalCount,
       }
     },
-    getVariables(props, { count, cursor }) {
+    getVariables(_props, { count, cursor }) {
       return {
         afterCursor: cursor,
         count,
@@ -94,9 +93,7 @@ export default createPaginationContainer(
     },
     query: graphql`
       query UserPostsPaginationQuery($afterCursor: String, $count: Int!) {
-        viewer {
-          ...UserPosts_viewer
-        }
+        ...UserPosts
       }
     `,
   },

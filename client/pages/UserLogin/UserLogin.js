@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { compose, flattenProp } from 'recompose'
 import Formsy from 'formsy-react'
 
 import Wrapper from './Wrapper'
@@ -21,9 +22,7 @@ class LoginPage extends React.Component {
     relay: PropTypes.shape({
       environment: PropTypes.any.isRequired,
     }).isRequired,
-    viewer: PropTypes.shape({
-      isLoggedIn: PropTypes.bool,
-    }).isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
   }
 
   onFacebookLoginSuccess = (result) => {
@@ -64,8 +63,8 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { viewer, router } = this.props
-    if (viewer.isLoggedIn) {
+    const { isLoggedIn, router } = this.props
+    if (isLoggedIn) {
       router.push('/')
       return <div />
     }
@@ -133,12 +132,20 @@ class LoginPage extends React.Component {
   }
 }
 
+const enhance = compose(
+  withRouter,
+  flattenProp('data'),
+  flattenProp('permission'),
+)
+
 export default createFragmentContainer(
-  withRouter(LoginPage),
+  enhance(LoginPage),
   graphql`
-    fragment UserLogin_viewer on Viewer {
-      isLoggedIn
-      canPublish
+    fragment UserLogin on Query {
+      permission {
+        isLoggedIn
+        canPublish
+      }
     }
   `,
 )

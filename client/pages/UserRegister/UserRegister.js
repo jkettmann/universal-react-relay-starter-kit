@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { compose, flattenProp } from 'recompose'
 import Formsy from 'formsy-react'
 
 import Wrapper from './Wrapper'
@@ -18,9 +19,7 @@ class RegisterPage extends React.Component {
     relay: PropTypes.shape({
       environment: PropTypes.any.isRequired,
     }).isRequired,
-    viewer: PropTypes.shape({
-      isLoggedIn: PropTypes.bool,
-    }).isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
   }
 
   constructor() {
@@ -70,8 +69,8 @@ class RegisterPage extends React.Component {
   }
 
   render() {
-    const { viewer, router } = this.props
-    if (viewer.isLoggedIn) {
+    const { isLoggedIn, router } = this.props
+    if (isLoggedIn) {
       router.push('/')
       return <div />
     }
@@ -156,11 +155,18 @@ class RegisterPage extends React.Component {
   }
 }
 
+const enhance = compose(
+  flattenProp('data'),
+  flattenProp('permission'),
+)
+
 const container = createFragmentContainer(
-  RegisterPage,
+  enhance(RegisterPage),
   graphql`
-    fragment UserRegister_viewer on Viewer {
-      isLoggedIn
+    fragment UserRegister on Query {
+      permission {
+        isLoggedIn
+      }
     }
   `,
 )

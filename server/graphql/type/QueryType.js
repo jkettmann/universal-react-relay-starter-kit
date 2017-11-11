@@ -6,14 +6,15 @@ import {
   fromGlobalId,
 } from 'graphql-relay'
 
-import ViewerType from './ViewerType'
+import PermissionType from './PermissionType'
 import PostType, { PostConnection } from './PostType'
+import UserType from './UserType'
 
 export default new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
-    viewer: {
-      type: ViewerType,
+    permission: {
+      type: PermissionType,
       resolve: () => ({}),
     },
     posts: {
@@ -27,6 +28,13 @@ export default new GraphQLObjectType({
         postId: { type: GraphQLString },
       },
       resolve: (obj, { postId }, { db }) => db.getPost(fromGlobalId(postId).id),
+    },
+    user: {
+      type: UserType,
+      // tokenData origins from a cookie containing session data
+      // and is set in server/authentication.js
+      resolve: (obj, args, { db, user }) =>
+        db.getUserById(user.id),
     },
   }),
 })

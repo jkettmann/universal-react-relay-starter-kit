@@ -19,7 +19,7 @@ input LoginInput {
 
 type LoginPayload {
   user: User
-  viewer: Viewer
+  permission: Permission
   clientMutationId: String
 }
 
@@ -54,6 +54,12 @@ type PageInfo {
 
   # When paginating forwards, the cursor to continue.
   endCursor: String
+}
+
+type Permission {
+  id: ID
+  isLoggedIn: Boolean
+  canPublish: Boolean
 }
 
 # A post
@@ -93,9 +99,10 @@ type PostEdge {
 }
 
 type Query {
-  viewer: Viewer
+  permission: Permission
   posts(after: String, first: Int, before: String, last: Int): PostConnection
   post(postId: String): Post
+  user: User
 }
 
 input RegisterInput {
@@ -148,11 +155,4 @@ input VerifyAccountInput {
 type VerifyAccountPayload {
   success: Boolean
   clientMutationId: String
-}
-
-type Viewer {
-  id: ID
-  isLoggedIn: Boolean
-  canPublish: Boolean
-  user: User
 }
