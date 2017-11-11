@@ -37,12 +37,5 @@ export default new GraphQLObjectType({
       resolve: (obj, args, { db, user }) =>
         db.getUserById(user.id),
     },
-    post: {
-      type: PostType,
-      args: {
-        postId: { type: GraphQLString },
-      },
-      resolve: (obj, { postId }, { db }) => db.getPost(fromGlobalId(postId).id),
-    },
   }),
 })

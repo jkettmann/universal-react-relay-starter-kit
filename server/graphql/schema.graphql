@@ -95,6 +95,7 @@ type PostEdge {
 type Query {
   viewer: Viewer
   posts(after: String, first: Int, before: String, last: Int): PostConnection
+  post(postId: String): Post
 }
 
 input RegisterInput {
@@ -154,5 +155,4 @@ type Viewer {
   isLoggedIn: Boolean
   canPublish: Boolean
   user: User
-  post(postId: String): Post
 }

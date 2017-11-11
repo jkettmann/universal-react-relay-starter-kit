@@ -37,14 +37,14 @@ PostDetail.propTypes = {
 }
 
 const enhance = compose(
-  flattenProp('viewer'),
+  flattenProp('data'),
   flattenProp('post'),
 )
 
 export default createFragmentContainer(
   enhance(PostDetail),
   graphql`
-    fragment PostDetails_viewer on Viewer {
+    fragment PostDetails on Query {
       post (postId: $postId) {
         title
         description

@@ -21,5 +21,12 @@ export default new GraphQLObjectType({
       args: connectionArgs,
       resolve: (obj, args, { db }) => connectionFromPromisedArray(db.getPosts(), args),
     },
+    post: {
+      type: PostType,
+      args: {
+        postId: { type: GraphQLString },
+      },
+      resolve: (obj, { postId }, { db }) => db.getPost(fromGlobalId(postId).id),
+    },
   }),
 })
