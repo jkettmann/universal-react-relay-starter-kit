@@ -40,7 +40,10 @@ const createRender = (page, permission) => ({ props }) => {
     throw new RedirectException(paths.unauthorized)
   }
 
-  return <UniversalComponent page={page} {...props} isLoading={!props} />
+  const { __fragments, __id } = props || {}
+  const data = { __fragments, __id }
+
+  return <UniversalComponent page={page} {...props} data={data} isLoading={!props} />
 }
 
 const prepareRouteConfig = ({ render, permissions, ...config }) => ({

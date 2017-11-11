@@ -10,7 +10,7 @@ import ViewerType from './ViewerType'
 import PostType, { PostConnection } from './PostType'
 
 export default new GraphQLObjectType({
-  name: 'Root',
+  name: 'Query',
   fields: () => ({
     viewer: {
       type: ViewerType,
