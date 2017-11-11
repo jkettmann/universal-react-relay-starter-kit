@@ -3,11 +3,10 @@ import graphQLHTTP from 'express-graphql'
 import { maskErrors } from 'graphql-errors'
 import cors from 'cors'
 import helmet from 'helmet'
-import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import debug from 'debug'
 
-import sessionMiddleware, { setUserToSession, getUserFromSession } from './sessionMiddleware'
+import sessionMiddleware from './sessionMiddleware'
 import Schema from './schema'
 import intlMiddleware from './intlMiddleware'
 import Database from './data/Database'
@@ -32,7 +31,6 @@ app.get('/health', (req, res) => {
 
 app.use(helmet())
 app.use(cors(corsOptions))
-app.use(cookieParser())
 app.use(intlMiddleware)
 app.use(sessionMiddleware)
 
@@ -44,9 +42,8 @@ app.use('/', graphQLHTTP(({ session }) => ({
   schema: Schema,
   context: {
     db,
-    session,
-    get user() { return getUserFromSession(session) },
-    set user(payload) { setUserToSession(session, payload) },
+    get user() { return session.getUser() },
+    set user(payload) { session.setUser(payload) },
   },
 })))
 

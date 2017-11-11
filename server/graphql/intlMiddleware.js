@@ -1,14 +1,16 @@
+import Cookies from 'cookies'
 import acceptLanguage from 'accept-language'
 
+const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 const languages = ['en', 'de']
 const defaultLanguage = 'en'
 
 acceptLanguage.languages(languages)
 
 export default (req, res, next) => {
-  const cookieLocale = req.cookies.locale
+  const cookies = new Cookies(req, res)
+  const cookieLocale = cookies.locale
   const locale = acceptLanguage.get(cookieLocale || req.headers['accept-language']) || defaultLanguage
-  req.cookies.locale = locale
-  res.cookie('locale', locale, { maxAge: (Date.now() / 1000) + (365 * 24 * 3600) })
+  cookies.set('locale', locale, { maxAge: ONE_YEAR })
   next()
 }
