@@ -2,7 +2,6 @@ import express from 'express'
 import webpack from 'webpack' // aliased to webpack-universal
 import helmet from 'helmet'
 import compression from 'compression'
-import cookieParser from 'cookie-parser'
 import Aws from 'aws-sdk'
 import S3Router from 'react-s3-uploader/s3router'
 import debug from 'debug'
@@ -25,7 +24,6 @@ const app = express()
 
 app.use(helmet())
 app.use(compression())
-app.use(cookieParser())
 
 app.get('/health', (req, res) => {
   res.sendStatus(isBuilt ? 200 : 400)
