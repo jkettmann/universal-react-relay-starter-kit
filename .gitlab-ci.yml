@@ -19,16 +19,19 @@ build:
       - node_modules/
       - build/
   tags:
-    - app
+    - gitlab-org
 
 # Job: Deploy
 # Zips the contents of our built application, uploads to S3
 # Configures a new Elastic Beanstalk version and switches to that version
 deploy:
-  image: python:latest
   stage: deploy
+  only:
+    refs:
+      - tags
+  image: python:latest
   script:
     - chmod +x ./bin/deploy
     - ./bin/deploy
   tags:
-    - app
+    - gitlab-org

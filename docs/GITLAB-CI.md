@@ -16,14 +16,15 @@ Select IAM in the AWS console menu. Add a new user called `Gitlab-CI` with `Acce
 
 ## GitLab CI setup
 
-- [Install GitLab runner](https://docs.gitlab.com/runner/install/)
-- [Register GitLab runner](https://docs.gitlab.com/runner/register/index.html)
-  - add a tag `app`
-  - Use docker executor
-  - use python:latest image
-  - in some cases you need to go to edit the runner and set the tag again under `Settings -> CI/CD ->  Runners settings`
+Go to the GitLab repository and select `Settings -> CI/CD` in the left sidebar.
 
-Go to the GitLab repository and select `Settings -> CI/CD` in the left sidebar. Expand the `Secret variables` drawer and add following environment variables.
+### Select a runner
+
+This project uses shared runners with the tag `gitlab-org` on GitLab by default. Compare the tags in every stage inside `gitlab-ci.yml` and the `Runners settings` drawer in your GitLab settings. For using a runner on your local machine refer to the [runner installation](https://docs.gitlab.com/runner/install/) and [registration](https://docs.gitlab.com/runner/register/index.html) docs.
+
+### Deinfe environment variables
+
+Expand the `Secret variables` drawer and add following environment variables.
 
 ```
 // the name of the bucket created in the first step
