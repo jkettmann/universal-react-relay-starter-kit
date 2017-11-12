@@ -2,6 +2,7 @@ This starter kit aims at helping developers starting a professional app to creat
 
 ## Content
 
+- [Setup](#setup)
 - [Installation](#installation)
 - [Technologies](#technologies)
 - [Design decisions](#design-decisions)
@@ -9,6 +10,24 @@ This starter kit aims at helping developers starting a professional app to creat
 - [Functional components](#functional-components)
 - [Roadmap](#roadmap)
 - [Credits](#credits)
+
+## Setup
+
+### Currently necessary for development
+
+- [AWS S3 Bucket](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/AWS_S3_BUCKET.md)
+- [AWS DynamoDB](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/AWS_DYNAMO_DB.md)
+- [AWS Cognito](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/AWS_COGNITO.md)
+- [AWS IAM User](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/AWS_IAM_USER.md)
+
+### Only for production
+
+- [AWS Elastic Beanstalk](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/AWS_ELASTIC_BEANSTALK.md)
+
+### CI integrations
+
+- [GitHub](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/GITHUB_CI.md)
+- [GitLab](https://github.com/jkettmann/universal-react-relay-starter-kit/docs/GITLAB_CI.md)
 
 ## Installation
 This project uses [dotenv](https://github.com/motdotla/dotenv) to set environment variables from a `.env` file. Therefore you need to add a file named `.env` to the root of the project. The content should be as follows. Please fill out `...` with your AWS or Facebook keys etc.
@@ -210,10 +229,11 @@ See [recompose](https://github.com/acdlite/recompose) for more information.
 
 ## Roadmap
 
-- Use real database
-- Login and registration (probably using [Passport](http://passportjs.org/) and [AWS Cognito](https://aws.amazon.com/de/cognito/))
-- Server side security using [helmet](https://github.com/helmetjs/helmet)
-- Unit and snapshot tests using [Jest](https://github.com/facebook/jest) and end-to-end tests using [cypress](https://www.cypress.io/)
+- [x] Use real database
+- [x] Login and registration (probably using [Passport](http://passportjs.org/) and [AWS Cognito](https://aws.amazon.com/de/cognito/))
+- [x] Server side security using [helmet](https://github.com/helmetjs/helmet)
+- [ ] Use facebook identity provider on cognito user pool instead identity pool
+- [ ] Unit and snapshot tests using [Jest](https://github.com/facebook/jest) and end-to-end tests using [cypress](https://www.cypress.io/)
 
 ## Credits
 
