@@ -1,0 +1,37 @@
+# Build - Build necessary JS files
+# Deploy - Deploy application to S3/ElasticBeanstalk
+stages:
+  - build
+  - deploy
+
+# Job: Build
+# Installs npm packages, transpiles ES6 -> ES5
+# Passes package.json node_modules/ and build/ onto next steps using artifacts
+build:
+  image: node:8.4.0
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - package.json
+      - node_modules/
+      - build/
+  tags:
+    - gitlab-org
+
+# Job: Deploy
+# Zips the contents of our built application, uploads to S3
+# Configures a new Elastic Beanstalk version and switches to that version
+deploy:
+  stage: deploy
+  only:
+    refs:
+      - tags
+  image: python:latest
+  script:
+    - chmod +x ./bin/deploy
+    - ./bin/deploy
+  tags:
+    - gitlab-org
