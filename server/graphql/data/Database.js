@@ -3,7 +3,7 @@ import uuid from 'uuid/v4'
 
 import { posts } from './testData/posts'
 import { users } from './testData/users'
-import { ROLES, ERRORS } from '../../config'
+import { ERRORS } from '../../config'
 
 import User from '../data/model/User'
 import Post from '../data/model/Post'
@@ -15,7 +15,6 @@ export default class Database {
     AWS.config.update({
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      endpoint: process.env.AWS_DYNAMODB_ENDPOINT,
       region: process.env.AWS_REGION,
     })
     this.client = new AWS.DynamoDB.DocumentClient()
