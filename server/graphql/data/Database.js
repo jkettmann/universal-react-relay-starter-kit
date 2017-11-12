@@ -1,14 +1,17 @@
 import AWS from 'aws-sdk'
 import uuid from 'uuid/v4'
 
-import { posts } from './testData/posts'
-import { users } from './testData/users'
 import { ERRORS } from '../../config'
 
 import User from '../data/model/User'
 import Post from '../data/model/Post'
 
 import { isLoggedIn, canPublish } from '../auth/utils'
+
+const TABLES = {
+  Post: 'Post',
+  User: 'User',
+}
 
 export default class Database {
   constructor() {
@@ -18,8 +21,6 @@ export default class Database {
       region: process.env.AWS_REGION,
     })
     this.client = new AWS.DynamoDB.DocumentClient()
-    this.users = users.map(user => new User(user))
-    this.posts = posts.map(post => new Post(post))
   }
 
   createPost = ({ creatorId, title, description, image }, user) => new Promise((resolve, reject) => {
@@ -40,7 +41,7 @@ export default class Database {
     })
 
     const params = {
-      TableName: 'Post',
+      TableName: TABLES.Post,
       Item: post,
     }
 
@@ -57,7 +58,7 @@ export default class Database {
   getPost = id => new Promise((resolve, reject) => {
     const params = {
       Key: { id },
-      TableName: 'Post',
+      TableName: TABLES.Post,
     }
 
     this.client.get(params, (error, data) => {
@@ -72,7 +73,7 @@ export default class Database {
 
   getPosts = () => new Promise((resolve, reject) => {
     const params = {
-      TableName: 'Post',
+      TableName: TABLES.Post,
     }
 
     this.client.scan(params, (error, data) => {
@@ -91,7 +92,7 @@ export default class Database {
     }
 
     const params = {
-      TableName: 'Post',
+      TableName: TABLES.Post,
       FilterExpression: '#creatorId = :creatorId',
       ExpressionAttributeNames: {
         '#creatorId': 'creatorId',
@@ -117,7 +118,7 @@ export default class Database {
   getUserById = id => new Promise((resolve, reject) => {
     const params = {
       Key: { id },
-      TableName: 'User',
+      TableName: TABLES.User,
     }
 
     this.client.get(params, (error, data) => {
@@ -134,7 +135,7 @@ export default class Database {
     const user = new User(userData)
 
     const params = {
-      TableName: 'User',
+      TableName: TABLES.User,
       Item: user,
     }
 
