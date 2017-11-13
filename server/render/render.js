@@ -11,7 +11,7 @@ import dotenv from 'dotenv'
 import debug from 'debug'
 
 import { ServerFetcher } from '../../client/fetcher'
-import { createResolver, historyMiddlewares, render, routeConfig, paths } from '../../client/Router'
+import { createResolver, historyMiddlewares, render, routeConfig, paths } from '../../client/router'
 import withIntl from '../../client/intl/ismorphicIntlProvider'
 
 dotenv.config()

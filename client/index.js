@@ -4,7 +4,7 @@ import AppContainer from 'react-hot-loader/lib/AppContainer'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import Cookie from 'js-cookie'
 
-import { createClientRouter, createClientResolver } from './Router'
+import { createClientRouter, createClientResolver } from './router'
 import withIntl from './intl/ismorphicIntlProvider'
 
 injectTapEventPlugin()
@@ -22,8 +22,8 @@ async function render(createRouter) {
 }
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept('./Router/index.js', () => {
-    render(require('./Router').createClientRouter)
+  module.hot.accept('./router/index.js', () => {
+    render(require('./router').createClientRouter)
   })
 }
 
