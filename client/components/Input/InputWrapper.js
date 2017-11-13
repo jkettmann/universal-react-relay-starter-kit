@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { compose, withHandlers, withProps, withState } from 'recompose'
 
 import FloatingLabel from './FloatingLabel'
 import BorderBottom from './BorderBottom'
@@ -18,25 +17,24 @@ const Wrapper = styled.div`
 
 const InputWrapper = ({
   active, // eslint-disable-line react/prop-types
-  hasValue, // eslint-disable-line react/prop-types
+  value, // eslint-disable-line react/prop-types
   error, // eslint-disable-line react/prop-types
   fullWidth,
   name,
   label,
   children,
-  ...childProps
 }) => (
   <Wrapper className={fullWidth && 'fullWidth'}>
     <FloatingLabel
       for={name}
       active={active}
-      float={active || hasValue}
+      float={active || value.length > 0}
       error={!!error}
     >
       {label}
     </FloatingLabel>
 
-    {React.cloneElement(children, { active, name, ...childProps })}
+    {children}
 
     <BorderBottom active={active} error={!!error} />
 
@@ -51,35 +49,13 @@ InputWrapper.propTypes = {
   fullWidth: PropTypes.bool,
   label: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: PropTypes.string.isRequired,
 }
 
 InputWrapper.defaultProps = {
   fullWidth: false,
   label: null,
   name: null,
-  value: null,
 }
 
-const state = withState('active', 'setActive', false)
-
-const handlers = withHandlers({
-  onBlur: ({ setActive, onBlur }) => (value, name) => {
-    if (onBlur) onBlur(value, name)
-    setActive(false)
-  },
-  onFocus: ({ setActive }) => () => setActive(true),
-})
-
-const props = withProps(({ value }) => ({
-  hasValue: (
-    value !== undefined &&
-    value !== null &&
-    (typeof value !== 'string' || value.length > 0) &&
-    (!Array.isArray(value) || value.length > 0)
-  ),
-}))
-
-const enhance = compose(state, handlers, props)
-
-export default enhance(InputWrapper)
+export default InputWrapper

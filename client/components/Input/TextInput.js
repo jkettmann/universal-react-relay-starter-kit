@@ -1,12 +1,21 @@
 import React from 'react'
+import { compose, withProps } from 'recompose'
 
 import InputWrapper from './InputWrapper'
 import Input from './Input'
 
 const TextInput = props => (
   <InputWrapper {...props}>
-    <Input />
+    <Input {...props} />
   </InputWrapper>
 )
 
-export default TextInput
+const enhance = compose(
+  withProps(({ input, meta, ...props }) => ({
+    ...props,
+    ...input,
+    ...meta,
+  })),
+)
+
+export default enhance(TextInput)
