@@ -1,6 +1,8 @@
+import React from 'react'
 import ReactDOM from 'react-dom/server'
 import { flushChunkNames } from 'react-universal-component/server'
 import flushChunks from 'webpack-flush-chunks'
+import { Provider } from 'react-redux'
 import { getFarceResult } from 'found/lib/server'
 import RedirectException from 'found/lib/RedirectException'
 import serialize from 'serialize-javascript'
@@ -13,6 +15,7 @@ import debug from 'debug'
 import { ServerFetcher } from '../../client/fetcher'
 import { createResolver, historyMiddlewares, render, routeConfig, paths } from '../../client/router'
 import withIntl from '../../client/intl/ismorphicIntlProvider'
+import { createServerStore } from '../../client/store'
 
 dotenv.config()
 const log = debug('server:render')
@@ -56,11 +59,18 @@ async function renderAsync(req, res) {
     render,
   })
 
+  const store = createServerStore((req.url))
+  const elementWithProvider = (
+    <Provider store={store}>
+      {element}
+    </Provider>
+  )
   const cookies = new Cookies(req, res)
   const locale = cookies.locale
-  const elementwithIntl = withIntl(element, locale)
+  const elementwithIntl = withIntl(elementWithProvider, locale)
   const sheet = new ServerStyleSheet()
-  const app = ReactDOM.renderToString(sheet.collectStyles(elementwithIntl))
+  const elementWithStyles = sheet.collectStyles(elementwithIntl)
+  const app = ReactDOM.renderToString(elementWithStyles)
   const relayPayload = serialize(fetcher, { isJSON: true })
   const styleTags = sheet.getStyleTags()
   const helmet = Helmet.renderStatic()
