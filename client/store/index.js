@@ -7,8 +7,12 @@ import createHistoryEnhancer from 'farce/lib/createHistoryEnhancer'
 import queryMiddleware from 'farce/lib/queryMiddleware'
 import createMatchEnhancer from 'found/lib/createMatchEnhancer'
 import Matcher from 'found/lib/Matcher'
+import { reducer as form } from 'redux-form'
 
 import { routeConfig } from '../router'
+
+// eslint-disable-next-line no-undef, no-underscore-dangle
+const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
 
 function generateStore(protocol) {
   const historyEnhancer = createHistoryEnhancer({
@@ -20,13 +24,14 @@ function generateStore(protocol) {
     new Matcher(routeConfig),
   )
 
-  const middleWare = compose(
+  const middleWare = composeEnhancers(
     historyEnhancer,
     matcherEnhancer,
   )
 
   const reducers = combineReducers({
     found,
+    form,
   })
 
   const store = createStore(reducers, middleWare)
