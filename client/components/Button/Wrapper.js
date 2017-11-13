@@ -10,7 +10,7 @@ const Wrapper = styled.button`
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   cursor: pointer;
   text-decoration: none;
-  margin: 0;
+  margin: 20px 0 0 0;
   padding: 0;
   outline: none;
   font-size: inherit;
