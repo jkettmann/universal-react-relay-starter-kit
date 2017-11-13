@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
+import getStoreRenderArgs from 'found/lib/getStoreRenderArgs'
 import AppContainer from 'react-hot-loader/lib/AppContainer'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import Cookie from 'js-cookie'
@@ -14,13 +15,23 @@ injectTapEventPlugin()
 async function render(createRouter) {
   const resolver = createClientResolver()
   const store = createClientStore()
-  const Router = await createRouter(resolver)
+  const matchContext = { store }
+  const Router = createRouter()
+  const initialRenderArgs = await getStoreRenderArgs({
+    store,
+    matchContext,
+    resolver,
+  })
   ReactDOM.render(
     <AppContainer>
       {
         withIntl(
           <Provider store={store}>
-            <Router resolver={resolver} />
+            <Router
+              matchContext={{ store }}
+              resolver={resolver}
+              initialRenderArgs={initialRenderArgs}
+            />
           </Provider>,
           Cookie.get('locale'),
         )

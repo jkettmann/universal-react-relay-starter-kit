@@ -1,14 +1,9 @@
-import BrowserProtocol from 'farce/lib/BrowserProtocol'
-import queryMiddleware from 'farce/lib/queryMiddleware'
-import createInitialFarceRouter from 'found/lib/createInitialFarceRouter'
+import createConnectedRouter from 'found/lib/createConnectedRouter'
 import createRender from 'found/lib/createRender'
 import { Resolver } from 'found-relay'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 
 import { ClientFetcher } from '../fetcher'
-import routeConfig from './routeConfig'
-
-export const historyMiddlewares = [queryMiddleware]
 
 export function createResolver(fetcher) {
   const environment = new Environment({
@@ -27,15 +22,6 @@ export function createClientResolver() {
   return createResolver(fetcher)
 }
 
-export async function createClientRouter(resolver) {
-  const historyProtocol = new BrowserProtocol()
-  const Router = await createInitialFarceRouter({
-    historyProtocol,
-    historyMiddlewares,
-    routeConfig,
-    resolver,
-    render,
-  })
-
-  return Router
+export function createClientRouter() {
+  return createConnectedRouter({ render })
 }
