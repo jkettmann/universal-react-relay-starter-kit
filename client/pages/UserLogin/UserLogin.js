@@ -10,6 +10,7 @@ import Hint from './Hint'
 import FormWrapper from './FormWrapper'
 import TextField from '../../components/Input/TextField'
 import Button, { FacebookLoginButton } from '../../components/Button'
+import ResetPasswordLink from './ResetPasswordLink'
 
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../common/config'
@@ -66,6 +67,10 @@ const UserLoginPage = ({
           secondary
         />
       </form>
+
+      <ResetPasswordLink to="/resetPassword">
+        Forgot your password?
+      </ResetPasswordLink>
 
       <Button
         label="Register"

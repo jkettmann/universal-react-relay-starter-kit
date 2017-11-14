@@ -16,6 +16,7 @@ import UserPostsRouteConfig from '../pages/UserPosts/UserPostsRoute'
 import UserProfileRouteConfig from '../pages/UserProfile/UserProfileRoute'
 import UserRegisterRouteConfig from '../pages/UserRegister/UserRegisterRoute'
 import UserVerifyRouteConfig from '../pages/UserVerify/UserVerifyRoute'
+import UserResetPasswordRouteConfig from '../pages/UserResetPassword/UserResetPasswordRoute'
 
 import paths from './paths'
 
@@ -61,6 +62,7 @@ export default makeRouteConfig(
     <Route path={paths.userRegister} {...prepareRouteConfig(UserRegisterRouteConfig)} />
     <Route path={paths.userVerifyWithEmail} {...prepareRouteConfig(UserVerifyRouteConfig)} />
     <Route path={paths.userVerifyWithoutEmail} {...prepareRouteConfig(UserVerifyRouteConfig)} />
+    <Route path={paths.resetPassword} {...prepareRouteConfig(UserResetPasswordRouteConfig)} />
     <Route path={paths.userProfile} {...prepareRouteConfig(UserProfileRouteConfig)} />
     <Route path={paths.userPosts} {...prepareRouteConfig(UserPostsRouteConfig)} />
     <Route path={paths.userCreatePost} {...prepareRouteConfig(UserCreatePostRouteConfig)} />

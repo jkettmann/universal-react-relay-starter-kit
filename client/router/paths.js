@@ -10,5 +10,6 @@ export default {
   userRegister: '/register',
   userVerifyWithEmail: '/verify/:email',
   userVerifyWithoutEmail: '/verify',
+  resetPassword: '/resetPassword',
   unauthorized: '/unauthorized',
 }
