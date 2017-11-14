@@ -59,7 +59,8 @@ export default makeRouteConfig(
     <Route path={paths.userLogin} {...prepareRouteConfig(UserLoginRouteConfig)} />
     <Route path={paths.unauthorized} {...prepareRouteConfig(UserLoginRouteConfig)} />
     <Route path={paths.userRegister} {...prepareRouteConfig(UserRegisterRouteConfig)} />
-    <Route path={paths.userVerify} {...prepareRouteConfig(UserVerifyRouteConfig)} />
+    <Route path={paths.userVerifyWithEmail} {...prepareRouteConfig(UserVerifyRouteConfig)} />
+    <Route path={paths.userVerifyWithoutEmail} {...prepareRouteConfig(UserVerifyRouteConfig)} />
     <Route path={paths.userProfile} {...prepareRouteConfig(UserProfileRouteConfig)} />
     <Route path={paths.userPosts} {...prepareRouteConfig(UserPostsRouteConfig)} />
     <Route path={paths.userCreatePost} {...prepareRouteConfig(UserCreatePostRouteConfig)} />

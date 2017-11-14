@@ -8,6 +8,7 @@ export default {
   userPosts: '/user/posts',
   userProfile: '/user',
   userRegister: '/register',
-  userVerify: '/verify/:email',
+  userVerifyWithEmail: '/verify/:email',
+  userVerifyWithoutEmail: '/verify',
   unauthorized: '/unauthorized',
 }
