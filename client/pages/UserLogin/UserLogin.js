@@ -13,7 +13,7 @@ import Button, { FacebookLoginButton } from '../../components/Button'
 
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../common/config'
-import mapSubmitErrorsToFormErrors from './mapSubmitErrorsToFormErrors'
+import mapSubmitErrorsToFormErrors from '../../utils/mapSubmitErrorsToFormErrors'
 
 const acceptedErrors = [
   { id: ERRORS.WrongEmailOrPassword, field: 'email', message: 'Wrong email or password' },
