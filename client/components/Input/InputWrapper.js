@@ -60,8 +60,8 @@ InputWrapper.defaultProps = {
 }
 
 const enhance = compose(
-  withProps(({ touched, error }) => ({
-    error: touched && error,
+  withProps(({ touched, validateImmediately, error }) => ({
+    error: (touched || validateImmediately) && error,
   })),
 )
 
