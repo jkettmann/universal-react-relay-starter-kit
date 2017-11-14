@@ -42,8 +42,9 @@ app.use('/', graphQLHTTP(({ session }) => ({
   schema: Schema,
   context: {
     db,
-    get user() { return session.getUser() },
-    set user(payload) { session.setUser(payload) },
+    get sessionUser() { return session.getUser() },
+    set sessionUser(payload) { session.setUser(payload) },
+    resetSessionUser() { session.resetUser() },
   },
 })))
 

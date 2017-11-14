@@ -12,15 +12,15 @@ export default new GraphQLObjectType({
     },
     isLoggedIn: {
       type: GraphQLBoolean,
-      resolve: (obj, args, { user }) =>
-        user.role === ROLES.reader ||
-        user.role === ROLES.publisher ||
-        user.role === ROLES.admin,
+      resolve: (obj, args, { sessionUser }) =>
+        sessionUser.role === ROLES.reader ||
+        sessionUser.role === ROLES.publisher ||
+        sessionUser.role === ROLES.admin,
     },
     canPublish: {
       type: GraphQLBoolean,
-      resolve: (obj, args, { user }) =>
-        user.role === ROLES.admin || user.role === ROLES.publisher,
+      resolve: (obj, args, { sessionUser }) =>
+        sessionUser.role === ROLES.admin || sessionUser.role === ROLES.publisher,
     },
 
   }),

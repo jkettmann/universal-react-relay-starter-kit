@@ -48,9 +48,10 @@ function createUserSession(cookies) {
   }
 
   const resetUser = () => {
-    cookies.set('accessToken', null, cookieOptions)
-    cookies.set('refreshToken', null, cookieOptions)
-    cookies.set('user', null, cookieOptions)
+    const options = { ...cookieOptions, expired: Date.now() }
+    cookies.set('accessToken', undefined, options)
+    cookies.set('refreshToken', undefined, options)
+    cookies.set('user', undefined, options)
   }
 
   return { getUser, setUser, resetUser }

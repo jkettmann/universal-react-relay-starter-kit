@@ -38,7 +38,7 @@ export default mutationWithClientMutationId({
       .then((payload) => {
         log('login successful', payload.userId)
         /* eslint-disable no-param-reassign */
-        context.user = {
+        context.sessionUser = {
           ...payload,
           email,
         }
