@@ -18,7 +18,7 @@ export default function resendVerification({ email }) {
         rej(error)
         return
       }
-      res()
+      res({ success: true })
     })
   })
 }

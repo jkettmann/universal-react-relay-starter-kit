@@ -94,9 +94,9 @@ const handlers = {
   register: ({ router }) => ({ email, password, firstName, lastName }) =>
     RegisterMutation.commit({ email, password, firstName, lastName })
       .then(() => router.push(`/verify/${email}`))
-      .catch((error) => {
-        console.error('register', error)
-        const formErrors = mapSubmitErrorsToFormErrors(error, acceptedErrors)
+      .catch((errors) => {
+        console.error('register', errors)
+        const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)
         throw new SubmissionError(formErrors)
       }),
 }

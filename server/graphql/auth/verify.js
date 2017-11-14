@@ -1,7 +1,9 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
+import { UserError } from 'graphql-errors'
 import debug from 'debug'
 
 import { userPool } from './config'
+import { ERRORS } from '../../config'
 
 const log = debug('graphql:verify')
 
@@ -15,7 +17,12 @@ export default function verify({ email, pin }) {
     cognitoUser.confirmRegistration(pin, true, (error, result) => {
       if (error) {
         log(error)
-        rej(error)
+        // TODO this code shouldn't know about graphql errors. refactor to use separate layers
+        if (error.code === 'CodeMismatchException') {
+          rej(new UserError(ERRORS.WrongEmailOrVerificationPIN))
+        } else {
+          rej(error)
+        }
         return
       }
       if (result === 'SUCCESS') {
