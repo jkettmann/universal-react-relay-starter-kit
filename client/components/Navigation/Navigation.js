@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, withHandlers, withState } from 'recompose'
 
 import Wrapper from './Wrapper'
@@ -44,16 +45,14 @@ const handlers = withHandlers({
 })
 
 const enhance = compose(
-  state,
-  handlers,
-)
-
-export default createFragmentContainer(
-  enhance(Navigation),
-  graphql`
+  fragment(graphql`
     fragment Navigation_permission on Permission {
       isLoggedIn
       ...NavigationMenu_permission
     }
-  `,
+  `),
+  state,
+  handlers,
 )
+
+export default enhance(Navigation)

@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, flattenProp, setPropTypes, withHandlers } from 'recompose'
+import { SubmissionError } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import Bold from './Bold'
@@ -57,34 +59,17 @@ UserLoginPage.propTypes = {
 }
 
 const loginHandlers = {
-  login: ({ relay, router }) => ({ email, password, facebookToken }) => {
-    const environment = relay.environment
-    LoginMutation.commit({
-      environment,
-      input: { email, password, facebookToken },
-      onCompleted: (result, errors) => {
+  login: ({ router }) => ({ email, password, facebookToken }) =>
+    LoginMutation.commit({ email, password, facebookToken })
+      .then((result, errors) => {
         if (!errors) {
           router.replace('/')
           return
         }
 
         console.error('login failed', errors[0])
-        const formError = {}
-        switch (errors[0]) {
-          case ERRORS.WrongEmailOrPassword:
-            formError.email = 'Email or password is incorrect'
-            formError.password = 'Email or password is incorrect'
-            break
-          default:
-            break
-        }
-        this.formElement.updateInputsWithError(formError)
-      },
-      onError: (error) => {
-        console.error('Login', error)
-      },
-    })
-  },
+        throw new SubmissionError(errors[0])
+      }),
 }
 
 const facebookHandlers = {
@@ -101,14 +86,19 @@ const facebookHandlers = {
 
 const propTypes = {
   router: routerShape.isRequired,
-  relay: PropTypes.shape({
-    environment: PropTypes.any.isRequired,
-  }).isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
 }
 
 const enhance = compose(
   withRouter,
+  fragment(graphql`
+    fragment UserLogin on Query {
+      permission {
+        isLoggedIn
+        canPublish
+      }
+    }
+  `),
   setPropTypes(propTypes),
   withHandlers(loginHandlers),
   withHandlers(facebookHandlers),
@@ -116,14 +106,4 @@ const enhance = compose(
   flattenProp('permission'),
 )
 
-export default createFragmentContainer(
-  enhance(UserLoginPage),
-  graphql`
-    fragment UserLogin on Query {
-      permission {
-        isLoggedIn
-        canPublish
-      }
-    }
-  `,
-)
+export default enhance(UserLoginPage)

@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, flattenProp, withHandlers } from 'recompose'
+import { SubmissionError } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import FormWrapper from './FormWrapper'
@@ -41,48 +43,39 @@ UserRegisterPage.propTypes = {
 }
 
 const handlers = {
-  register: ({ relay, router }) => ({ email, password, firstName, lastName }) => {
-    const environment = relay.environment
-
-    RegisterMutation.commit({
-      environment,
-      input: { email, password, firstName, lastName },
-      onCompleted: (result, errors) => {
+  register: ({ router }) => ({ email, password, firstName, lastName }) =>
+    RegisterMutation.commit({ email, password, firstName, lastName })
+      .then((result, errors) => {
         if (!errors) {
           router.push(`/verify/${email}`)
           return
         }
 
         console.error('register', errors)
-        const formError = {}
-        switch (errors[0]) {
-          case ERRORS.EmailAlreadyTaken:
-            formError.email =
-              'This email address is already taken.'
-            break
-          default:
-            break
-        }
-        this.formElement.updateInputsWithError(formError)
-      },
-      onError: error => console.error('Registration Failed', error),
-    })
-  },
+        // const formError = {}
+        // switch (errors[0]) {
+        //   case ERRORS.EmailAlreadyTaken:
+        //     formError.email =
+        //       'This email address is already taken.'
+        //     break
+        //   default:
+        //     break
+        // }
+        throw new SubmissionError(errors[0])
+      }),
 }
 
 const enhance = compose(
-  withHandlers(handlers),
-  flattenProp('data'),
-  flattenProp('permission'),
-)
-
-export default createFragmentContainer(
-  enhance(UserRegisterPage),
-  graphql`
+  fragment(graphql`
     fragment UserRegister on Query {
       permission {
         isLoggedIn
       }
     }
-  `,
+  `),
+  withHandlers(handlers),
+  flattenProp('data'),
+  flattenProp('permission'),
 )
+
+export default enhance(UserRegisterPage)

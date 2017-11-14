@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, withHandlers } from 'recompose'
+import { SubmissionError } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import Form from './Form'
@@ -20,35 +22,27 @@ UserCreatePostPage.propTypes = {
 }
 
 const handlers = {
-  createPost: ({ relay, router }) => ({ title, description, image }) => {
-    const environment = relay.environment
-
-    CreatePostMutation.commit({
-      environment,
-      input: { title, description, image },
-      onCompleted: (result, errors) => {
+  createPost: ({ router }) => ({ title, description, image }) =>
+    CreatePostMutation.commit({ title, description, image })
+      .then((result, errors) => {
         if (!errors) {
           router.push('/user/posts')
           return
         }
         console.error('create post', errors)
-      },
-      onError: error => console.error('Creating post failed', error),
-    })
-  },
+        throw new SubmissionError(errors[0])
+      }),
 }
 
 const enhance = compose(
-  withHandlers(handlers),
-)
-
-export default createFragmentContainer(
-  enhance(UserCreatePostPage),
-  graphql`
+  fragment(graphql`
     fragment UserCreatePost on Query {
       permission {
         canPublish
       }
     }
-  `,
+  `),
+  withHandlers(handlers),
 )
+
+export default enhance(UserCreatePostPage)

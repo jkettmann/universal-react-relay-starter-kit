@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, flattenProp } from 'recompose'
 
 import Image from './Image'
@@ -37,13 +38,7 @@ PostDetail.propTypes = {
 }
 
 const enhance = compose(
-  flattenProp('data'),
-  flattenProp('post'),
-)
-
-export default createFragmentContainer(
-  enhance(PostDetail),
-  graphql`
+  fragment(graphql`
     fragment PostDetails on Query {
       post (postId: $postId) {
         title
@@ -55,5 +50,9 @@ export default createFragmentContainer(
         }
       }
     }
-  `,
+  `),
+  flattenProp('data'),
+  flattenProp('post'),
 )
+
+export default enhance(PostDetail)

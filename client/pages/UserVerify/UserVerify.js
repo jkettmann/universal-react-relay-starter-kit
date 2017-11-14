@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, flattenProp, withHandlers, withState } from 'recompose'
 import { defineMessages, FormattedMessage } from 'react-intl'
+import { SubmissionError } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import Form from './Form'
@@ -54,57 +56,48 @@ UserVerifyPage.propTypes = {
 }
 
 const handlers = {
-  verify: ({ relay, router }) => ({ email, pin }) => {
-    const environment = relay.environment
-    VerifyAccountMutation.commit({
-      environment,
-      input: { email, pin },
-      onCompleted: (result, errors) => {
+  verify: ({ router }) => ({ email, pin }) =>
+    VerifyAccountMutation.commit({ email, pin })
+      .then((result, errors) => {
         if (!errors) {
           router.replace('/login')
           return
         }
 
         console.error('verification failed', errors)
-        const formError = {}
-        switch (errors[0]) {
-          case ERRORS.WrongEmailOrVerificationPIN:
-            formError.email = 'Email or password is incorrect'
-            formError.pin = 'Email or verification PIN is incorrect'
-            break
-          default:
-            break
-        }
-        this.formElement.updateInputsWithError(formError)
-      },
-      onError: (error) => {
-        console.error('verification failed', error)
-      },
-    })
-  },
-  resendVerification: ({ relay, params, setIsLoading, setHasResentVerification }) => () => {
+        // const formError = {}
+        // switch (errors[0]) {
+        //   case ERRORS.WrongEmailOrVerificationPIN:
+        //     formError.email = 'Email or password is incorrect'
+        //     formError.pin = 'Email or verification PIN is incorrect'
+        //     break
+        //   default:
+        //     break
+        // }
+        throw new SubmissionError(errors[0])
+      }),
+  resendVerification: ({ params, setIsLoading, setHasResentVerification }) => () => {
     setIsLoading(true)
-    const { email } = params
-    const environment = relay.environment
-    ResendVerificationMutation.commit({
-      environment,
-      input: { email },
-      onCompleted: (result, errors) => {
+    return ResendVerificationMutation.commit({ email: params.email })
+      .then((result, errors) => {
+        setIsLoading(false)
         if (!errors) {
           setHasResentVerification(true)
         } else {
-          console.error('verification failed', errors)
+          throw new SubmissionError(errors[0])
         }
-        setIsLoading(false)
-      },
-      onError: (error) => {
-        console.error('verification failed', error)
-      },
-    })
+      })
   },
 }
 
 const enhance = compose(
+  fragment(graphql`
+    fragment UserVerify on Query {
+      permission {
+        isLoggedIn
+      }
+    }
+  `),
   withState('isLoading', 'setIsLoading', false),
   withState('hasResentVerification', 'setHasResentVerification', false),
   withHandlers(handlers),
@@ -112,15 +105,4 @@ const enhance = compose(
   flattenProp('permission'),
 )
 
-const container = createFragmentContainer(
-  enhance(UserVerifyPage),
-  graphql`
-    fragment UserVerify on Query {
-      permission {
-        isLoggedIn
-      }
-    }
-  `,
-)
-
-export default container
+export default enhance(UserVerifyPage)

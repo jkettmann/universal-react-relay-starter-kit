@@ -1,4 +1,5 @@
-import { commitMutation, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { createMutation } from 'relay-compose'
 
 const mutation = graphql`
   mutation LogoutMutation($input: LogoutInput!) {
@@ -8,15 +9,9 @@ const mutation = graphql`
   }
 `
 
-function commit({ environment, onCompleted, onError }) {
+function commit() {
   const variables = { input: {} }
-
-  commitMutation(environment, {
-    mutation,
-    variables,
-    onCompleted,
-    onError,
-  })
+  createMutation(mutation, variables)
 }
 
 export default {
