@@ -22,9 +22,7 @@ const acceptedErrors = [
 
 const UserResetPasswordPage = ({
   hasSentPin,
-  valid,
   error,
-  resetPassword,
   handleSubmit,
 }) => (
   <Wrapper>
@@ -82,9 +80,7 @@ const UserResetPasswordPage = ({
 
 UserResetPasswordPage.propTypes = {
   hasSentPin: PropTypes.bool.isRequired,
-  valid: PropTypes.bool.isRequired,
   error: PropTypes.string,
-  resetPassword: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 }
 
