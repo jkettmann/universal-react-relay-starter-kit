@@ -6,13 +6,14 @@ const query = graphql`
   query UserPostsRoute_Query ($afterCursor: String, $count: Int!) {
     ...UserPosts
     permission {
-      isLoggedIn
+      canPublish
     }
   }
 `
 
 export default {
   render: 'UserPostsPage',
+  permission: 'canPublish',
   query,
   prepareVariables: params => ({
     ...params,
