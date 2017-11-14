@@ -1,15 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
-import { compose, flattenProp } from 'recompose'
+import { compose, flattenProp, withHandlers, withState } from 'recompose'
 import { defineMessages, FormattedMessage } from 'react-intl'
 
 import Wrapper from './Wrapper'
 import Form from './Form'
 import ResendVerificationButton from './ResendVerificationButton'
-import TextInput from '../../components/Input/FormsyText'
-import Button from '../../components/Button'
 
 import ResendVerificationMutation from '../../mutation/ResendVerificationMutation'
 import VerifyAccountMutation from '../../mutation/VerifyAccountMutation'
@@ -26,52 +23,49 @@ const messages = defineMessages({
   },
 })
 
-class UserVerifyPage extends React.Component {
-  static propTypes = {
-    params: PropTypes.shape({
-      email: PropTypes.string.isRequired,
-    }).isRequired,
-    router: routerShape.isRequired,
-    relay: PropTypes.shape({
-      environment: PropTypes.any.isRequired,
-    }).isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-  }
+const getResendVerificationMessage = hasResentVerification => hasResentVerification
+  ? messages.hasResentVerification
+  : messages.resendVerification
 
-  state = {
-    isLoading: false,
-    hasResentVerification: false,
-    canSubmit: false,
-  }
+const UserVerifyPage = ({ hasResentVerification, verify, resendVerification, params }) => (
+  <Wrapper>
+    <h2>Verify your account</h2>
 
-  setFormElement = (element) => {
-    this.formElement = element
-  }
+    <Form
+      initialValues={{ email: params && params.email }}
+      onSubmit={verify}
+    />
 
-  getResendVerificationMessage = hasResentVerification => hasResentVerification
-    ? messages.hasResentVerification
-    : messages.resendVerification
+    <ResendVerificationButton
+      onClick={resendVerification}
+    >
+      <FormattedMessage {...getResendVerificationMessage(hasResentVerification)} />
+    </ResendVerificationButton>
+  </Wrapper>
+)
 
-  enableButton = () => {
-    this.setState({
-      canSubmit: true,
-    })
-  }
+UserVerifyPage.propTypes = {
+  params: PropTypes.shape({
+    email: PropTypes.string,
+  }).isRequired,
+  hasResentVerification: PropTypes.bool.isRequired,
+  verify: PropTypes.func.isRequired,
+  resendVerification: PropTypes.func.isRequired,
+}
 
-  disableButton = () => {
-    this.setState({
-      canSubmit: false,
-    })
-  }
-
-  verify = ({ email, pin }) => {
-    const environment = this.props.relay.environment
+const handlers = {
+  verify: ({ relay, router }) => ({ email, pin }) => {
+    const environment = relay.environment
     VerifyAccountMutation.commit({
       environment,
       input: { email, pin },
-      onCompleted: () => this.props.router.go(-1),
-      onError: (errors) => {
-        console.error('verification failed', errors[0])
+      onCompleted: (result, errors) => {
+        if (!errors) {
+          router.replace('/login')
+          return
+        }
+
+        console.error('verification failed', errors)
         const formError = {}
         switch (errors[0]) {
           case ERRORS.WrongEmailOrVerificationPIN:
@@ -83,86 +77,37 @@ class UserVerifyPage extends React.Component {
         }
         this.formElement.updateInputsWithError(formError)
       },
+      onError: (error) => {
+        console.error('verification failed', error)
+      },
     })
-  }
-
-  resendVerification = () => {
-    this.setState({ isLoading: true })
-    const { email } = this.props.params
-    const environment = this.props.relay.environment
+  },
+  resendVerification: ({ relay, params, setIsLoading, setHasResentVerification }) => () => {
+    setIsLoading(true)
+    const { email } = params
+    const environment = relay.environment
     ResendVerificationMutation.commit({
       environment,
       input: { email },
-      onCompleted: () => {
-        this.setState({
-          isLoading: false,
-          hasResentVerification: true,
-        })
+      onCompleted: (result, errors) => {
+        if (!errors) {
+          setHasResentVerification(true)
+        } else {
+          console.error('verification failed', errors)
+        }
+        setIsLoading(false)
       },
-      onError: (errors) => {
-        console.error('verification failed', errors[0])
+      onError: (error) => {
+        console.error('verification failed', error)
       },
     })
-  }
-
-  render() {
-    const { isLoggedIn, router, params } = this.props
-    if (isLoggedIn) {
-      router.push('/')
-      return <div />
-    }
-
-    const { hasResentVerification } = this.state
-    const resendVerificationMessage = this.getResendVerificationMessage(hasResentVerification)
-
-    return (
-      <Wrapper>
-        <h2>Verify your account</h2>
-
-        <Form
-          ref={this.setFormElement}
-          onValid={this.enableButton}
-          onInvalid={this.disableButton}
-          onSubmit={this.verify}
-        >
-          <TextInput
-            name="email"
-            value={params.email}
-            label="E-Mail"
-            validations="isEmail"
-            validationError="Please enter a valid email address"
-            fullWidth
-            required
-          />
-
-          <TextInput
-            name="pin"
-            label="Verification PIN"
-            fullWidth
-            required
-          />
-
-          <Button
-            type="submit"
-            label="Verifiy"
-            style={{ marginTop: 20 }}
-            disabled={!this.state.canSubmit}
-            fullWidth
-            secondary
-          />
-        </Form>
-
-        <ResendVerificationButton
-          onClick={this.resendVerification}
-        >
-          <FormattedMessage {...resendVerificationMessage} />
-        </ResendVerificationButton>
-      </Wrapper>
-    )
-  }
+  },
 }
 
 const enhance = compose(
+  withState('isLoading', 'setIsLoading', false),
+  withState('hasResentVerification', 'setHasResentVerification', false),
+  withHandlers(handlers),
   flattenProp('data'),
   flattenProp('permission'),
 )

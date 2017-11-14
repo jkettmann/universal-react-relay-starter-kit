@@ -47,10 +47,10 @@ const handlers = withHandlers({
   onBlur: ({ onBlur, name, value }) => () => call(onBlur, value, name),
 })
 
-const props = withProps(({ value }) => ({
-  value: value === undefined || value === null ? '' : value,
+const props = withProps(({ value, input }) => ({
+  ...input,
 }))
 
-const enhance = compose(handlers, props)
+const enhance = compose(props)
 
 export default enhance(Input)

@@ -2,7 +2,6 @@ export {
   createClientResolver,
   createClientRouter,
   createResolver,
-  historyMiddlewares,
   render,
   default,
 } from './Router'

@@ -1,8 +1,11 @@
+import React from 'react'
 import ReactDOM from 'react-dom/server'
 import { flushChunkNames } from 'react-universal-component/server'
 import flushChunks from 'webpack-flush-chunks'
-import { getFarceResult } from 'found/lib/server'
+import { Provider } from 'react-redux'
+import { RouterProvider } from 'found/lib/server'
 import RedirectException from 'found/lib/RedirectException'
+import getStoreRenderArgs from 'found/lib/getStoreRenderArgs'
 import serialize from 'serialize-javascript'
 import { ServerStyleSheet } from 'styled-components'
 import { Helmet } from 'react-helmet'
@@ -11,8 +14,9 @@ import dotenv from 'dotenv'
 import debug from 'debug'
 
 import { ServerFetcher } from '../../client/fetcher'
-import { createResolver, historyMiddlewares, render, routeConfig, paths } from '../../client/Router'
+import { createResolver, render, paths } from '../../client/router'
 import withIntl from '../../client/intl/ismorphicIntlProvider'
+import { createServerStore } from '../../client/store'
 
 dotenv.config()
 const log = debug('server:render')
@@ -48,19 +52,27 @@ function getStatusCode(url) {
 
 async function renderAsync(req, res) {
   const fetcher = new ServerFetcher(process.env.GRAPHQL_ENDPOINT, { cookie: req.headers.cookie })
-  const { redirect, status, element } = await getFarceResult({
-    url: req.url,
-    historyMiddlewares,
-    routeConfig,
+
+  const store = createServerStore((req.url))
+  const renderArgs = await getStoreRenderArgs({
+    store,
+    matchContext: { store },
     resolver: createResolver(fetcher),
-    render,
   })
 
+  const elementWithProvider = (
+    <Provider store={store}>
+      <RouterProvider router={renderArgs.router}>
+        {render(renderArgs)}
+      </RouterProvider>
+    </Provider>
+  )
   const cookies = new Cookies(req, res)
   const locale = cookies.locale
-  const elementwithIntl = withIntl(element, locale)
+  const elementwithIntl = withIntl(elementWithProvider, locale)
   const sheet = new ServerStyleSheet()
-  const app = ReactDOM.renderToString(sheet.collectStyles(elementwithIntl))
+  const elementWithStyles = sheet.collectStyles(elementwithIntl)
+  const app = ReactDOM.renderToString(elementWithStyles)
   const relayPayload = serialize(fetcher, { isJSON: true })
   const styleTags = sheet.getStyleTags()
   const helmet = Helmet.renderStatic()
@@ -70,7 +82,6 @@ async function renderAsync(req, res) {
     helmet,
     relayPayload,
     styleTags,
-    redirect,
   }
 }
 
@@ -83,13 +94,6 @@ export default ({ clientStats }) => async (req, res) => {
 
   try {
     const renderResult = await renderAsync(req, res)
-
-    const redirectUrl = renderResult.redirect && renderResult.redirect.url
-    if (redirectUrl) {
-      res.redirect(302, redirectUrl)
-      return
-    }
-
     const helmet = renderResult.helmet
     title = helmet && helmet.title && helmet.title.toString()
     meta = helmet && helmet.meta && helmet.meta.toString()

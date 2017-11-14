@@ -3,50 +3,71 @@ import PropTypes from 'prop-types'
 import withRouter from 'found/lib/withRouter'
 import { routerShape } from 'found/lib/PropTypes'
 import { createFragmentContainer, graphql } from 'react-relay'
-import { compose, flattenProp } from 'recompose'
-import Formsy from 'formsy-react'
+import { compose, flattenProp, setPropTypes, withHandlers } from 'recompose'
 
 import Wrapper from './Wrapper'
 import Bold from './Bold'
 import Hint from './Hint'
-import FormWraper from './FormWrapper'
-import TextInput from '../../components/Input/FormsyText'
+import FormWrapper from './FormWrapper'
+import Form from './Form'
 import Button, { FacebookLoginButton } from '../../components/Button'
 
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../common/config'
 
-class LoginPage extends React.Component {
-  static propTypes = {
-    router: routerShape.isRequired,
-    relay: PropTypes.shape({
-      environment: PropTypes.any.isRequired,
-    }).isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-  }
+const UserLoginPage = ({
+  onFacebookLoginSuccess,
+  onFacebookLoginFailure,
+  login,
+}) => (
+  <Wrapper>
+    <h2>Logins</h2>
 
-  onFacebookLoginSuccess = (result) => {
-    const { email } = result.profile
-    const { accessToken } = result.token
+    <Hint>
+      You can use <Bold>reader@test.com</Bold>, <Bold>publisher@test.com</Bold>,
+      <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
+    </Hint>
 
-    this.login({ email, facebookToken: accessToken })
-  }
+    <FormWrapper>
 
-  onFacebookLoginFailure = (error) => {
-    console.log('facebook failure', error)
-  }
+      <FacebookLoginButton
+        label="Login with facebook"
+        onLoginSuccess={onFacebookLoginSuccess}
+        onLoginFailure={onFacebookLoginFailure}
+        fullWidth
+        secondary
+      />
 
-  setFormElement = (element) => {
-    this.formElement = element
-  }
+      <Form onSubmit={login} />
 
-  login = ({ email, password, facebookToken }) => {
-    const environment = this.props.relay.environment
+      <Button
+        label="Register"
+        to="/register"
+        fullWidth
+        primary
+      />
+    </FormWrapper>
+  </Wrapper>
+)
+
+UserLoginPage.propTypes = {
+  onFacebookLoginSuccess: PropTypes.func.isRequired,
+  onFacebookLoginFailure: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+}
+
+const loginHandlers = {
+  login: ({ relay, router }) => ({ email, password, facebookToken }) => {
+    const environment = relay.environment
     LoginMutation.commit({
       environment,
       input: { email, password, facebookToken },
-      onCompleted: () => this.props.router.go(-1),
-      onError: (errors) => {
+      onCompleted: (result, errors) => {
+        if (!errors) {
+          router.replace('/')
+          return
+        }
+
         console.error('login failed', errors[0])
         const formError = {}
         switch (errors[0]) {
@@ -59,87 +80,44 @@ class LoginPage extends React.Component {
         }
         this.formElement.updateInputsWithError(formError)
       },
+      onError: (error) => {
+        console.error('Login', error)
+      },
     })
-  }
+  },
+}
 
-  render() {
-    const { isLoggedIn, router } = this.props
-    if (isLoggedIn) {
-      router.push('/')
-      return <div />
-    }
+const facebookHandlers = {
+  onFacebookLoginSuccess: ({ login }) => (result) => {
+    const { email } = result.profile
+    const { accessToken } = result.token
 
-    const submitMargin = { marginTop: 20 }
+    login({ email, facebookToken: accessToken })
+  },
+  onFacebookLoginFailure: (error) => {
+    console.log('facebook failure', error)
+  },
+}
 
-    return (
-      <Wrapper>
-        <h2>Login</h2>
-
-        <Hint>
-          You can use <Bold>reader@test.com</Bold>, <Bold>publisher@test.com</Bold>,
-          <Bold> publisher2@test.com</Bold> with password <Bold>qwerty</Bold>.
-        </Hint>
-
-        <FormWraper>
-
-          <FacebookLoginButton
-            label="Login with facebook"
-            style={submitMargin}
-            onLoginSuccess={this.onFacebookLoginSuccess}
-            onLoginFailure={this.onFacebookLoginFailure}
-            fullWidth
-            secondary
-          />
-
-          <Formsy.Form
-            ref={this.setFormElement}
-            onSubmit={this.login}
-          >
-            <TextInput
-              name="email"
-              label="E-Mail"
-              validations="isEmail"
-              validationError="Please enter a valid email address"
-              fullWidth
-            />
-
-            <TextInput
-              type="password"
-              name="password"
-              label="Passwort"
-              fullWidth
-            />
-
-            <Button
-              type="submit"
-              label="Login"
-              style={submitMargin}
-              fullWidth
-              secondary
-            />
-          </Formsy.Form>
-
-          <Button
-            label="Register"
-            style={submitMargin}
-            to="/register"
-            fullWidth
-            primary
-          />
-        </FormWraper>
-      </Wrapper>
-    )
-  }
+const propTypes = {
+  router: routerShape.isRequired,
+  relay: PropTypes.shape({
+    environment: PropTypes.any.isRequired,
+  }).isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 }
 
 const enhance = compose(
   withRouter,
+  setPropTypes(propTypes),
+  withHandlers(loginHandlers),
+  withHandlers(facebookHandlers),
   flattenProp('data'),
   flattenProp('permission'),
 )
 
 export default createFragmentContainer(
-  enhance(LoginPage),
+  enhance(UserLoginPage),
   graphql`
     fragment UserLogin on Query {
       permission {
