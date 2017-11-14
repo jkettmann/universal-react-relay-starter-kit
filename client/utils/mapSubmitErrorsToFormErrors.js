@@ -1,6 +1,10 @@
 const generalFormErrorKey = '_error'
 
 function mapToFieldErrors(errorId, acceptedErrors) {
+  if (!acceptedErrors || !acceptedErrors.find(({ id }) => id === errorId)) {
+    return { [generalFormErrorKey]: 'An unknown error has occured. Please try again later.' }
+  }
+
   return acceptedErrors.reduce((fieldErrors, acceptedError) => {
     if (acceptedError.id === errorId) {
       const errorKey = acceptedError.field || generalFormErrorKey
