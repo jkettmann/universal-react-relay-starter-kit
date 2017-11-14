@@ -17,8 +17,7 @@ const Form = ({ valid, handleSubmit }) => (
     <TextField
       name="email"
       label="E-Mail"
-      validations="isEmail"
-      validationError="Please enter a valid email address"
+      validations="email"
       fullWidth
       required
     />
@@ -26,6 +25,8 @@ const Form = ({ valid, handleSubmit }) => (
     <TextField
       name="pin"
       label="Verification PIN"
+      validations="number"
+      validateImmediately
       fullWidth
       required
     />

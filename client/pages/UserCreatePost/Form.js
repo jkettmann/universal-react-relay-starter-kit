@@ -19,8 +19,6 @@ const Form = ({ handleSubmit, valid }) => (
     <TextField
       name="title"
       label="Title"
-      validations="isWords"
-      validationError="Please enter a title"
       fullWidth
       required
     />
@@ -28,8 +26,6 @@ const Form = ({ handleSubmit, valid }) => (
     <TextField
       name="description"
       label="Description"
-      validations="isWords"
-      validationError="Please enter a description"
       fullWidth
       required
     />
@@ -38,9 +34,8 @@ const Form = ({ handleSubmit, valid }) => (
       label="Select Image"
       name="image"
       style={{ marginTop: 20 }}
-      validations="isExisty"
-      validationError="Please select an image"
       fullWidth
+      required
     />
 
     <Button

@@ -10,8 +10,7 @@ const Form = ({ handleSubmit, valid }) => (
     <TextField
       name="email"
       label="E-Mail"
-      validations="isEmail"
-      validationError="Please enter a valid email address"
+      validations="email"
       fullWidth
       required
     />
@@ -19,9 +18,9 @@ const Form = ({ handleSubmit, valid }) => (
     <TextField
       name="password"
       type="password"
-      label="Passwort"
-      validations="minLength:5"
-      validationError="Please enter at least 5 characters"
+      label="Password"
+      validations="password"
+      validateImmediately
       fullWidth
       required
     />
@@ -29,7 +28,7 @@ const Form = ({ handleSubmit, valid }) => (
     <TextField
       name="firstName"
       label="First Name"
-      validations="isWords"
+      validations="letters"
       validationError="Please enter your first name"
       fullWidth
       required
@@ -38,7 +37,7 @@ const Form = ({ handleSubmit, valid }) => (
     <TextField
       name="lastName"
       label="Last Name"
-      validations="isWords"
+      validations="letters"
       validationError="Please enter your last name"
       fullWidth
       required

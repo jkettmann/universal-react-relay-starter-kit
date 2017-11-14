@@ -10,9 +10,9 @@ const Form = ({ handleSubmit }) => (
     <TextField
       name="email"
       label="E-Mail"
-      validations="isEmail"
-      validationError="Please enter a valid email address"
+      validations="email"
       fullWidth
+      required
     />
 
     <TextField
@@ -20,6 +20,7 @@ const Form = ({ handleSubmit }) => (
       name="password"
       label="Passwort"
       fullWidth
+      required
     />
 
     <Button
