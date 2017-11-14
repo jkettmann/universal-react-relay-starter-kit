@@ -33,8 +33,8 @@ export default new GraphQLObjectType({
       type: UserType,
       // tokenData origins from a cookie containing session data
       // and is set in server/authentication.js
-      resolve: (obj, args, { db, user }) =>
-        db.getUserById(user.id),
+      resolve: (obj, args, { db, sessionUser }) =>
+        db.getUserById(sessionUser.id),
     },
   }),
 })
