@@ -96,22 +96,16 @@ const propTypes = {
 }
 
 const handlers = withHandlers({
-  logout: ({ relay }) => (event) => {
+  logout: () => (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    LogoutMutation.commit({
-      environment: relay.environment,
-      input: {},
-      onCompleted: (result) => {
+    LogoutMutation.commit()
+      .then((result) => {
         console.log('logout successful', result)
         // reload to clear relay store
         window.location.pathname = '/' // eslint-disable-line no-undef
-      },
-      onError: (errors) => {
-        console.error('logout failed', errors[0])
-      },
-    })
+      })
   },
 })
 

@@ -11,7 +11,7 @@ const mutation = graphql`
 
 function commit() {
   const variables = { input: {} }
-  createMutation(mutation, variables)
+  return createMutation(mutation, variables)
 }
 
 export default {
