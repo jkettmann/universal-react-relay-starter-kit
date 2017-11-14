@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { compose } from 'recompose'
 import { reduxForm } from 'redux-form'
 
 import TextField from '../../components/Input/TextField'
@@ -36,8 +35,4 @@ Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
 }
 
-const enhance = compose(
-  reduxForm({ form: 'login' }),
-)
-
-export default enhance(Form)
+export default reduxForm({ form: 'login' })(Form)

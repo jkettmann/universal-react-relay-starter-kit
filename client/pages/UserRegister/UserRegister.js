@@ -49,7 +49,7 @@ const handlers = {
       input: { email, password, firstName, lastName },
       onCompleted: (result, errors) => {
         if (!errors) {
-          router.push('/login')
+          router.push(`/verify/${email}`)
           return
         }
 
@@ -65,7 +65,7 @@ const handlers = {
         }
         this.formElement.updateInputsWithError(formError)
       },
-      onError: (error) => console.error('Registration Failed', error),
+      onError: error => console.error('Registration Failed', error),
     })
   },
 }

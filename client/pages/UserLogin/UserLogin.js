@@ -62,8 +62,12 @@ const loginHandlers = {
     LoginMutation.commit({
       environment,
       input: { email, password, facebookToken },
-      onCompleted: () => router.go(-1),
-      onError: (errors) => {
+      onCompleted: (result, errors) => {
+        if (!errors) {
+          router.replace('/')
+          return
+        }
+
         console.error('login failed', errors[0])
         const formError = {}
         switch (errors[0]) {
@@ -75,6 +79,9 @@ const loginHandlers = {
             break
         }
         this.formElement.updateInputsWithError(formError)
+      },
+      onError: (error) => {
+        console.error('Login', error)
       },
     })
   },
