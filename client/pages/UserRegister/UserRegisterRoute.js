@@ -2,7 +2,9 @@ import { graphql } from 'react-relay'
 
 const query = graphql`
   query UserRegisterRoute_Query {
-    ...UserRegister
+    permission {
+      isAnonymous
+    }
   }
 `
 
