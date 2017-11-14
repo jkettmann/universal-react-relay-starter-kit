@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, setPropTypes, withHandlers, withProps } from 'recompose'
 import { defineMessages } from 'react-intl'
 
@@ -95,22 +96,16 @@ const propTypes = {
 }
 
 const handlers = withHandlers({
-  logout: ({ relay }) => (event) => {
+  logout: () => (event) => {
     event.preventDefault()
     event.stopPropagation()
 
-    LogoutMutation.commit({
-      environment: relay.environment,
-      input: {},
-      onCompleted: (result) => {
+    LogoutMutation.commit()
+      .then((result) => {
         console.log('logout successful', result)
         // reload to clear relay store
         window.location.pathname = '/' // eslint-disable-line no-undef
-      },
-      onError: (errors) => {
-        console.error('logout failed', errors[0])
-      },
-    })
+      })
   },
 })
 
@@ -119,14 +114,16 @@ const props = withProps(({ permission, logout }) => ({
   commonMenuItems,
 }))
 
-const enhance = compose(setPropTypes(propTypes), handlers, props)
-
-export default createFragmentContainer(
-  enhance(NavigationMenu),
-  graphql`
+const enhance = compose(
+  setPropTypes(propTypes),
+  fragment(graphql`
     fragment NavigationMenu_permission on Permission {
       isLoggedIn
       canPublish
     }
-  `,
+  `),
+  handlers,
+  props,
 )
+
+export default enhance(NavigationMenu)

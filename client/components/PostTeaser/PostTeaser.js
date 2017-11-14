@@ -1,7 +1,8 @@
 import React from 'react'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import PropTypes from 'prop-types'
-import { flattenProp } from 'recompose'
+import { compose, flattenProp } from 'recompose'
 
 import Tile from './Tile'
 import Link from './Link'
@@ -29,15 +30,15 @@ PostTeaser.propTypes = {
   image: PropTypes.string.isRequired,
 }
 
-const enhance = flattenProp('post')
-
-export default createFragmentContainer(
-  enhance(PostTeaser),
-  graphql`
+const enhance = compose(
+  fragment(graphql`
     fragment PostTeaser_post on Post {
       id
       title
       image
     }
-  `,
+  `),
+  flattenProp('post'),
 )
+
+export default enhance(PostTeaser)

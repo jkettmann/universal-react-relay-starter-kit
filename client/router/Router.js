@@ -2,6 +2,7 @@ import createConnectedRouter from 'found/lib/createConnectedRouter'
 import createRender from 'found/lib/createRender'
 import { Resolver } from 'found-relay'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
+import { setEnviroment } from 'relay-compose'
 
 import { ClientFetcher } from '../fetcher'
 
@@ -11,6 +12,7 @@ export function createResolver(fetcher) {
     store: new Store(new RecordSource()),
   })
 
+  setEnviroment(environment)
   return new Resolver(environment)
 }
 

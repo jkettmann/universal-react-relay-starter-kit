@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
-import { createPaginationContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { paginationContainer } from 'relay-compose-test'
 import { compose, withHandlers, withProps, flattenProp } from 'recompose'
 
 import PostList from '../../components/PostList'
@@ -31,6 +32,44 @@ Posts.propTypes = {
   hasMore: PropTypes.bool.isRequired,
 }
 
+const fragments = graphql`
+  fragment Posts on Query {
+    posts (after: $afterCursor first: $count) @connection(key: "Posts_posts") {
+      pageInfo {
+        hasNextPage
+        endCursor
+      },
+      edges {
+        node {
+          id
+          ...PostTeaser_post
+        }
+      }
+    }
+  }
+`
+
+const connectionConfig = {
+  direction: 'forward',
+  getFragmentVariables(prevVars, totalCount) {
+    return {
+      ...prevVars,
+      count: totalCount,
+    }
+  },
+  getVariables(_props, { count, cursor }) {
+    return {
+      afterCursor: cursor,
+      count,
+    }
+  },
+  query: graphql`
+    query PostsPaginationQuery($afterCursor: String, $count: Int!) {
+      ...Posts
+    }
+  `,
+}
+
 const props = withProps(({ relay }) => ({
   hasMore: relay.hasMore(),
 }))
@@ -39,44 +78,11 @@ const handlers = withHandlers({
   loadMore: ({ relay }) => () => relay.isLoading() || relay.loadMore(POST_COUNT),
 })
 
-const enhance = compose(props, handlers, flattenProp('data'))
-
-export default createPaginationContainer(
-  enhance(Posts),
-  graphql`
-    fragment Posts on Query {
-      posts (after: $afterCursor first: $count) @connection(key: "Posts_posts") {
-        pageInfo {
-          hasNextPage
-          endCursor
-        },
-        edges {
-          node {
-            id
-            ...PostTeaser_post
-          }
-        }
-      }
-    }
-  `,
-  {
-    direction: 'forward',
-    getFragmentVariables(prevVars, totalCount) {
-      return {
-        ...prevVars,
-        count: totalCount,
-      }
-    },
-    getVariables(_props, { count, cursor }) {
-      return {
-        afterCursor: cursor,
-        count,
-      }
-    },
-    query: graphql`
-      query PostsPaginationQuery($afterCursor: String, $count: Int!) {
-        ...Posts
-      }
-    `,
-  },
+const enhance = compose(
+  paginationContainer(fragments, connectionConfig),
+  props,
+  handlers,
+  flattenProp('data'),
 )
+
+export default enhance(Posts)

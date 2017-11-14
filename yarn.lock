@@ -4930,6 +4930,14 @@ relay-compiler@^1.4.0:
     signedsource "^1.0.0"
     yargs "^9.0.0"
 
+relay-compose-test@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/relay-compose-test/-/relay-compose-test-1.0.6.tgz#f5a7718e9aa8211a3730ca652ae3b729acc31549"
+
+relay-compose@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/relay-compose/-/relay-compose-1.0.6.tgz#e38b486def1758f9626483a5dd027324378782df"
+
 relay-debugger-react-native-runtime@0.0.10:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/relay-debugger-react-native-runtime/-/relay-debugger-react-native-runtime-0.0.10.tgz#0ef36012a1fba928962205514b46f635c652f235"

@@ -123,6 +123,8 @@
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
     "relay-compiler": "^1.4.0",
+    "relay-compose": "^1.0.6",
+    "relay-compose-test": "^1.0.6",
     "relay-runtime": "^1.4.0",
     "sanitize-filename": "^1.6.1",
     "serialize-javascript": "^1.4.0",

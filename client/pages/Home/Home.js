@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, flattenProp } from 'recompose'
 
 import Wrapper from './Wrapper'
@@ -20,17 +21,15 @@ HomePage.propTypes = {
 }
 
 const enhance = compose(
-  flattenProp('data'),
-  flattenProp('permission'),
-)
-
-export default createFragmentContainer(
-  enhance(HomePage),
-  graphql`
+  fragment(graphql`
     fragment Home on Query {
       permission {
         isLoggedIn
       }
     }
-  `,
+  `),
+  flattenProp('data'),
+  flattenProp('permission'),
 )
+
+export default enhance(HomePage)

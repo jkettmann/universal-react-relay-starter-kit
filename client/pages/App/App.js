@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ThemeProvider } from 'styled-components'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { graphql } from 'react-relay'
+import { fragment } from 'relay-compose'
 import { compose, flattenProp } from 'recompose'
 import { Helmet } from 'react-helmet'
 import { defineMessages, injectIntl, intlShape } from 'react-intl'
@@ -47,17 +48,15 @@ App.defaultProps = {
 }
 
 const enhance = compose(
-  injectIntl,
-  flattenProp('data'),
-)
-
-export default createFragmentContainer(
-  enhance(App),
-  graphql`
+  fragment(graphql`
     fragment App on Query {
       permission {
         ...Navigation_permission
       }
     }
-  `,
+  `),
+  injectIntl,
+  flattenProp('data'),
 )
+
+export default enhance(App)
