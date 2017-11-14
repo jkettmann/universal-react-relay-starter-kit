@@ -10,5 +10,6 @@ const query = graphql`
 
 export default {
   render: 'UserResetPasswordPage',
+  permission: 'isAnonymous',
   query,
 }

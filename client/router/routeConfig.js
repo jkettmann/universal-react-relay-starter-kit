@@ -38,7 +38,7 @@ const createRender = (page, permission) => ({ props }) => {
   }
   // eslint-disable-next-line react/prop-types
   if (permission && props && props.permission && !props.permission[permission]) {
-    throw new RedirectException(paths.unauthorized)
+    throw new RedirectException(permission === 'isAnonymous' ? paths.home : paths.unauthorized)
   }
 
   const { __fragments, __id } = props || {}

@@ -10,5 +10,6 @@ const query = graphql`
 
 export default {
   render: 'UserRegisterPage',
+  permission: 'isAnonymous',
   query,
 }

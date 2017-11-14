@@ -11,5 +11,6 @@ const query = graphql`
 
 export default {
   render: 'UserProfilePage',
+  permission: 'isLoggedIn',
   query,
 }
