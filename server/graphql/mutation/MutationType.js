@@ -5,6 +5,8 @@ import LoginMutation from './LoginMutation'
 import LogoutMutation from './LogoutMutation'
 import ResendVerificationMutation from './ResendVerificationMutation'
 import VerifyAccountMutation from './VerifyAccountMutation'
+import ResetPasswordMutation from './ResetPasswordMutation'
+import ConfirmPasswordMutation from './ConfirmPasswordMutation'
 import CreatePostMutation from './CreatePostMutation'
 
 export default new GraphQLObjectType({
@@ -15,6 +17,8 @@ export default new GraphQLObjectType({
     logout: LogoutMutation,
     resendVerification: ResendVerificationMutation,
     verifyAccount: VerifyAccountMutation,
+    resetPassword: ResetPasswordMutation,
+    confirmPassword: ConfirmPasswordMutation,
     createPost: CreatePostMutation,
   }),
 })

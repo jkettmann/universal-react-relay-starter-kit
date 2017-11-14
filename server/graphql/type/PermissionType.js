@@ -10,6 +10,10 @@ export default new GraphQLObjectType({
       // set a constant id to allow Relay to update its store after mutations
       resolve: () => 'permission',
     },
+    isAnonymous: {
+      type: GraphQLBoolean,
+      resolve: (obj, args, { sessionUser }) => !sessionUser.id,
+    },
     isLoggedIn: {
       type: GraphQLBoolean,
       resolve: (obj, args, { sessionUser }) =>

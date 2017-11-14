@@ -1,7 +1,7 @@
 import { graphql } from 'react-relay'
 
 const query = graphql`
-  query UserRegisterRoute_Query {
+  query UserResetPasswordRoute_Query {
     permission {
       isAnonymous
     }
@@ -9,6 +9,6 @@ const query = graphql`
 `
 
 export default {
-  render: 'UserRegisterPage',
+  render: 'UserResetPasswordPage',
   query,
 }
