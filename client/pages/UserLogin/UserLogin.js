@@ -34,7 +34,6 @@ const UserLoginPage = ({
     </Hint>
 
     <FormWrapper>
-
       <FacebookLoginButton
         label="Login with facebook"
         onLoginSuccess={onFacebookLoginSuccess}
