@@ -1,26 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import withRouter from 'found/lib/withRouter'
-import { routerShape } from 'found/lib/PropTypes'
-import { graphql } from 'react-relay'
-import { fragment } from 'relay-compose'
-import { compose, flattenProp, setPropTypes, withHandlers } from 'recompose'
-import { SubmissionError } from 'redux-form'
+import { compose, withHandlers, withProps } from 'recompose'
+import { SubmissionError, reduxForm } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import Bold from './Bold'
 import Hint from './Hint'
 import FormWrapper from './FormWrapper'
-import Form from './Form'
+import TextField from '../../components/Input/TextField'
 import Button, { FacebookLoginButton } from '../../components/Button'
 
 import LoginMutation from '../../mutation/LoginMutation'
 import { ERRORS } from '../../../common/config'
+import mapSubmitErrorsToFormErrors from '../../utils/mapSubmitErrorsToFormErrors'
+
+const acceptedErrors = [
+  { id: ERRORS.WrongEmailOrPassword, field: 'email', message: 'Wrong email or password' },
+  { id: ERRORS.WrongEmailOrPassword, field: 'password', message: 'Wrong email or password' },
+]
 
 const UserLoginPage = ({
   onFacebookLoginSuccess,
   onFacebookLoginFailure,
-  login,
+  handleSubmit,
 }) => (
   <Wrapper>
     <h2>Logins</h2>
@@ -31,7 +34,6 @@ const UserLoginPage = ({
     </Hint>
 
     <FormWrapper>
-
       <FacebookLoginButton
         label="Login with facebook"
         onLoginSuccess={onFacebookLoginSuccess}
@@ -40,7 +42,30 @@ const UserLoginPage = ({
         secondary
       />
 
-      <Form onSubmit={login} />
+      <form onSubmit={handleSubmit}>
+        <TextField
+          name="email"
+          label="E-Mail"
+          validations="email"
+          fullWidth
+          required
+        />
+
+        <TextField
+          type="password"
+          name="password"
+          label="Passwort"
+          fullWidth
+          required
+        />
+
+        <Button
+          type="submit"
+          label="Login"
+          fullWidth
+          secondary
+        />
+      </form>
 
       <Button
         label="Register"
@@ -55,20 +80,17 @@ const UserLoginPage = ({
 UserLoginPage.propTypes = {
   onFacebookLoginSuccess: PropTypes.func.isRequired,
   onFacebookLoginFailure: PropTypes.func.isRequired,
-  login: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 }
 
 const loginHandlers = {
   login: ({ router }) => ({ email, password, facebookToken }) =>
     LoginMutation.commit({ email, password, facebookToken })
-      .then((result, errors) => {
-        if (!errors) {
-          router.replace('/')
-          return
-        }
-
-        console.error('login failed', errors[0])
-        throw new SubmissionError(errors[0])
+      .then(() => router.replace('/'))
+      .catch((error) => {
+        console.error('login failed', error)
+        const formErrors = mapSubmitErrorsToFormErrors(error, acceptedErrors)
+        throw new SubmissionError(formErrors)
       }),
 }
 
@@ -84,26 +106,12 @@ const facebookHandlers = {
   },
 }
 
-const propTypes = {
-  router: routerShape.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-}
-
 const enhance = compose(
   withRouter,
-  fragment(graphql`
-    fragment UserLogin on Query {
-      permission {
-        isLoggedIn
-        canPublish
-      }
-    }
-  `),
-  setPropTypes(propTypes),
   withHandlers(loginHandlers),
   withHandlers(facebookHandlers),
-  flattenProp('data'),
-  flattenProp('permission'),
+  withProps(({ login }) => ({ onSubmit: login })),
+  reduxForm({ form: 'login' }),
 )
 
 export default enhance(UserLoginPage)

@@ -8,6 +8,7 @@ class FetcherBase {
   }
 
   async fetch(operation, variables) {
+    // eslint-disable-next-line no-undef
     const response = await fetch(this.url, {
       method: 'POST',
       credentials: 'include',
@@ -20,6 +21,14 @@ class FetcherBase {
     })
 
     return response.json()
+      .then((json) => {
+        // https://github.com/facebook/relay/issues/1816
+        if (operation.query.operation === 'mutation' && json.errors) {
+          return Promise.reject(json.errors)
+        }
+
+        return Promise.resolve(json)
+      })
   }
 }
 

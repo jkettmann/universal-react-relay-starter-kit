@@ -1,19 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { graphql } from 'react-relay'
-import { fragment } from 'relay-compose'
-import { compose, flattenProp, withHandlers } from 'recompose'
-import { SubmissionError } from 'redux-form'
+import { compose, withHandlers, withProps } from 'recompose'
+import { SubmissionError, reduxForm } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import FormWrapper from './FormWrapper'
+import TextField from '../../components/Input/TextField'
 import Button from '../../components/Button'
-import Form from './Form'
 import RegisterMutation from '../../mutation/RegisterMutation'
 
 import { ERRORS } from '../../../common/config'
+import mapSubmitErrorsToFormErrors from '../../utils/mapSubmitErrorsToFormErrors'
 
-const UserRegisterPage = ({ register }) => (
+const acceptedErrors = [
+  { id: ERRORS.EmailAlreadyTaken, field: 'email', message: 'This email is already taken' },
+]
+
+const UserRegisterPage = ({ valid, handleSubmit }) => (
   <Wrapper>
     <h2>Register</h2>
 
@@ -26,7 +29,51 @@ const UserRegisterPage = ({ register }) => (
         secondary
       />
 
-      <Form onSubmit={register} />
+      <form onSubmit={handleSubmit}>
+        <TextField
+          name="email"
+          label="E-Mail"
+          validations="email"
+          fullWidth
+          required
+        />
+
+        <TextField
+          name="password"
+          type="password"
+          label="Password"
+          validations="password"
+          validateImmediately
+          fullWidth
+          required
+        />
+
+        <TextField
+          name="firstName"
+          label="First Name"
+          validations="letters"
+          validationError="Please enter your first name"
+          fullWidth
+          required
+        />
+
+        <TextField
+          name="lastName"
+          label="Last Name"
+          validations="letters"
+          validationError="Please enter your last name"
+          fullWidth
+          required
+        />
+
+        <Button
+          type="submit"
+          label="Register"
+          disabled={!valid}
+          fullWidth
+          secondary
+        />
+      </form>
 
       <Button
         label="Login"
@@ -39,43 +86,26 @@ const UserRegisterPage = ({ register }) => (
 )
 
 UserRegisterPage.propTypes = {
-  register: PropTypes.func.isRequired,
+  valid: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 }
 
 const handlers = {
   register: ({ router }) => ({ email, password, firstName, lastName }) =>
     RegisterMutation.commit({ email, password, firstName, lastName })
-      .then((result, errors) => {
-        if (!errors) {
-          router.push(`/verify/${email}`)
-          return
-        }
-
+      .then(() => router.push(`/verify/${email}`))
+      .catch((errors) => {
         console.error('register', errors)
-        // const formError = {}
-        // switch (errors[0]) {
-        //   case ERRORS.EmailAlreadyTaken:
-        //     formError.email =
-        //       'This email address is already taken.'
-        //     break
-        //   default:
-        //     break
-        // }
-        throw new SubmissionError(errors[0])
+        const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)
+        throw new SubmissionError(formErrors)
       }),
 }
 
 const enhance = compose(
-  fragment(graphql`
-    fragment UserRegister on Query {
-      permission {
-        isLoggedIn
-      }
-    }
-  `),
   withHandlers(handlers),
-  flattenProp('data'),
-  flattenProp('permission'),
+  withProps(({ register }) => ({ onSubmit: register })),
+  reduxForm({ form: 'register' }),
+
 )
 
 export default enhance(UserRegisterPage)
