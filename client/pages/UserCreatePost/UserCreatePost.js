@@ -1,24 +1,56 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { graphql } from 'react-relay'
-import { fragment } from 'relay-compose'
-import { compose, withHandlers } from 'recompose'
-import { SubmissionError } from 'redux-form'
+import { compose, withHandlers, withProps } from 'recompose'
+import { SubmissionError, reduxForm } from 'redux-form'
 
 import Wrapper from './Wrapper'
 import Form from './Form'
+import TextField from '../../components/Input/TextField'
+import ImageField from '../../components/Input/ImageField'
+import Button from '../../components/Button'
 import CreatePostMutation from '../../mutation/CreatePostMutation'
 
-const UserCreatePostPage = ({ createPost }) => (
+const UserCreatePostPage = ({ valid, handleSubmit }) => (
   <Wrapper>
     <h2>Create Post</h2>
 
-    <Form onSubmit={createPost} />
+    <Form onSubmit={handleSubmit}>
+      <TextField
+        name="title"
+        label="Title"
+        fullWidth
+        required
+      />
+
+      <TextField
+        name="description"
+        label="Description"
+        fullWidth
+        required
+      />
+
+      <ImageField
+        label="Select Image"
+        name="image"
+        style={{ marginTop: 20 }}
+        fullWidth
+        required
+      />
+
+      <Button
+        type="submit"
+        label="Save post"
+        disabled={!valid}
+        secondary
+        fullWidth
+      />
+    </Form>
   </Wrapper>
 )
 
 UserCreatePostPage.propTypes = {
-  createPost: PropTypes.func.isRequired,
+  valid: PropTypes.bool.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 }
 
 const handlers = {
@@ -35,14 +67,9 @@ const handlers = {
 }
 
 const enhance = compose(
-  fragment(graphql`
-    fragment UserCreatePost on Query {
-      permission {
-        canPublish
-      }
-    }
-  `),
   withHandlers(handlers),
+  withProps(({ createPost }) => ({ onSubmit: createPost })),
+  reduxForm({ form: 'createPost' }),
 )
 
 export default enhance(UserCreatePostPage)
