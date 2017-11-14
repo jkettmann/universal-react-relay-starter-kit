@@ -27,11 +27,14 @@ const getResendVerificationMessage = hasResentVerification => hasResentVerificat
   ? messages.hasResentVerification
   : messages.resendVerification
 
-const UserVerifyPage = ({ hasResentVerification, verify, resendVerification }) => (
+const UserVerifyPage = ({ hasResentVerification, verify, resendVerification, params }) => (
   <Wrapper>
     <h2>Verify your account</h2>
 
-    <Form onSubmit={verify} />
+    <Form
+      initialValues={{ email: params && params.email }}
+      onSubmit={verify}
+    />
 
     <ResendVerificationButton
       onClick={resendVerification}
@@ -42,6 +45,9 @@ const UserVerifyPage = ({ hasResentVerification, verify, resendVerification }) =
 )
 
 UserVerifyPage.propTypes = {
+  params: PropTypes.shape({
+    email: PropTypes.string,
+  }).isRequired,
   hasResentVerification: PropTypes.bool.isRequired,
   verify: PropTypes.func.isRequired,
   resendVerification: PropTypes.func.isRequired,
