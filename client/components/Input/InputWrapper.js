@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { compose, withProps } from 'recompose'
 import styled from 'styled-components'
 
 import FloatingLabel from './FloatingLabel'
@@ -58,4 +59,10 @@ InputWrapper.defaultProps = {
   name: null,
 }
 
-export default InputWrapper
+const enhance = compose(
+  withProps(({ touched, error }) => ({
+    error: touched && error,
+  })),
+)
+
+export default enhance(InputWrapper)
