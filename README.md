@@ -240,3 +240,4 @@ See [recompose](https://github.com/acdlite/recompose) for more information.
 ### Icons
 
 User icon made by [Smashicons](https://www.flaticon.com/authors/smashicons) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+Close icon made by [Cole Bemis](https://www.flaticon.com/authors/cole-bemis) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
