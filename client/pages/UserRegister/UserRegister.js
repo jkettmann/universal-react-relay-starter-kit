@@ -30,7 +30,7 @@ const enhance = compose(
   withHandlers({
     onClickLogin: ({ router }) => () => router.push(paths.login),
     onRegisterSuccess: ({ router }) => email =>
-      router.replace(buildPathWithVariable(paths.userVerifyWithEmail, email)),
+      router.replace(buildPathWithVariable(paths.userVerifyWithEmail, { email })),
   }),
 )
 

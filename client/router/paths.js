@@ -8,6 +8,8 @@ export const buildPathWithVariable = (path, variables) => {
   if (pathWithVariables.indexOf(':') > -1) {
     console.warn(`A variable might not have been set in path ${pathWithVariables}`)
   }
+
+  return pathWithVariables
 }
 
 export default {

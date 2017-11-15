@@ -16,7 +16,7 @@ const dialogComponentNames = {
   [DIALOG_IDS.LOGIN]: 'UserLoginDialog',
   [DIALOG_IDS.REGISTER]: 'UserRegisterDialog',
   [DIALOG_IDS.RESET_PASSWORD]: 'UserResetPasswordBox',
-  [DIALOG_IDS.VERIFY_USER]: 'UserVerifyBox',
+  [DIALOG_IDS.VERIFY_USER]: 'UserVerifyDialog',
 }
 
 const getDialogForId = (dialogId, options = null) => {

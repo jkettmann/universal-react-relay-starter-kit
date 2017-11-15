@@ -107,7 +107,10 @@ const enhance = compose(
   withRouter,
   withHandlers(loginHandlers),
   withHandlers(facebookHandlers),
-  withProps(({ login }) => ({ onSubmit: login })),
+  withProps(({ email, login }) => ({
+    initialValues: { email },
+    onSubmit: login,
+  })),
   reduxForm({ form: 'login' }),
 )
 

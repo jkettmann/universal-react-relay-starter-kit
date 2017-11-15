@@ -94,9 +94,9 @@ UserVerifyBox.defaultProps = {
 }
 
 const handlers = {
-  verify: ({ router }) => ({ email, pin }) =>
+  verify: ({ onVerifySuccess }) => ({ email, pin }) =>
     VerifyAccountMutation.commit({ email, pin })
-      .then(() => router.replace('/login'))
+      .then(() => onVerifySuccess(email))
       .catch((errors) => {
         console.error('verification failed', errors)
         const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)
@@ -120,9 +120,9 @@ const enhance = compose(
   withState('isLoading', 'setIsLoading', false),
   withState('hasResentVerification', 'setHasResentVerification', false),
   withHandlers(handlers),
-  withProps(({ verify, params }) => ({
+  withProps(({ verify, email }) => ({
     onSubmit: verify,
-    initialValues: { email: params && params.email },
+    initialValues: { email },
   })),
   reduxForm({ form: 'verifyEmail' }),
 )
