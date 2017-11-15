@@ -1,133 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { compose, withHandlers, withProps, withState } from 'recompose'
-import { defineMessages, FormattedMessage } from 'react-intl'
-import { SubmissionError, reduxForm } from 'redux-form'
+import { compose, withHandlers, withProps } from 'recompose'
+import withRouter from 'found/lib/withRouter'
 
 import Wrapper from './Wrapper'
-import Form from './Form'
-import TextField from '../../components/Input/TextField'
-import Button from '../../components/Button'
-import FormError from '../../components/Input/FormError'
-import ResendVerificationButton from './ResendVerificationButton'
+import UserVerifyBox from '../../components/UserVerifyBox'
 
-import ResendVerificationMutation from '../../mutation/ResendVerificationMutation'
-import VerifyAccountMutation from '../../mutation/VerifyAccountMutation'
+import paths from '../../router/paths'
 
-import { ERRORS } from '../../../common/config'
-import mapSubmitErrorsToFormErrors from '../../utils/mapSubmitErrorsToFormErrors'
-
-const acceptedErrors = [
-  { id: ERRORS.WrongEmailOrVerificationPIN, field: 'email', message: 'The email or verification PIN is wrong' },
-  { id: ERRORS.WrongEmailOrVerificationPIN, field: 'pin', message: 'The email or verification PIN is wrong' },
-]
-
-const messages = defineMessages({
-  resendVerification: {
-    id: 'User.Verify.resendPIN',
-    defaultMessage: 'Send new verification PIN',
-  },
-  hasResentVerification: {
-    id: 'User.Verify.hasResentPIN',
-    defaultMessage: 'A new PIN has been sent to you',
-  },
-})
-
-const getResendVerificationMessage = hasResentVerification => hasResentVerification
-  ? messages.hasResentVerification
-  : messages.resendVerification
-
-const UserVerifyPage = ({
-  valid,
-  error,
-  hasResentVerification,
-  handleSubmit,
-  resendVerification,
-}) => (
+const UserVerifyPage = ({ email, onVerifySuccess }) => (
   <Wrapper>
-    <h2>Verify your account</h2>
-
-    <Form onSubmit={handleSubmit}>
-      <TextField
-        name="email"
-        label="E-Mail"
-        validations="email"
-        fullWidth
-        required
-      />
-
-      <TextField
-        name="pin"
-        label="Verification PIN"
-        validations="number"
-        validateImmediately
-        fullWidth
-        required
-      />
-
-      {error && <FormError>{error}</FormError>}
-
-      <Button
-        type="submit"
-        label="Verifiy"
-        disabled={!valid}
-        fullWidth
-        secondary
-      />
-    </Form>
-
-    <ResendVerificationButton
-      onClick={resendVerification}
-    >
-      <FormattedMessage {...getResendVerificationMessage(hasResentVerification)} />
-    </ResendVerificationButton>
+    <UserVerifyBox
+      email={email}
+      onVerifySuccess={onVerifySuccess}
+    />
   </Wrapper>
 )
 
 UserVerifyPage.propTypes = {
-  valid: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  hasResentVerification: PropTypes.bool.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  resendVerification: PropTypes.func.isRequired,
+  email: PropTypes.string,
+  onVerifySuccess: PropTypes.func.isRequired,
 }
 
 UserVerifyPage.defaultProps = {
-  error: null,
-}
-
-const handlers = {
-  verify: ({ router }) => ({ email, pin }) =>
-    VerifyAccountMutation.commit({ email, pin })
-      .then(() => router.replace('/login'))
-      .catch((errors) => {
-        console.error('verification failed', errors)
-        const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)
-        throw new SubmissionError(formErrors)
-      }),
-  resendVerification: ({ params, setIsLoading, setHasResentVerification }) => () => {
-    setIsLoading(true)
-    return ResendVerificationMutation.commit({ email: params.email })
-      .then(() => {
-        setIsLoading(false)
-        setHasResentVerification(true)
-      })
-      .catch((errors) => {
-        setIsLoading(false)
-        console.error(errors)
-      })
-  },
+  email: null,
 }
 
 const enhance = compose(
-  withState('isLoading', 'setIsLoading', false),
-  withState('hasResentVerification', 'setHasResentVerification', false),
-  withHandlers(handlers),
-  withProps(({ verify, params }) => ({
-    onSubmit: verify,
-    initialValues: { email: params && params.email },
+  withRouter,
+  withProps(({ params }) => ({
+    email: params.email,
   })),
-  reduxForm({ form: 'verifyEmail' }),
+  withHandlers({
+    onVerifySuccess: ({ router }) => () => router.replace(paths.userLogin),
+  }),
 )
 
 export default enhance(UserVerifyPage)

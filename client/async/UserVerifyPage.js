@@ -1,1 +1,1 @@
-export { default } from '../pages/UserVerify/UserVerify'
+export { default } from '../pages/UserVerify'

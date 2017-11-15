@@ -1,1 +1,1 @@
-export { default } from '../pages/UserResetPassword/UserResetPassword'
+export { default } from '../pages/UserResetPassword'

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
+import { connect } from 'react-redux'
 import { fragment } from 'relay-compose'
 import { compose, setPropTypes, withHandlers, withProps } from 'recompose'
 import { defineMessages } from 'react-intl'
@@ -9,6 +10,7 @@ import Wrapper from './Wrapper'
 import Divider from './Divider'
 import NavigationItemList from '../NavigationItemList'
 
+import { openLoginDialog as openLoginDialogAction } from '../Dialog/actions'
 import LogoutMutation from '../../mutation/LogoutMutation'
 
 const messages = defineMessages({
@@ -20,29 +22,29 @@ const messages = defineMessages({
   posts: { id: 'Navigation.Posts', defaultMessage: 'Posts' },
 })
 
-const anonymousMenuItems = [
-  { message: messages.login, to: '/login' },
+const createAnonymousMenuItems = ({ openLoginDialog }) => [
+  { message: messages.login, onClick: openLoginDialog },
 ]
 
 const createReaderMenuItems = ({ logout }) => [
   { message: messages.profile, to: '/user' },
-  { message: messages.logout, to: '/', onClick: logout },
+  { message: messages.logout, onClick: logout },
 ]
 
 const createPublisherMenuItems = ({ logout }) => [
   { message: messages.profile, to: '/user' },
   { message: messages.createPost, to: '/user/post/create' },
   { message: messages.userPosts, to: '/user/posts' },
-  { message: messages.logout, to: '/', onClick: logout },
+  { message: messages.logout, onClick: logout },
 ]
 
-const commonMenuItems = [
+const createCommonMenuItems = () => [
   { message: messages.posts, to: '/posts' },
 ]
 
 const getUserMenuItems = (permission, handlers) => {
   if (!permission.isLoggedIn) {
-    return anonymousMenuItems
+    return createAnonymousMenuItems(handlers)
   }
 
   if (permission.isLoggedIn && !permission.canPublish) {
@@ -95,6 +97,13 @@ const propTypes = {
   }),
 }
 
+const mapDispatchToProps = (dispatch, { closeNavigation }) => ({
+  openLoginDialog: () => {
+    dispatch(openLoginDialogAction())
+    closeNavigation()
+  },
+})
+
 const handlers = withHandlers({
   logout: () => (event) => {
     event.preventDefault()
@@ -109,9 +118,9 @@ const handlers = withHandlers({
   },
 })
 
-const props = withProps(({ permission, logout }) => ({
-  userMenuItems: getUserMenuItems(permission, { logout }),
-  commonMenuItems,
+const props = withProps(({ permission, openLoginDialog, logout }) => ({
+  userMenuItems: getUserMenuItems(permission, { openLoginDialog, logout }),
+  commonMenuItems: createCommonMenuItems(),
 }))
 
 const enhance = compose(
@@ -122,6 +131,7 @@ const enhance = compose(
       canPublish
     }
   `),
+  connect(null, mapDispatchToProps),
   handlers,
   props,
 )

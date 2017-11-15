@@ -9,6 +9,7 @@ import { defineMessages, injectIntl, intlShape } from 'react-intl'
 
 import theme from '../../theme'
 import Navigation from '../../components/Navigation'
+import Dialog from '../../components/Dialog'
 
 const messages = defineMessages({
   pageTitle: { id: 'App.pageTitle', defaultMessage: 'Universal Relay Starter Kit' },
@@ -31,6 +32,8 @@ const App = ({ permission, children, intl }) => (
       <Navigation permission={permission} />
 
       {children}
+
+      <Dialog />
     </div>
   </ThemeProvider>
 )

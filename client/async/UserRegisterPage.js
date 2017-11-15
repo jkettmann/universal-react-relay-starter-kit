@@ -1,1 +1,1 @@
-export { default } from '../pages/UserRegister/UserRegister'
+export { default } from '../pages/UserRegister'
