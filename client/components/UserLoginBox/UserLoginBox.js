@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import withRouter from 'found/lib/withRouter'
+import { connect } from 'react-redux'
 import { compose, withHandlers, withProps } from 'recompose'
 import { SubmissionError, reduxForm } from 'redux-form'
 
@@ -80,7 +81,13 @@ UserLoginPage.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
 }
 
-const loginHandlers = {
+const getFormEmail = ({ login }) => login && login.values && login.values.email
+
+const mapStateToProps = state => ({
+  formEmail: getFormEmail(state.form),
+})
+
+const handlers = {
   login: ({ onLoginSuccess }) => ({ email, password, facebookToken }) =>
     LoginMutation.commit({ email, password, facebookToken })
       .then(onLoginSuccess)
@@ -89,9 +96,11 @@ const loginHandlers = {
         const formErrors = mapSubmitErrorsToFormErrors(error, acceptedErrors)
         throw new SubmissionError(formErrors)
       }),
+  onClickResetPassword: ({ formEmail, onClickResetPassword }) => () =>
+    onClickResetPassword(formEmail),
 }
 
-const facebookHandlers = {
+const socialLoginHandlers = {
   onFacebookLoginSuccess: ({ login }) => (result) => {
     const { email } = result.profile
     const { accessToken } = result.token
@@ -105,8 +114,9 @@ const facebookHandlers = {
 
 const enhance = compose(
   withRouter,
-  withHandlers(loginHandlers),
-  withHandlers(facebookHandlers),
+  connect(mapStateToProps),
+  withHandlers(handlers),
+  withHandlers(socialLoginHandlers),
   withProps(({ email, login }) => ({
     initialValues: { email },
     onSubmit: login,

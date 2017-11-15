@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onClickRegister: () => dispatch(openRegisterDialog()),
-  onClickResetPassword: () => dispatch(openResetPasswordDialog()),
+  onClickResetPassword: email => dispatch(openResetPasswordDialog(email)),
   onLoginSuccess: () => dispatch(closeDialog()),
 })
 

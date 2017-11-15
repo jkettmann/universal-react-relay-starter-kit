@@ -94,9 +94,9 @@ const handlers = {
         const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)
         throw new SubmissionError(formErrors)
       }),
-  confirmPassword: ({ router }) => ({ email, pin, password }) =>
+  confirmPassword: ({ onResetPasswordSuccess }) => ({ email, pin, password }) =>
     ConfirmPasswordMutation.commit({ email, pin, password })
-      .then(() => router.replace('/login'))
+      .then(() => onResetPasswordSuccess(email))
       .catch((errors) => {
         console.error('password confirmation failed', errors)
         const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)
@@ -107,7 +107,8 @@ const handlers = {
 const enhance = compose(
   withState('hasSentPin', 'setHasSentPin', false),
   withHandlers(handlers),
-  withProps(({ hasSentPin, resetPassword, confirmPassword }) => ({
+  withProps(({ email, hasSentPin, resetPassword, confirmPassword }) => ({
+    initialValues: { email },
     onSubmit: hasSentPin ? confirmPassword : resetPassword,
   })),
   reduxForm({ form: 'resetPassword' }),

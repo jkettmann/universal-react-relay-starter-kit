@@ -23,5 +23,5 @@ export const closeDialog = () => ({
 
 export const openLoginDialog = email => openDialog(DIALOG_IDS.LOGIN, { email })
 export const openRegisterDialog = () => openDialog(DIALOG_IDS.REGISTER)
-export const openResetPasswordDialog = () => openDialog(DIALOG_IDS.RESET_PASSWORD)
+export const openResetPasswordDialog = email => openDialog(DIALOG_IDS.RESET_PASSWORD, { email })
 export const openVerifyUserDialog = email => openDialog(DIALOG_IDS.VERIFY_USER, { email })
