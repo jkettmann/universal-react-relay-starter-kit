@@ -21,6 +21,8 @@ const acceptedErrors = [
 const UserLoginPage = ({
   onFacebookLoginSuccess,
   onFacebookLoginFailure,
+  onClickResetPassword,
+  onClickRegister,
   handleSubmit,
 }) => (
   <Box>
@@ -57,13 +59,13 @@ const UserLoginPage = ({
       />
     </form>
 
-    <ResetPasswordLink to="/resetPassword">
+    <ResetPasswordLink onClick={onClickResetPassword}>
       Forgot your password?
     </ResetPasswordLink>
 
     <Button
       label="Register"
-      to="/register"
+      onClick={onClickRegister}
       fullWidth
       primary
     />
@@ -71,15 +73,17 @@ const UserLoginPage = ({
 )
 
 UserLoginPage.propTypes = {
+  onClickRegister: PropTypes.func.isRequired,
+  onClickResetPassword: PropTypes.func.isRequired,
   onFacebookLoginSuccess: PropTypes.func.isRequired,
   onFacebookLoginFailure: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 }
 
 const loginHandlers = {
-  login: ({ router }) => ({ email, password, facebookToken }) =>
+  login: ({ onLoginSuccess }) => ({ email, password, facebookToken }) =>
     LoginMutation.commit({ email, password, facebookToken })
-      .then(() => router.replace('/'))
+      .then(onLoginSuccess)
       .catch((error) => {
         console.error('login failed', error)
         const formErrors = mapSubmitErrorsToFormErrors(error, acceptedErrors)

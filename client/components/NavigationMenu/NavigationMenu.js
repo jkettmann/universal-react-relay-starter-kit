@@ -10,7 +10,7 @@ import Wrapper from './Wrapper'
 import Divider from './Divider'
 import NavigationItemList from '../NavigationItemList'
 
-import dialogActions from '../Dialog/actions'
+import { openLoginDialog as openLoginDialogAction } from '../Dialog/actions'
 import LogoutMutation from '../../mutation/LogoutMutation'
 
 const messages = defineMessages({
@@ -23,22 +23,22 @@ const messages = defineMessages({
 })
 
 const createAnonymousMenuItems = ({ openLoginDialog }) => [
-  { message: messages.login, to: '/', onClick: openLoginDialog },
+  { message: messages.login, onClick: openLoginDialog },
 ]
 
 const createReaderMenuItems = ({ logout }) => [
   { message: messages.profile, to: '/user' },
-  { message: messages.logout, to: '/', onClick: logout },
+  { message: messages.logout, onClick: logout },
 ]
 
 const createPublisherMenuItems = ({ logout }) => [
   { message: messages.profile, to: '/user' },
   { message: messages.createPost, to: '/user/post/create' },
   { message: messages.userPosts, to: '/user/posts' },
-  { message: messages.logout, to: '/', onClick: logout },
+  { message: messages.logout, onClick: logout },
 ]
 
-const commonMenuItems = [
+const createCommonMenuItems = () => [
   { message: messages.posts, to: '/posts' },
 ]
 
@@ -97,8 +97,11 @@ const propTypes = {
   }),
 }
 
-const mapDispatchToProps = dispatch => ({
-  openLoginDialog: () => dispatch(dialogActions.openLoginDialog),
+const mapDispatchToProps = (dispatch, { closeNavigation }) => ({
+  openLoginDialog: () => {
+    dispatch(openLoginDialogAction())
+    closeNavigation()
+  },
 })
 
 const handlers = withHandlers({
@@ -117,7 +120,7 @@ const handlers = withHandlers({
 
 const props = withProps(({ permission, openLoginDialog, logout }) => ({
   userMenuItems: getUserMenuItems(permission, { openLoginDialog, logout }),
-  commonMenuItems,
+  commonMenuItems: createCommonMenuItems(),
 }))
 
 const enhance = compose(

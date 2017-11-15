@@ -13,7 +13,7 @@ import {
 } from './actions'
 
 const dialogComponentNames = {
-  [DIALOG_IDS.LOGIN]: 'UserLoginBox',
+  [DIALOG_IDS.LOGIN]: 'UserLoginDialog',
   [DIALOG_IDS.REGISTER]: 'UserRegisterBox',
   [DIALOG_IDS.RESET_PASSWORD]: 'UserResetPasswordBox',
   [DIALOG_IDS.VERIFY_USER]: 'UserVerifyBox',

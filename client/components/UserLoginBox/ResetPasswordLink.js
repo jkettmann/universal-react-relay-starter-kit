@@ -1,10 +1,9 @@
 import styled from 'styled-components'
-import Link from 'found/lib/Link'
 
-const ResetPasswordLink = styled(Link)`
+const ResetPasswordLink = styled.div`
   margin-top: 10px;
   line-height: 40px;
-  text-decoration: none;
+  cursor: pointer;
   color: ${props => props.theme.color.grey1};
 `
 
