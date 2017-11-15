@@ -4,7 +4,7 @@ import withRouter from 'found/lib/withRouter'
 import { compose, withHandlers, withProps } from 'recompose'
 import { SubmissionError, reduxForm } from 'redux-form'
 
-import Wrapper from './Wrapper'
+import Box from '../Box'
 import TextField from '../../components/Input/TextField'
 import Button, { FacebookLoginButton } from '../../components/Button'
 import ResetPasswordLink from './ResetPasswordLink'
@@ -23,7 +23,7 @@ const UserLoginPage = ({
   onFacebookLoginFailure,
   handleSubmit,
 }) => (
-  <Wrapper>
+  <Box>
     <FacebookLoginButton
       label="Login with facebook"
       onLoginSuccess={onFacebookLoginSuccess}
@@ -67,7 +67,7 @@ const UserLoginPage = ({
       fullWidth
       primary
     />
-  </Wrapper>
+  </Box>
 )
 
 UserLoginPage.propTypes = {

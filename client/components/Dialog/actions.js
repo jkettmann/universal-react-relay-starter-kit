@@ -1,5 +1,6 @@
 export const DIALOG_IDS = {
   LOGIN: 'login',
+  REGISTER: 'register',
 }
 
 export const showDialog = (id) => {
@@ -18,3 +19,4 @@ export const closeDialog = () => ({
 })
 
 export const openLoginDialog = () => showDialog(DIALOG_IDS.LOGIN)
+export const openRegisterDialog = () => showDialog(DIALOG_IDS.REGISTER)
