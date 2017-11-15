@@ -16,3 +16,5 @@ export const showDialog = (id) => {
 export const closeDialog = () => ({
   type: 'CLOSE_DIALOG',
 })
+
+export const openLoginDialog = () => showDialog(DIALOG_IDS.LOGIN)

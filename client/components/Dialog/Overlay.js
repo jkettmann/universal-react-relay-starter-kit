@@ -6,9 +6,11 @@ const Overlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
+  display: ${props => props.active ? 'flex' : 'none'};
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: ${props => props.theme.zIndex.dialogOverlay};
-  display: ${props => props.active ? 'flex' : 'none'}
 `
 
 export default Overlay

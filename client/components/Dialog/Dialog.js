@@ -4,14 +4,20 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose'
 
 import Overlay from './Overlay'
+import UniversalComponent from '../UniversalComponent'
 
 import * as actions from './actions'
 
+const getDialogForId = (dialogId) => {
+  if (!dialogId) return null
+
+  const name = 'UserLoginBox'
+  return <UniversalComponent name={name} />
+}
+
 const Dialog = ({ openDialogId }) => (
   <Overlay active={!!openDialogId}>
-    <div>
-      {openDialogId}
-    </div>
+    {getDialogForId(openDialogId)}
   </Overlay>
 )
 
