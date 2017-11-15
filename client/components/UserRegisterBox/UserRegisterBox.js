@@ -4,8 +4,8 @@ import { compose, withHandlers, withProps } from 'recompose'
 import { SubmissionError, reduxForm } from 'redux-form'
 
 import Box from '../Box'
-import TextField from '../../components/Input/TextField'
-import Button from '../../components/Button'
+import TextField from '../Input/TextField'
+import Button from '../Button'
 import RegisterMutation from '../../mutation/RegisterMutation'
 
 import { ERRORS } from '../../../common/config'

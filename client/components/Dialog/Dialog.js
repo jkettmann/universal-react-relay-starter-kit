@@ -15,6 +15,7 @@ import {
 const dialogComponentNames = {
   [DIALOG_IDS.LOGIN]: 'UserLoginBox',
   [DIALOG_IDS.REGISTER]: 'UserRegisterBox',
+  [DIALOG_IDS.RESET_PASSWORD]: 'UserResetPasswordBox',
 }
 
 const getDialogForId = (dialogId) => {
