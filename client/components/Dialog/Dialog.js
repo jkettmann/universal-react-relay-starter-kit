@@ -14,12 +14,12 @@ import {
 
 const dialogComponentNames = {
   [DIALOG_IDS.LOGIN]: 'UserLoginDialog',
-  [DIALOG_IDS.REGISTER]: 'UserRegisterBox',
+  [DIALOG_IDS.REGISTER]: 'UserRegisterDialog',
   [DIALOG_IDS.RESET_PASSWORD]: 'UserResetPasswordBox',
   [DIALOG_IDS.VERIFY_USER]: 'UserVerifyBox',
 }
 
-const getDialogForId = (dialogId) => {
+const getDialogForId = (dialogId, options = null) => {
   if (!dialogId) {
     return null
   }
@@ -30,25 +30,28 @@ const getDialogForId = (dialogId) => {
     return null
   }
 
-  return <UniversalComponent name={name} />
+  return <UniversalComponent name={name} {...options} />
 }
 
-const Dialog = ({ openDialogId }) => (
+const Dialog = ({ openDialogId, options }) => (
   <Overlay active={!!openDialogId}>
-    {getDialogForId(openDialogId)}
+    {getDialogForId(openDialogId, options)}
   </Overlay>
 )
 
 Dialog.propTypes = {
   openDialogId: PropTypes.string,
+  options: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 }
 
 Dialog.defaultProps = {
   openDialogId: null,
+  options: null,
 }
 
 const mapStateToProps = state => ({
   openDialogId: state.dialog.openDialogId,
+  options: state.dialog.options,
 })
 
 const mapDispatchToProps = dispatch => ({

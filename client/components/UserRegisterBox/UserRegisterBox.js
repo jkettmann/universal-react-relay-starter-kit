@@ -15,7 +15,7 @@ const acceptedErrors = [
   { id: ERRORS.EmailAlreadyTaken, field: 'email', message: 'This email is already taken' },
 ]
 
-const UserRegisterBox = ({ valid, handleSubmit }) => (
+const UserRegisterBox = ({ valid, handleSubmit, onClickLogin }) => (
   <Box>
     <Button
       label="Register with facebook"
@@ -73,7 +73,7 @@ const UserRegisterBox = ({ valid, handleSubmit }) => (
 
     <Button
       label="Login"
-      to="/login"
+      onClick={onClickLogin}
       fullWidth
       primary
     />
@@ -82,13 +82,14 @@ const UserRegisterBox = ({ valid, handleSubmit }) => (
 
 UserRegisterBox.propTypes = {
   valid: PropTypes.bool.isRequired,
+  onClickLogin: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 }
 
 const handlers = {
-  register: ({ router }) => ({ email, password, firstName, lastName }) =>
+  register: ({ onRegisterSuccess }) => ({ email, password, firstName, lastName }) =>
     RegisterMutation.commit({ email, password, firstName, lastName })
-      .then(() => router.push(`/verify/${email}`))
+      .then(() => onRegisterSuccess(email))
       .catch((errors) => {
         console.error('register', errors)
         const formErrors = mapSubmitErrorsToFormErrors(errors, acceptedErrors)

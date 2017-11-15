@@ -2,9 +2,10 @@ const initialState = {
   openDialogId: null,
 }
 
-const openDialog = (state, { dialogId }) => ({
+const openDialog = (state, { dialogId, options }) => ({
   ...state,
   openDialogId: dialogId,
+  options,
 })
 
 const closeDialog = state => ({

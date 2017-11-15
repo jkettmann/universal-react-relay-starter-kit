@@ -5,7 +5,7 @@ export const DIALOG_IDS = {
   VERIFY_USER: 'verifyUser',
 }
 
-export const openDialog = (id) => {
+export const openDialog = (id, options) => {
   if (!Object.values(DIALOG_IDS).includes(id)) {
     console.error(`Dialog with id "${id}" not supported`)
   }
@@ -13,6 +13,7 @@ export const openDialog = (id) => {
   return {
     type: 'OPEN_DIALOG',
     dialogId: id,
+    options,
   }
 }
 
@@ -23,4 +24,4 @@ export const closeDialog = () => ({
 export const openLoginDialog = () => openDialog(DIALOG_IDS.LOGIN)
 export const openRegisterDialog = () => openDialog(DIALOG_IDS.REGISTER)
 export const openResetPasswordDialog = () => openDialog(DIALOG_IDS.RESET_PASSWORD)
-export const openVerifyUserDialog = () => openDialog(DIALOG_IDS.VERIFY_USER)
+export const openVerifyUserDialog = email => openDialog(DIALOG_IDS.VERIFY_USER, { email })
