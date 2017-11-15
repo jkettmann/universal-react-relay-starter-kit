@@ -2,9 +2,8 @@ import React from 'react'
 import Route from 'found/lib/Route'
 import RedirectException from 'found/lib/RedirectException'
 import makeRouteConfig from 'found/lib/makeRouteConfig'
-import universal from 'react-universal-component'
 
-import Loading from '../components/Loading'
+import UniversalComponent from '../components/UniversalComponent'
 
 import AppRouteConfig from '../pages/App/AppRoute'
 import HomeRouteConfig from '../pages/Home/HomeRoute'
@@ -20,17 +19,6 @@ import UserResetPasswordRouteConfig from '../pages/UserResetPassword/UserResetPa
 
 import paths from './paths'
 
-const getPage = props => import(`../async/${props.page}`)
-
-const UniversalComponent = universal(getPage, {
-  loading: Loading,
-  error: (ref) => {
-    console.log(ref)
-    console.error(ref.error.stack)
-    return <div>{ref.error.message}</div>
-  },
-})
-
 // eslint-disable-next-line react/prop-types
 const createRender = (page, permission) => ({ props }) => {
   if (permission && !props) {
@@ -44,7 +32,7 @@ const createRender = (page, permission) => ({ props }) => {
   const { __fragments, __id } = props || {}
   const data = { __fragments, __id }
 
-  return <UniversalComponent page={page} {...props} data={data} isLoading={!props} />
+  return <UniversalComponent name={page} {...props} data={data} isLoading={!props} />
 }
 
 const prepareRouteConfig = ({ render, permission, ...config }) => ({
