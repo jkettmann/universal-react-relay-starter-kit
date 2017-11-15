@@ -2,6 +2,7 @@ export const DIALOG_IDS = {
   LOGIN: 'login',
   REGISTER: 'register',
   RESET_PASSWORD: 'resetPassword',
+  VERIFY_USER: 'verifyUser',
 }
 
 export const showDialog = (id) => {
@@ -22,3 +23,4 @@ export const closeDialog = () => ({
 export const openLoginDialog = () => showDialog(DIALOG_IDS.LOGIN)
 export const openRegisterDialog = () => showDialog(DIALOG_IDS.REGISTER)
 export const openResetPasswordDialog = () => showDialog(DIALOG_IDS.RESET_PASSWORD)
+export const openVerifyUserDialog = () => showDialog(DIALOG_IDS.VERIFY_USER)
