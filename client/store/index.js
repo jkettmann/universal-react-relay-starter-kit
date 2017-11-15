@@ -9,6 +9,8 @@ import createMatchEnhancer from 'found/lib/createMatchEnhancer'
 import Matcher from 'found/lib/Matcher'
 import { reducer as form } from 'redux-form'
 
+import dialog from '../components/Dialog/reducer'
+
 import { routeConfig } from '../router'
 
 // eslint-disable-next-line no-undef, no-underscore-dangle
@@ -32,6 +34,7 @@ function generateStore(protocol) {
   const reducers = combineReducers({
     found,
     form,
+    dialog,
   })
 
   const store = createStore(reducers, middleWare)
