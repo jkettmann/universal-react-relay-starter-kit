@@ -1,5 +1,4 @@
-import { combineReducers, createStore, compose } from 'redux'
-import found from 'found/lib/foundReducer'
+import { createStore, compose } from 'redux'
 import FarceActions from 'farce/lib/Actions'
 import BrowserProtocol from 'farce/lib/BrowserProtocol'
 import ServerProtocol from 'farce/lib/ServerProtocol'
@@ -7,11 +6,9 @@ import createHistoryEnhancer from 'farce/lib/createHistoryEnhancer'
 import queryMiddleware from 'farce/lib/queryMiddleware'
 import createMatchEnhancer from 'found/lib/createMatchEnhancer'
 import Matcher from 'found/lib/Matcher'
-import { reducer as form } from 'redux-form'
-
-import dialog from '../components/Dialog/reducer'
 
 import { routeConfig } from '../router'
+import reducers from './reducers'
 
 // eslint-disable-next-line no-undef, no-underscore-dangle
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
@@ -31,12 +28,6 @@ function generateStore(protocol) {
     matcherEnhancer,
   )
 
-  const reducers = combineReducers({
-    found,
-    form,
-    dialog,
-  })
-
   const store = createStore(reducers, middleWare)
 
   store.dispatch(FarceActions.init())
@@ -44,9 +35,24 @@ function generateStore(protocol) {
   return store
 }
 
-export function createClientStore() {
-  return generateStore(new BrowserProtocol())
-}
+export const createClientStore = (() => {
+  let store
+  return () => {
+    if (!store) {
+      store = generateStore(new BrowserProtocol())
+
+      if (module.hot) {
+        // Enable Webpack hot module replacement for reducers
+        module.hot.accept('./reducers', () => {
+          const nextRootReducer = require('./reducers')
+          store.replaceReducer(nextRootReducer)
+        })
+      }
+    }
+
+    return store
+  }
+})()
 
 export function createServerStore(url) {
   return generateStore(new ServerProtocol(url))
