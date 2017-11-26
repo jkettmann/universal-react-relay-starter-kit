@@ -2568,6 +2568,10 @@ extglob@^2.0.2:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+extract-hoc@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/extract-hoc/-/extract-hoc-0.0.4.tgz#9a312134cb4a71ec59a95d2151ea88ad390ac56f"
+
 extsprintf@1.3.0, extsprintf@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"

@@ -22,7 +22,10 @@
   ],
   "env": {
     "development": {
-      "plugins": ["react-hot-loader/babel"]
+      "plugins": [
+        "extract-hoc/babel",
+        "react-hot-loader/babel"
+      ]
     }
   }
 }
