@@ -11,7 +11,7 @@ injectTapEventPlugin()
 
 async function render(createRoot) {
   const Root = await createRoot()
-  ReactDOM.render(
+  ReactDOM.hydrate(
     <AppContainer>
       {
         withIntl(<Root />, Cookie.get('locale'))
