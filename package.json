@@ -108,6 +108,7 @@
     "jsonwebtoken": "^8.1.0",
     "jwk-to-pem": "^1.2.6",
     "lodash": "^4.17.4",
+    "path-to-regexp": "1.7.0",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",

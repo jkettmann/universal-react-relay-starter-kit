@@ -227,6 +227,10 @@ export default enhance(Button)
 
 See [recompose](https://github.com/acdlite/recompose) for more information.
 
+## Notes
+
+- `path-to-regexp` is installed with version `1.7.0` for [found](https://github.com/4Catalyzer/found). If not adding it to the dependencies a warning is logged (`Incorrect version of path-to-regexp imported.`) and server side rendering won't work. Compare [this issue](https://github.com/4Catalyzer/found/issues/126).
+
 ## Roadmap
 
 - [x] Use real database
