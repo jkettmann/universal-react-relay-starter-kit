@@ -1,9 +1,10 @@
 import express from 'express'
 import debug from 'debug'
 
-import setup from './setup'
+import renderSetup from './render/setup'
+import graphqlSetup from './graphql/setup'
 
-const log = debug('graphql')
+const log = debug('server')
 const PORT = process.env.PORT_APP
 let isBuilt = false
 
@@ -18,4 +19,8 @@ const done = () => !isBuilt && app.listen(PORT, () => {
   log(`BUILD COMPLETE -- Listening @ http://localhost:${PORT}`)
 })
 
-setup(app, done)
+debug('start combined')
+
+graphqlSetup(app)
+renderSetup(app, done)
+
