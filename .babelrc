@@ -16,9 +16,7 @@
     ["react-intl", {
       "messagesDir": "./build/intl/messages/"
     }],
-    ["universal-import", {
-      "babelServer": true
-    }]
+    "universal-import"
   ],
   "env": {
     "development": {

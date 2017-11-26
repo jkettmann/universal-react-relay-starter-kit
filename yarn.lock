@@ -2482,6 +2482,10 @@ express-graphql@^0.6.11:
     http-errors "^1.3.0"
     raw-body "^2.1.0"
 
+express-no-favicons@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/express-no-favicons/-/express-no-favicons-0.0.1.tgz#21d700ab228650e58fe212710a45b03c7ccf3456"
+
 express-session@^1.15.6:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.15.6.tgz#47b4160c88f42ab70fe8a508e31cbff76757ab0a"
@@ -4481,7 +4485,7 @@ path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
 
-path-to-regexp@^1.7.0:
+path-to-regexp@1.7.0, path-to-regexp@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.7.0.tgz#59fde0f435badacba103a84e9d3bc64e96b9937d"
   dependencies:

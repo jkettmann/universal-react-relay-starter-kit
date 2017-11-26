@@ -1,5 +1,6 @@
 import express from 'express'
-import webpack from 'webpack' // aliased to webpack-universal
+import webpack from 'webpack'
+import noFavicon from 'express-no-favicons'
 import helmet from 'helmet'
 import compression from 'compression'
 import Aws from 'aws-sdk'
@@ -18,6 +19,7 @@ export default function setup(app, done) {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   })
 
+  app.use(noFavicon())
   app.use(helmet())
   app.use(compression())
 
