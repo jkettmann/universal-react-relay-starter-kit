@@ -33,6 +33,7 @@ export default function setup(app, done) {
   }))
 
   if (DEV) {
+    log('development config')
     const clientConfig = require('../../webpack/client.dev')
     const serverConfig = require('../../webpack/server.dev')
     const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -50,12 +51,14 @@ export default function setup(app, done) {
 
     compiler.plugin('done', done)
   } else {
+    log('production config')
     const clientConfig = require('../../webpack/client.prod')
     const serverConfig = require('../../webpack/server.prod')
     const publicPath = clientConfig.output.publicPath
     const outputPath = clientConfig.output.path
 
     webpack([clientConfig, serverConfig]).run((err, stats) => {
+      log('build finished')
       const clientStats = stats.toJson().children[0]
       const serverRender = require('../../buildClientSSR/main.js').default
 

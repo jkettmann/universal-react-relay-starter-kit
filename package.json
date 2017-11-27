@@ -21,8 +21,8 @@
     "relay-compiler": "relay-compiler --src client --schema server/graphql/schema.graphql",
     "relay-compiler:watch": "relay-compiler --src client --schema server/graphql/schema.graphql --watch",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "build": "npm run clean && npm run relay-compiler && npm run build:common && npm run build:client && npm run build:server && cp -R client build/clientUncompiled && cp -R webpack build/webpack",
-    "build:client": "babel -d ./build/client/ ./client -s --copy-files",
+    "build": "npm run clean && npm run relay-compiler && npm run build:common && npm run build:copy-files && npm run build:server",
+    "build:copy-files": "cp -R client build/client && cp -R webpack build/webpack",
     "build:common": "babel -d ./build/common/ ./common -s --copy-files",
     "build:server": "babel -d ./build/server/ ./server -s --copy-files",
     "build-langs": "babel-node ./i18n/bundleMessages.js"
