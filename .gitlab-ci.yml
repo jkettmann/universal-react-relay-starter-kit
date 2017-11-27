@@ -11,8 +11,9 @@ build:
   image: node:8.4.0
   stage: build
   script:
-    - npm install
-    - npm run build
+    - npm install -g yarn
+    - yarn install
+    - yarn run build
   artifacts:
     paths:
       - package.json
