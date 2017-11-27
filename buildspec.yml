@@ -3,14 +3,15 @@ version: 0.1
 phases:
   install:
     commands:
-      - npm install
+      - npm install -g yarn
+      - yarn install
   pre_build:
     commands:
       - echo "pre build phase"
   build:
     commands:
       - echo "build phase"
-      - npm run build
+      - yarn run build
   post_build:
     commands:
       - echo "post build phase"
