@@ -53,19 +53,15 @@ export default function setup(app, done) {
   } else {
     log('production config')
     const clientConfig = require('../../webpack/client.prod')
-    const serverConfig = require('../../webpack/server.prod')
     const publicPath = clientConfig.output.publicPath
     const outputPath = clientConfig.output.path
 
-    webpack([clientConfig, serverConfig]).run((err, stats) => {
-      log('build finished')
-      const clientStats = stats.toJson().children[0]
-      const serverRender = require('../../buildClientSSR/main.js').default
+    const clientStats = require('./clientStats.json')
+    const serverRender = require('../../buildClientSSR/main.js').default
 
-      app.use(publicPath, express.static(outputPath))
-      app.use(serverRender({ clientStats }))
+    app.use(publicPath, express.static(outputPath))
+    app.use(serverRender({ clientStats }))
 
-      done()
-    })
+    done()
   }
 }
